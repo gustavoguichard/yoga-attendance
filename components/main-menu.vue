@@ -12,17 +12,17 @@ import { mapActions, mapState } from 'vuex'
 
 export default {
   computed: {
-    ...mapState('auth', ['user']), // Not updating consistently ¯\_(ツ)_/¯
+    ...mapState('auth', ['userData']),
     isAuthenticated() {
-      return !!this.user;
+      return !!this.userData;
     },
   },
   methods: {
     ...mapActions({
-      logout: 'auth/logout',
+      signOut: 'auth/clear',
     }),
     async exit() {
-      await this.logout();
+      await this.signOut();
       this.$router.replace('/');
     },
   },

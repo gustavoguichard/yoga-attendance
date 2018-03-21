@@ -21,7 +21,6 @@
 </template>
 
 <script>
-import Cookie from 'js-cookie'
 import { mapActions } from 'vuex'
 
 export default {
@@ -34,21 +33,13 @@ export default {
   },
   middleware: 'not-authenticated',
   methods: {
-    postLogin() {
-      setTimeout(() => {
-        const auth = { accessToken: 'someStringGotFromApiService' }
-        this.$store.commit('update', auth)
-        Cookie.set('auth', auth)
-        this.$router.push('/')
-      }, 1000)
-    },
     ...mapActions({
       authenticate: 'auth/authenticate',
     }),
     async signIn() {
       const { email, password } = this;
       try {
-        await this.authenticate({ strategy: 'local', email, password });
+        await this.authenticate({ email, password });
         this.$router.replace('/protected');
       } catch (e) {
         this.error = e.message;

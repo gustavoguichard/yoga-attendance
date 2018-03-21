@@ -33,5 +33,7 @@ module.exports = {
     'import/extensions': 0,
     'no-param-reassign': 0,
     'no-debugger': 0,
+    'import/prefer-default-export': 0,
+    'arrow-parens': 0,
   },
 };

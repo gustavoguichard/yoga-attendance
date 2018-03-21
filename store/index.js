@@ -1,45 +1,18 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
-// import feathersVuex, { initAuth } from 'feathers-vuex'
-// import feathersClient from '@/api'
 import cookieparser from 'cookieparser'
+import api from '@/api'
 
-// const { service, auth } = feathersVuex(feathersClient, { idField: '_id' })
-// const { auth } = feathersVuex(feathersClient, { idField: '_id' })
-
-Vue.use(Vuex)
-
-const store = new Vuex.Store({
-  state: {
-    auth: null,
-  },
-  mutations: {
-    update(state, data) {
-      state.auth = data
-    },
-  },
-  actions: {
-    // nuxtServerInit({ commit, dispatch }, { req }) {
-    nuxtServerInit({ commit }, { req }) {
-      // return initAuth({
-      //   commit,
-      //   dispatch,
-      //   req,
-      //   moduleName: 'auth',
-      //   cookieName: 'feathers-jwt',
-      // })
-      const accessToken = () => {
-        if (!req.headers.cookie) return null
-        const parsed = cookieparser.parse(req.headers.cookie)
-        return parsed['feathers-jwt']
+export const state = () => ({})
+export const actions = {
+  async nuxtServerInit({ dispatch }, { req }) {
+    if (req.headers.cookie) {
+      const parsed = cookieparser.parse(req.headers.cookie)
+      const accessToken = parsed['feathers-jwt']
+      if (accessToken) {
+        try {
+          const data = await api.authenticate({ strategy: 'jwt', accessToken })
+          dispatch('auth/updateUserData', data)
+        } catch (error) { return error }
       }
-      commit('update', accessToken())
-    },
+    }
   },
-  plugins: [
-    // service('practitioners'),
-    // auth({ userService: 'users' }),
-  ],
-})
-
-export default () => store
+}

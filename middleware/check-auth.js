@@ -1,6 +1,5 @@
 export default function ({ store, redirect }) {
-  // if (!store.state.auth.accessToken) {
-  if (!store.state.auth) {
+  if (!store.state.auth.userData) {
     redirect('/sign-in');
   }
 }
