@@ -1767,7 +1767,7 @@ de-indent@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/de-indent/-/de-indent-1.0.2.tgz#b2038e846dc33baa5796128d0804b455b8c1e21d"
 
-debug@*, debug@^3.0.0, debug@^3.1.0, debug@~3.1.0:
+debug@*, debug@^3.1.0, debug@~3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/debug/-/debug-3.1.0.tgz#5bb5a0672628b64149566ba16819e61518c67261"
   dependencies:
@@ -2473,38 +2473,6 @@ fast-levenshtein@~2.0.4:
 fastparse@^1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/fastparse/-/fastparse-1.1.1.tgz#d1e2643b38a94d7583b479060e6c4affc94071f8"
-
-feathers-commons@^0.8.0, feathers-commons@^0.8.7:
-  version "0.8.7"
-  resolved "https://registry.yarnpkg.com/feathers-commons/-/feathers-commons-0.8.7.tgz#11c6f25b537745a983e8d61552d7db8932d53782"
-
-feathers-errors@^2.9.2:
-  version "2.9.2"
-  resolved "https://registry.yarnpkg.com/feathers-errors/-/feathers-errors-2.9.2.tgz#96ca0e5fe50cc56f0eccc90ce3fa5e1f8840828d"
-  dependencies:
-    debug "^3.0.0"
-
-feathers-query-filters@^2.1.2:
-  version "2.1.2"
-  resolved "https://registry.yarnpkg.com/feathers-query-filters/-/feathers-query-filters-2.1.2.tgz#cdb18224db5e19cc0140d528108e0908d5eb0654"
-  dependencies:
-    feathers-commons "^0.8.0"
-
-feathers-vuex@^1.1.4:
-  version "1.1.4"
-  resolved "https://registry.yarnpkg.com/feathers-vuex/-/feathers-vuex-1.1.4.tgz#a55c9ecc1388258728862c143d970aa1dda4e9c6"
-  dependencies:
-    debug "^3.1.0"
-    feathers-commons "^0.8.7"
-    feathers-errors "^2.9.2"
-    feathers-query-filters "^2.1.2"
-    jwt-decode "^2.2.0"
-    lodash.clonedeep "^4.5.0"
-    lodash.isobject "^3.0.2"
-    lodash.merge "^4.6.0"
-    lodash.trim "^4.5.1"
-    serialize-error "^2.1.0"
-    sift "^5.0.0"
 
 figures@^2.0.0:
   version "2.0.0"
@@ -3458,7 +3426,7 @@ jsprim@^1.2.2:
     json-schema "0.2.3"
     verror "1.10.0"
 
-jwt-decode@^2.1.0, jwt-decode@^2.2.0:
+jwt-decode@^2.1.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/jwt-decode/-/jwt-decode-2.2.0.tgz#7d86bd56679f58ce6a84704a657dd392bba81a79"
 
@@ -3572,10 +3540,6 @@ lodash.findkey@^4.6.0:
   version "4.6.0"
   resolved "https://registry.yarnpkg.com/lodash.findkey/-/lodash.findkey-4.6.0.tgz#83058e903b51cbb759d09ccf546dea3ea39c4718"
 
-lodash.isobject@^3.0.2:
-  version "3.0.2"
-  resolved "https://registry.yarnpkg.com/lodash.isobject/-/lodash.isobject-3.0.2.tgz#3c8fb8d5b5bf4bf90ae06e14f2a530a4ed935e1d"
-
 lodash.isplainobject@^4.0.6:
   version "4.0.6"
   resolved "https://registry.yarnpkg.com/lodash.isplainobject/-/lodash.isplainobject-4.0.6.tgz#7c526a52d89b45c45cc690b88163be0497f550cb"
@@ -3587,10 +3551,6 @@ lodash.kebabcase@^4.1.1:
 lodash.memoize@^4.1.2:
   version "4.1.2"
   resolved "https://registry.yarnpkg.com/lodash.memoize/-/lodash.memoize-4.1.2.tgz#bcc6c49a42a2840ed997f323eada5ecd182e0bfe"
-
-lodash.merge@^4.6.0:
-  version "4.6.1"
-  resolved "https://registry.yarnpkg.com/lodash.merge/-/lodash.merge-4.6.1.tgz#adc25d9cb99b9391c59624f379fbba60d7111d54"
 
 lodash.snakecase@^4.1.1:
   version "4.1.1"
@@ -3608,10 +3568,6 @@ lodash.templatesettings@^4.0.0:
   resolved "https://registry.yarnpkg.com/lodash.templatesettings/-/lodash.templatesettings-4.1.0.tgz#2b4d4e95ba440d915ff08bc899e4553666713316"
   dependencies:
     lodash._reinterpolate "~3.0.0"
-
-lodash.trim@^4.5.1:
-  version "4.5.1"
-  resolved "https://registry.yarnpkg.com/lodash.trim/-/lodash.trim-4.5.1.tgz#36425e7ee90be4aa5e27bcebb85b7d11ea47aa57"
 
 lodash.uniq@^4.5.0:
   version "4.5.0"
@@ -5420,10 +5376,6 @@ send@0.16.2:
     range-parser "~1.2.0"
     statuses "~1.4.0"
 
-serialize-error@^2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/serialize-error/-/serialize-error-2.1.0.tgz#50b679d5635cdf84667bdc8e59af4e5b81d5f60a"
-
 serialize-javascript@^1.3.0, serialize-javascript@^1.4.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/serialize-javascript/-/serialize-javascript-1.4.0.tgz#7c958514db6ac2443a8abc062dc9f7886a7f6005"
@@ -5504,10 +5456,6 @@ shell-quote@^1.6.1:
     array-map "~0.0.0"
     array-reduce "~0.0.0"
     jsonify "~0.0.0"
-
-sift@^5.0.0:
-  version "5.1.0"
-  resolved "https://registry.yarnpkg.com/sift/-/sift-5.1.0.tgz#1bbf2dfb0eb71e56c4cc7fb567fbd1351b65015e"
 
 signal-exit@^3.0.0, signal-exit@^3.0.2:
   version "3.0.2"
@@ -6299,9 +6247,9 @@ vue@^2.5.13:
   version "2.5.16"
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.5.16.tgz#07edb75e8412aaeed871ebafa99f4672584a0085"
 
-vuetify@^1.0.0:
-  version "1.0.9"
-  resolved "https://registry.yarnpkg.com/vuetify/-/vuetify-1.0.9.tgz#036f0c97aaba452ec4bdfb87c4c69448db46af74"
+vuetify@^1.0.10:
+  version "1.0.10"
+  resolved "https://registry.yarnpkg.com/vuetify/-/vuetify-1.0.10.tgz#875d2d27d95470ce977ce9c705bb41b5b547e801"
 
 vuex@^3.0.1:
   version "3.0.1"

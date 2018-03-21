@@ -1,23 +1,31 @@
 <template>
-  <main class="sign-in">
-    <p v-if="error" class="error">{{ error }}</p>
-    <div class="container">
-      <form>
-        <fieldset>
-          <legend>Sign in</legend>
-          <label>
-            E-mail
-            <input type="email" v-model="email">
-          </label>
-          <label>
-            Password
-            <input type="password" v-model="password">
-          </label>
-        </fieldset>
-        <button @click.prevent="signIn">Sign in</button>
-      </form>
-    </div>
-  </main>
+<div class="page-container sign-in">
+  <p v-if="error" class="error">{{ error }}</p>
+  <v-layout column justify-center align-center>
+    <v-flex xs12 sm8 md6>
+      <v-card class="mt-5 pt-4">
+        <h3 class="text-xs-center">Olá professor :)</h3>
+        <v-layout row justify-space-around>
+          <img src="/logo.png" alt="Iyengar Brasil" class="mb-1" />
+        </v-layout>
+        <v-card-text>
+          <blockquote>Yoga é como um espelho para olharmos para dentro de nós mesmos.</blockquote>
+          <div class="text-xs-right">
+            <em><small>&mdash; B.K.S Iyengar</small></em>
+          </div>
+        </v-card-text>
+        <v-card-text>
+          <v-text-field @keyup.enter.native="submit" v-model="email" autofocus name="email" label="E-mail" id="email"></v-text-field>
+          <v-text-field @keyup.enter.native="submit" v-model="password" type="password" name="password" label="Senha" id="password"></v-text-field>
+        </v-card-text>
+        <v-card-row actions>
+          <!-- <v-btn flat primary light>Esqueci-minha senha</v-btn> -->
+          <v-btn primary light @click.native="submit">Entrar</v-btn>
+        </v-card-row>
+      </v-card>
+    </v-flex>
+  </v-layout>
+</div>
 </template>
 
 <script>
@@ -36,7 +44,7 @@ export default {
     ...mapActions({
       authenticate: 'auth/authenticate',
     }),
-    async signIn() {
+    async submit() {
       const { email, password } = this;
       try {
         await this.authenticate({ email, password });
@@ -58,51 +66,3 @@ export default {
   },
 };
 </script>
-
-<style>
-.sign-in {
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  height: 80vh;
-}
-.sign-in .error {
-  color: firebrick;
-  margin-top: -2.125rem;
-}
-.sign-in .container {
-  padding: 2rem;
-  border: 1px solid #DDD;
-  border-radius: .25rem;
-}
-.sign-in form {
-  display: flex;
-  flex-direction: column;
-}
-.sign-in fieldset {
-  border: none;
-  margin: 0;
-  padding: 0;
-}
-.sign-in legend {
-  margin: 0;
-  padding: 0;
-  margin-bottom: 1rem;
-  font-size: 1.5rem;
-}
-.sign-in label {
-  display: flex;
-}
-.sign-in label + label {
-  margin-top: 1rem;
-}
-.sign-in input {
-  flex: 1;
-  margin-left: 1rem;
-}
-.sign-in button {
-  align-self: flex-end;
-  margin-top: 1rem;
-}
-</style>

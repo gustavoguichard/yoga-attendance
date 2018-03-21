@@ -1,14 +1,20 @@
 <template>
-  <ul class="main-menu">
-    <li class="main-menu__item"><nuxt-link to="/" exact>Home</nuxt-link></li>
-    <li class="main-menu__item" v-if="isAuthenticated"><nuxt-link to="/protected">Protected</nuxt-link></li>
-    <li class="main-menu__item" v-if="isAuthenticated"><a href="#" @click.prevent="exit">Sign out</a></li>
-    <li class="main-menu__item" v-else><nuxt-link to="/sign-in">Sign in</nuxt-link></li>
-  </ul>
+  <v-list dense>
+    <template v-for="(item, i) in items">
+      <v-list-tile :to="item.to" v-if="item.show">
+        <v-list-tile-action v-if="item.icon">
+          <v-icon v-html="item.icon">spa</v-icon>
+        </v-list-tile-action>
+        <v-list-tile-content>
+          <v-list-tile-title v-html="item.name"></v-list-tile-title>
+        </v-list-tile-content>
+      </v-list-tile>
+    </template>
+  </v-list>
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapState } from 'vuex'
 
 export default {
   computed: {
@@ -16,38 +22,20 @@ export default {
     isAuthenticated() {
       return !!this.userData;
     },
-  },
-  methods: {
-    ...mapActions({
-      signOut: 'auth/clear',
-    }),
-    async exit() {
-      await this.signOut();
-      this.$router.replace('/');
+    items() {
+      return [
+        { name: 'Home', to: '/', icon: 'spa', show: true },
+        { name: 'Protected', to: '/protected', show: this.isAuthenticated },
+        { name: 'Login', to: '/sign-in', show: !this.isAuthenticated },
+        { name: 'Logout', to: '/sign-out', icon: 'exit_to_app', show: this.isAuthenticated },
+      ]
     },
   },
 };
 </script>
 
 <style>
-.main-menu {
-  border-bottom: 1px solid #F2F2F2;
-  font-size: 0;
-  list-style: none;
-  padding: 1.5rem 0;
-  text-align: center;
-}
-.main-menu__item {
-  display: inline-block;
-  font-size: 1rem;
-}
-.main-menu__item a {
-  color: #999;
-}
-.main-menu__item .nuxt-link-active {
+/*.main-menu__item .nuxt-link-active {
   color: #92D3CE;
-}
-.main-menu__item + .main-menu__item {
-  margin-left: 1rem;
-}
+}*/
 </style>

@@ -35,5 +35,6 @@ module.exports = {
     'no-debugger': 0,
     'import/prefer-default-export': 0,
     'arrow-parens': 0,
+    'object-curly-newline': 0,
   },
 };
