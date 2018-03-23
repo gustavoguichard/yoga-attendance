@@ -48,7 +48,7 @@ export default {
       const { email, password } = this;
       try {
         await this.authenticate({ email, password });
-        this.$router.replace('/protected');
+        this.$router.replace('/');
       } catch (e) {
         this.error = e.message;
         throw e;
