@@ -18,7 +18,7 @@ export const actions = {
     context.commit('update', data)
   },
   async ensureAuth({ state, commit }) {
-    if (state.userData && !state.clientReady) {
+    if (state.userData && !state.clientReady && process.client) {
       try {
         const { accessToken } = state.userData
         await api.authenticate({ strategy: 'jwt', accessToken })
