@@ -25,7 +25,6 @@ export default {
     items() {
       return [
         { name: 'Aulas', to: '/', icon: 'spa', show: this.isAuthenticated },
-        { name: 'Protected', to: '/protected', show: this.isAuthenticated },
         { name: 'Login', to: '/sign-in', show: !this.isAuthenticated },
         { name: 'Logout', to: '/sign-out', icon: 'exit_to_app', show: this.isAuthenticated },
       ]
