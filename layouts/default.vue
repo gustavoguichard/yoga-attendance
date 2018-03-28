@@ -1,23 +1,15 @@
 <template>
   <v-app id="inspire">
-    <v-navigation-drawer
-      fixed
-      clipped
-      v-model="drawer"
-      app
-    >
+    <v-navigation-drawer fixed clipped v-model="drawer" app>
       <main-menu />
     </v-navigation-drawer>
-    <v-toolbar
-      color="blue-grey"
-      dark
-      fixed
-      app
-      clipped-left
-    >
+    <v-toolbar color="blue-grey" dark fixed app clipped-left>
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       <v-toolbar-title>Yoga Attendance</v-toolbar-title>
       <v-spacer></v-spacer>
+      <v-btn icon to="/sign-out" v-if="userData">
+        <v-icon>exit_to_app</v-icon>
+      </v-btn>
     </v-toolbar>
     <v-content>
       <v-container fluid fill-height>
@@ -36,11 +28,15 @@
 
 <script>
 import mainMenu from '@/components/main-menu.vue'
+import { mapState } from 'vuex'
 
 export default {
   name: 'default-layout',
   components: { mainMenu },
-  data: () => ({ drawer: false }),
+  data: () => ({ drawer: true }),
+  computed: {
+    ...mapState('auth', ['userData']),
+  },
 };
 </script>
 

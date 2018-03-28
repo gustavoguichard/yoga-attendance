@@ -10,12 +10,20 @@ export const mutations = {
   update(current, data) {
     current.list = data
   },
+  updatePerson(current, person) {
+    current.person = person
+  },
 }
 
 export const actions = {
-  async fetch(context) {
-    const response = await api.service('practitioners').find()
+  async fetch(context, params) {
+    const response = await api.service('practitioners').find(params)
     context.commit('update', response.data)
+  },
+
+  async find(context, id) {
+    const response = await api.service('practitioners').get(id)
+    context.commit('updatePerson', response)
   },
 }
 

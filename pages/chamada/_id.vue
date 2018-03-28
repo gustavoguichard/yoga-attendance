@@ -21,9 +21,6 @@
             <v-list-tile-content>
               <v-list-tile-title>{{ person.fullName }}</v-list-tile-title>
             </v-list-tile-content>
-            <!-- <v-list-tile-avatar>
-              <v-icon>person</v-icon>
-            </v-list-tile-avatar> -->
           </v-list-tile>
         </div>
       </v-list>
@@ -82,18 +79,19 @@ export default {
       this.selected = this.allSelected ? [] : map(this.list, '_id')
     },
     selectTeacher(teacher) {
-      this.currentTeacher = teacher._id
+      this.currentTeacher = teacher
     },
     isTeacher(teacher) {
-      return teacher._id === this.teacher
+      return teacher._id === this.teacher._id
     },
     async submit() {
       await this.$store.dispatch('auth/ensureAuth')
       await this.$store.dispatch('classrooms/addAttendance', {
         practitioners: this.selected,
-        teacher: this.teacher,
+        teacher: this.teacher._id,
         classId: this.lesson._id,
       })
+      this.$router.push('/')
     },
   },
   computed: {
@@ -104,7 +102,7 @@ export default {
       return this.list.length === this.selected.length
     },
     teacher() {
-      return this.currentTeacher || this.lesson.teacher
+      return this.currentTeacher || this.lesson.teacher || { id: null }
     },
   },
   async fetch({ store, params }) {

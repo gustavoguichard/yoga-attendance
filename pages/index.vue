@@ -26,7 +26,7 @@
         <v-toolbar-title>Outras turmas</v-toolbar-title>
       </v-toolbar>
       <v-list two-line>
-        <class-tile v-for="lesson in classWithoutTeacher" :key="lesson.title" :lesson="lesson" :icon="true"></class-tile>
+        <class-tile v-for="lesson in classWithoutTeacher" :key="lesson.title" :lesson="lesson"></class-tile>
       </v-list>
     </v-card>
   </v-layout>
