@@ -13,7 +13,7 @@ export const mutations = {
 }
 
 export const actions = {
-  async fetch(context, { params, query }) {
+  async find(context, { params, query }) {
     const skip = PAGE_LIMIT * (query.page || 0)
     const response = await api.service('frequency').find({
       query: {

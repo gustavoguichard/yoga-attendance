@@ -15,11 +15,11 @@ export const mutations = {
 }
 
 export const actions = {
-  async fetch(context) {
+  async find(context) {
     const response = await api.service('classrooms').find()
     context.commit('update', response.data)
   },
-  async find(context, id) {
+  async get(context, id) {
     const response = await api.service('classrooms').get(id)
     context.commit('updateLesson', response)
   },

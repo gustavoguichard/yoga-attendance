@@ -44,7 +44,7 @@ export default {
   },
   async fetch({ store }) {
     await store.dispatch('auth/ensureAuth')
-    await store.dispatch('classrooms/fetch')
+    await store.dispatch('classrooms/find')
   },
 };
 </script>

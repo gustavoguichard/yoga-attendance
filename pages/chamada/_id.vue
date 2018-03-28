@@ -107,8 +107,8 @@ export default {
   },
   async fetch({ store, params }) {
     await store.dispatch('auth/ensureAuth')
-    await store.dispatch('classrooms/find', params.id)
-    await store.dispatch('practitioners/fetch')
+    await store.dispatch('classrooms/get', params.id)
+    await store.dispatch('practitioners/find')
   },
 };
 </script>

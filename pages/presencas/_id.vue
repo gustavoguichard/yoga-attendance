@@ -47,8 +47,8 @@ export default {
   },
   async fetch({ store, ...context }) {
     await store.dispatch('auth/ensureAuth')
-    await store.dispatch('classrooms/find', context.params.id)
-    await store.dispatch('frequency/fetch', context)
+    await store.dispatch('classrooms/get', context.params.id)
+    await store.dispatch('frequency/find', context)
   },
 };
 </script>

@@ -16,14 +16,18 @@ export const mutations = {
 }
 
 export const actions = {
-  async fetch(context, params) {
+  async find(context, params) {
     const response = await api.service('practitioners').find(params)
     context.commit('update', response.data)
   },
 
-  async find(context, id) {
+  async get(context, id) {
     const response = await api.service('practitioners').get(id)
     context.commit('updatePerson', response)
+  },
+
+  async patch(context, { id, ...data }) {
+    return api.service('practitioners').patch(id, data)
   },
 }
 
