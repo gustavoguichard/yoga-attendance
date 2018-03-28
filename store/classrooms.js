@@ -25,12 +25,16 @@ export const actions = {
   },
   async addAttendance(context, payload) {
     return api.service('frequency').create(payload)
-  }
+  },
 }
 
 const groupedByTeacher = rooms => {
   const grouped = groupBy(rooms, 'teacher.fullName')
-  return reduce(grouped, (result, cr, name) => [...result, { name, classes: cr }], [])
+  return reduce(grouped, (result, cr, name) => [...result, {
+    name,
+    picture: cr[0].teacher && cr[0].teacher.picture,
+    classes: cr,
+  }], [])
 }
 
 export const getters = {

@@ -36,15 +36,16 @@
         <div v-for="(teacher, i) in teachers" :key="teacher._id">
           <v-divider v-if="i > 0"></v-divider>
           <v-list-tile avatar ripple @click="selectTeacher(teacher)">
-            <v-list-tile-action>
-              <v-icon v-if="isTeacher(teacher)" color="yellow darken-2">star</v-icon>
-            </v-list-tile-action>
+            <v-list-tile-avatar>
+              <img v-if="teacher.picture" :src="'/' + teacher.picture" />
+              <v-icon v-else>person</v-icon>
+            </v-list-tile-avatar>
             <v-list-tile-content>
               <v-list-tile-title>{{ teacher.fullName }}</v-list-tile-title>
             </v-list-tile-content>
-            <!-- <v-list-tile-avatar>
-              <v-icon>person</v-icon>
-            </v-list-tile-avatar> -->
+            <v-list-tile-action>
+              <v-icon v-if="isTeacher(teacher)" color="yellow darken-2">star</v-icon>
+            </v-list-tile-action>
           </v-list-tile>
         </div>
       </v-list>
