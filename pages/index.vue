@@ -7,7 +7,7 @@
       <v-list two-line>
         <template v-for="(teacher, i) in classByTeacher">
           <v-divider v-if="i !== 0"></v-divider>
-          <v-list-tile avatar :key="teacher.name" @click="">
+          <v-list-tile avatar :key="teacher.name">
             <v-list-tile-avatar>
               <v-icon>person</v-icon>
             </v-list-tile-avatar>
@@ -16,12 +16,7 @@
             </v-list-tile-content>
           </v-list-tile>
           <v-divider></v-divider>
-          <v-list-tile v-for="lesson in teacher.classes" :key="lesson.title">
-            <v-list-tile-content>
-              <v-list-tile-title>{{ lesson.title }}</v-list-tile-title>
-              <v-list-tile-sub-title v-if="lesson.description" v-html="lesson.description" />
-            </v-list-tile-content>
-          </v-list-tile>
+          <class-tile v-for="lesson in teacher.classes" :key="lesson.title" :lesson="lesson"></class-tile>
         </template>
       </v-list>
     </v-card>
@@ -30,16 +25,7 @@
         <v-toolbar-title>Outras turmas</v-toolbar-title>
       </v-toolbar>
       <v-list two-line>
-        <template v-for="(room, i) in classWithoutTeacher">
-          <v-list-tile avatar :key="room.title" @click="">
-            <v-list-tile-avatar>
-              <v-icon>group</v-icon>
-            </v-list-tile-avatar>
-            <v-list-tile-content>
-              <v-list-tile-title>{{ room.title }}</v-list-tile-title>
-            </v-list-tile-content>
-          </v-list-tile>
-        </template>
+        <class-tile v-for="lesson in classWithoutTeacher" :key="lesson.title" :lesson="lesson" :icon="true"></class-tile>
       </v-list>
     </v-card>
   </v-layout>
@@ -47,9 +33,11 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import classTile from '@/components/class-tile.vue'
 
 export default {
   middleware: 'check-auth',
+  components: { classTile },
   computed: {
     ...mapGetters('classrooms', ['classByTeacher', 'classWithoutTeacher']),
   },

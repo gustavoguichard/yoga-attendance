@@ -1,7 +1,7 @@
 <template>
   <v-list dense>
     <template v-for="(item, i) in items">
-      <v-list-tile :to="item.to" v-if="item.show">
+      <v-list-tile :to="item.to" v-if="show(item)">
         <v-list-tile-action v-if="item.icon">
           <v-icon v-html="item.icon">spa</v-icon>
         </v-list-tile-action>
@@ -17,6 +17,11 @@
 import { mapState } from 'vuex'
 
 export default {
+  methods: {
+    show(page) {
+      return this.isAuthenticated ? !page.unlogged : !!page.unlogged
+    },
+  },
   computed: {
     ...mapState('auth', ['userData']),
     isAuthenticated() {
@@ -24,17 +29,12 @@ export default {
     },
     items() {
       return [
-        { name: 'Aulas', to: '/', icon: 'spa', show: this.isAuthenticated },
-        { name: 'Login', to: '/sign-in', show: !this.isAuthenticated },
-        { name: 'Logout', to: '/sign-out', icon: 'exit_to_app', show: this.isAuthenticated },
+        { name: 'Aulas', to: '/', icon: 'spa' },
+        { name: 'Praticantes', to: '/praticantes', icon: 'group' },
+        { name: 'Login', to: '/sign-in', icon: 'person_add', unlogged: true },
+        { name: 'Logout', to: '/sign-out', icon: 'exit_to_app' },
       ]
     },
   },
 };
 </script>
-
-<style>
-/*.main-menu__item .nuxt-link-active {
-  color: #92D3CE;
-}*/
-</style>

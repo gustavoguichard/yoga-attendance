@@ -2,9 +2,8 @@
   <v-app id="inspire">
     <v-navigation-drawer
       fixed
-      v-model="drawer"
       clipped
-      dark
+      v-model="drawer"
       app
     >
       <main-menu />
@@ -41,9 +40,7 @@ import mainMenu from '@/components/main-menu.vue'
 export default {
   name: 'default-layout',
   components: { mainMenu },
-  data: () => ({
-    drawer: true,
-  }),
+  data: () => ({ drawer: false }),
 };
 </script>
 
