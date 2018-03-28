@@ -19,6 +19,7 @@ export default {
     items: [
       { name: 'Aulas', to: '/', icon: 'spa' },
       { name: 'Praticantes', to: '/praticantes', icon: 'group' },
+      { name: 'Professores', to: '/professores', icon: 'record_voice_over' },
     ],
   }),
 };
