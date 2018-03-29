@@ -19,8 +19,9 @@
               <v-list-tile-title>{{ person[0].fullName }}</v-list-tile-title>
             </v-list-tile-content>
             <v-list-tile-action>
-              <v-chip color="primary" text-color="white">
-                {{ person.length }} Presenças
+              <v-chip>
+                <v-avatar class="blue white-txt">{{ person.length }}</v-avatar>
+                Aulas ({{ countPercent(person.length) }}%)
               </v-chip>
             </v-list-tile-action>
           </v-list-tile>
@@ -40,6 +41,11 @@ export default {
     ...mapGetters('frequency', ['byPractitioner']),
     ...mapState('practitioners', ['list']),
     ...mapState('classrooms', ['lesson']),
+  },
+  methods: {
+    countPercent(length) {
+      return parseInt((length * 100) / 15, 10)
+    },
   },
   async fetch({ store, params }) {
     await store.dispatch('auth/ensureAuth')

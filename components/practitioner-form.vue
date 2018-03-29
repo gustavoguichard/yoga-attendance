@@ -20,6 +20,7 @@
         <v-checkbox
           v-for="lesson in classes"
           :label="lesson.title"
+          :key="lesson.title"
           v-model="editingPerson.classRooms"
           color="blue"
           :value="lesson._id"

@@ -15,11 +15,6 @@
             <v-list-tile-content>
               <v-list-tile-title>{{ teacher.fullName }}</v-list-tile-title>
             </v-list-tile-content>
-            <v-list-tile-action>
-              <v-btn icon :to="`/acertos/${teacher._id}`">
-                <v-icon>attach_money</v-icon>
-              </v-btn>
-            </v-list-tile-action>
           </v-list-tile>
           <v-divider></v-divider>
         </template>

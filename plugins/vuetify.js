@@ -2,6 +2,7 @@ import Vue from 'vue'
 import {
   Vuetify,
   VApp,
+  VAvatar,
   VBtn,
   VCard,
   VCheckbox,
@@ -22,6 +23,7 @@ import {
 Vue.use(Vuetify, {
   components: {
     VApp,
+    VAvatar,
     VBtn,
     VCard,
     VCheckbox,
