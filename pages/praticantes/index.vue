@@ -61,5 +61,6 @@ export default {
 .card {
   margin: 1em;
   min-width: 400px;
+  width: 60%;
 }
 </style>

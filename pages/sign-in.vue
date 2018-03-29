@@ -1,31 +1,28 @@
 <template>
-<div class="page-container sign-in">
+<v-layout justify-center class="page-container sign-in">
   <p v-if="error" class="error">{{ error }}</p>
-  <v-layout column justify-center align-center>
-    <v-flex xs12 sm8 md6>
-      <v-card class="mt-5 pt-4">
+  <v-card class="mt-3 py-4 px-2">
+    <v-layout wrap>
+      <v-flex column>
         <h3 class="text-xs-center">Olá professor :)</h3>
-        <v-layout row justify-space-around>
+        <p class="text-xs-center">
           <img src="/logo.png" alt="Iyengar Brasil" class="mb-1" />
-        </v-layout>
-        <v-card-text>
-          <blockquote>Yoga é como um espelho para olharmos para dentro de nós mesmos.</blockquote>
-          <div class="text-xs-right">
-            <em><small>&mdash; B.K.S Iyengar</small></em>
-          </div>
-        </v-card-text>
-        <v-card-text>
-          <v-text-field @keyup.enter.native="submit" v-model="email" autofocus name="email" label="E-mail" id="email"></v-text-field>
-          <v-text-field @keyup.enter.native="submit" v-model="password" type="password" name="password" label="Senha" id="password"></v-text-field>
-        </v-card-text>
-        <v-card-row actions>
-          <!-- <v-btn flat primary light>Esqueci-minha senha</v-btn> -->
-          <v-btn primary light @click.native="submit">Entrar</v-btn>
-        </v-card-row>
-      </v-card>
-    </v-flex>
-  </v-layout>
-</div>
+        </p>
+      </v-flex>
+      <v-card-text>
+        <blockquote>Yoga é como um espelho para olharmos para dentro de nós mesmos.</blockquote>
+        <div class="text-xs-right">
+          <em><small>&mdash; B.K.S Iyengar</small></em>
+        </div>
+        <v-text-field @keyup.enter.native="submit" v-model="email" autofocus name="email" label="E-mail" id="email"></v-text-field>
+        <v-text-field @keyup.enter.native="submit" v-model="password" type="password" name="password" label="Senha" id="password"></v-text-field>
+      </v-card-text>
+    </v-layout>
+    <v-btn color="blue" dark fab absolute bottom right @click="submit">
+      <v-icon>check</v-icon>
+    </v-btn>
+  </v-card>
+</v-layout>
 </template>
 
 <script>
@@ -66,3 +63,14 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+  .page-container {
+    height: auto !important;
+  }
+
+  .card {
+    min-width: 400px;
+    width: 60%;
+  }
+</style>
