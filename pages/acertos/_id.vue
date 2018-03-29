@@ -21,7 +21,7 @@
             <v-list-tile-action>
               <v-chip>
                 <v-avatar class="blue white-txt">{{ person.length }}</v-avatar>
-                Aulas ({{ countPercent(person.length) }}%)
+                Aulas ({{ countPercent(person) }}%)
               </v-chip>
             </v-list-tile-action>
           </v-list-tile>
@@ -34,17 +34,34 @@
 
 <script>
 import { mapGetters, mapState } from 'vuex'
+import { find, map } from 'lodash'
+import api from '@/api'
+import moment from 'moment'
+
+// const lastMonthStart = moment().subtract(1, 'month').startOf('month')
+const lastMonthStart = moment().startOf('month')
+// const lastMonthEnd = moment().subtract(1, 'month').endOf('month')
+const lastMonthEnd = moment().endOf('month')
 
 export default {
   middleware: 'check-auth',
+  data: () => ({
+    frequencyById: [],
+  }),
   computed: {
     ...mapGetters('frequency', ['byPractitioner']),
     ...mapState('practitioners', ['list']),
     ...mapState('classrooms', ['lesson']),
   },
   methods: {
-    countPercent(length) {
-      return parseInt((length * 100) / 15, 10)
+    countPercent(personArray) {
+      if (this.frequencyById.length) {
+        const { length } = personArray
+        const person = personArray[0]
+        const result = find(this.frequencyById, f => f._id === person._id)
+        return parseInt((length * 100) / result.total, 10)
+      }
+      return 100
     },
   },
   async fetch({ store, params }) {
@@ -52,10 +69,31 @@ export default {
     await store.dispatch('frequency/find', {
       query: {
         classId: params.id,
+        createdAt: {
+          $gte: lastMonthStart._d,
+          $lt: lastMonthEnd._d,
+        },
         populatePractitioners: true,
       },
     })
     await store.dispatch('classrooms/get', params.id)
+  },
+  async mounted() {
+    await this.$store.dispatch('auth/ensureAuth')
+    const totalById = await Promise.all(map(this.byPractitioner, async lessons => {
+      const { _id } = lessons[0]
+      const frequency = await api.service('frequency').find({
+        query: {
+          practitioners: _id,
+          createdAt: {
+            $gte: lastMonthStart._d,
+            $lt: lastMonthEnd._d,
+          },
+        },
+      })
+      return { _id, total: frequency.total }
+    }))
+    this.frequencyById = totalById
   },
 };
 </script>
