@@ -20,6 +20,9 @@
         </div>
       </v-list>
     </v-card>
+    <v-btn color="blue" dark fab fixed bottom right to="/praticantes/new">
+      <v-icon>person_add</v-icon>
+    </v-btn>
   </v-layout>
 </template>
 
@@ -37,7 +40,7 @@ export default {
       if (this.$route.query.add_teacher) {
         await this.$store.dispatch('auth/ensureAuth')
         await this.$store.dispatch('practitioners/patch', {
-          id: person._id,
+          _id: person._id,
           teacher: true,
         })
         this.$router.push('/professores')

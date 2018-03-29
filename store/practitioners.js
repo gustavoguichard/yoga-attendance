@@ -1,5 +1,5 @@
 import api from '@/api'
-import { filter } from 'lodash'
+import { filter, sortBy } from 'lodash'
 import { groupByFirstLetter } from '@/utils/helpers'
 
 export const state = () => ({
@@ -8,7 +8,7 @@ export const state = () => ({
 
 export const mutations = {
   update(current, data) {
-    current.list = data
+    current.list = sortBy(data, 'fullName')
   },
   updatePerson(current, person) {
     current.person = person
@@ -26,8 +26,12 @@ export const actions = {
     context.commit('updatePerson', response)
   },
 
-  async patch(context, { id, ...data }) {
-    return api.service('practitioners').patch(id, data)
+  async patch(context, { _id, ...data }) {
+    return api.service('practitioners').patch(_id, data)
+  },
+
+  async create(context, data) {
+    return api.service('practitioners').create(data)
   },
 }
 
