@@ -2,7 +2,7 @@
   <v-layout justify-center wrap>
     <v-card>
       <v-toolbar color="blue-grey lighten-1" dark>
-        <v-toolbar-title>Selecione a turma pelo professor</v-toolbar-title>
+        <v-toolbar-title>Selecione uma turma</v-toolbar-title>
       </v-toolbar>
       <v-list two-line>
         <template v-for="(teacher, i) in classByTeacher">
@@ -17,28 +17,20 @@
             </v-list-tile-content>
           </v-list-tile>
           <v-divider></v-divider>
-          <class-tile
-            v-for="lesson in teacher.classes"
-            :key="lesson.title"
-            :lesson="lesson"
-            :openLesson="openLesson"
-            :viewFrequency="viewFrequency"
-          ></class-tile>
+          <class-tile v-for="lesson in teacher.classes" :key="lesson.title" :lesson="lesson" :callback="classClicked"></class-tile>
+
         </template>
-      </v-list>
-    </v-card>
-    <v-card>
-      <v-toolbar color="blue-grey lighten-1" dark>
-        <v-toolbar-title>Outras turmas</v-toolbar-title>
-      </v-toolbar>
-      <v-list two-line>
-        <class-tile
-          v-for="lesson in classWithoutTeacher"
-          :key="lesson.title"
-          :lesson="lesson"
-          :openLesson="openLesson"
-          :viewFrequency="viewFrequency"
-        ></class-tile>
+        <v-divider></v-divider>
+        <v-list-tile avatar>
+          <v-list-tile-avatar>
+            <v-icon>group</v-icon>
+          </v-list-tile-avatar>
+          <v-list-tile-content>
+            <v-list-tile-title>Outras turmas</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+        <v-divider></v-divider>
+        <class-tile v-for="(lesson, i) in classWithoutTeacher" :key="i" :lesson="lesson" :callback="classClicked"></class-tile>
       </v-list>
     </v-card>
   </v-layout>
@@ -55,11 +47,8 @@ export default {
     ...mapGetters('classrooms', ['classByTeacher', 'classWithoutTeacher']),
   },
   methods: {
-    openLesson({ _id }) {
-      this.$router.push(`/chamada/${_id}`)
-    },
-    viewFrequency({ _id }) {
-      this.$router.push(`/presencas/${_id}`)
+    classClicked(lesson) {
+      this.$router.push(`/acertos/${lesson._id}`)
     },
   },
   async fetch({ store }) {
@@ -73,5 +62,6 @@ export default {
 .card {
   margin: 1em;
   min-width: 400px;
+  width: 60%;
 }
 </style>

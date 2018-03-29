@@ -20,6 +20,7 @@ export default {
       { name: 'Aulas', to: '/', icon: 'spa' },
       { name: 'Praticantes', to: '/praticantes', icon: 'group' },
       { name: 'Professores', to: '/professores', icon: 'record_voice_over' },
+      { name: 'Acertos', to: '/acertos', icon: 'monetization_on' },
     ],
   }),
 };

@@ -9,12 +9,17 @@
           <v-divider v-if="i !== 0"></v-divider>
           <v-list-tile avatar :key="i" :to="`/praticantes/${teacher._id}`">
             <v-list-tile-avatar>
-              <img v-if="teacher.picture" :src="teacher.picture" />
+              <img v-if="teacher.picture" :src="'/' + teacher.picture" />
               <v-icon v-else>person</v-icon>
             </v-list-tile-avatar>
             <v-list-tile-content>
               <v-list-tile-title>{{ teacher.fullName }}</v-list-tile-title>
             </v-list-tile-content>
+            <v-list-tile-action>
+              <v-btn icon :to="`/acertos/${teacher._id}`">
+                <v-icon>attach_money</v-icon>
+              </v-btn>
+            </v-list-tile-action>
           </v-list-tile>
           <v-divider></v-divider>
         </template>
@@ -37,9 +42,7 @@ export default {
   async fetch({ store }) {
     await store.dispatch('auth/ensureAuth')
     await store.dispatch('practitioners/find', {
-      query: {
-        teacher: true,
-      },
+      query: { teacher: true },
     })
   },
 };
