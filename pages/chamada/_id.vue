@@ -9,11 +9,8 @@
         <v-toolbar-title>Praticantes da turma</v-toolbar-title>
       </v-toolbar>
       <v-list dense subheader>
-        <div v-for="(people, letter) in practitionersByLetter" :key="letter">
-          <v-divider></v-divider>
-          <v-subheader>{{ letter }}</v-subheader>
-          <v-divider></v-divider>
-          <v-list-tile avatar v-for="person in people" :key="person.fullName" ripple @click="toggle(person)">
+        <div v-for="person in subscribedPractitioners" :key="person._id">
+          <v-list-tile avatar ripple @click="toggle(person)">
             <v-list-tile-action>
               <v-icon v-if="isSelected(person)" color="blue darken-2">person</v-icon>
               <v-icon v-else color="grey lighten-1">person_add</v-icon>
@@ -55,7 +52,9 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import { concat, findIndex, map, uniq, without } from 'lodash'
+import {
+  concat, findIndex, filter, includes, map, uniq, without
+} from 'lodash'
 
 export default {
   middleware: 'check-auth',
@@ -76,7 +75,7 @@ export default {
       return index >= 0
     },
     selectAll() {
-      this.selected = this.allSelected ? [] : map(this.list, '_id')
+      this.selected = this.allSelected ? [] : map(this.subscribedPractitioners, '_id')
     },
     selectTeacher(teacher) {
       this.currentTeacher = teacher
@@ -95,14 +94,21 @@ export default {
     },
   },
   computed: {
-    ...mapGetters('practitioners', ['practitionersByLetter', 'teachers']),
+    ...mapGetters('practitioners', ['teachers']),
     ...mapState('practitioners', ['list']),
     ...mapState('classrooms', ['lesson']),
     allSelected() {
-      return this.list.length === this.selected.length
+      return this.subscribedPractitioners.length === this.selected.length
+    },
+    subscribedPractitioners() {
+      const isntTeaching = person => person._id !== this.teacher._id
+      const isSubscribed = person => includes(person.classRooms, this.lesson._id)
+      return filter(this.list, person =>
+        isSubscribed(person) && isntTeaching(person)
+      )
     },
     teacher() {
-      return this.currentTeacher || this.lesson.teacher || { id: null }
+      return this.currentTeacher || this.lesson.teacher || { _id: null }
     },
   },
   async fetch({ store, params }) {
