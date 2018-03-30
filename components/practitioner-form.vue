@@ -5,6 +5,9 @@
         <v-text-field @keyup.enter="submit" v-model="editingPerson.fullName" name="fullName" label="Nome completo" prepend-icon="perm_identity" required></v-text-field>
       </v-flex>
       <v-flex xs12>
+        <v-text-field @keyup.enter="submit" v-model="editingPerson.nickName" name="nickName" label="Apelido" prepend-icon="face"></v-text-field>
+      </v-flex>
+      <v-flex xs12>
         <v-text-field @keyup.enter="submit" v-model="editingPerson.email" name="email" label="E-mail" prepend-icon="email" required></v-text-field>
       </v-flex>
       <v-flex xs12>
@@ -50,6 +53,7 @@ export default {
   data: () => ({
     editingPerson: {
       fullName: '',
+      nickName: '',
       email: '',
       phone: '',
       birthdate: '',

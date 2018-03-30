@@ -23,7 +23,13 @@
               <v-icon v-else color="grey lighten-1">check</v-icon>
             </v-list-tile-action>
             <v-list-tile-content>
-              <v-list-tile-title>{{ person.fullName }}</v-list-tile-title>
+              <v-list-tile-title>
+                <span v-if="person.nickName">
+                  {{ person.nickName }}
+                  <em class="grey--text"> - {{ person.fullName }}</em>
+                </span>
+                <span v-else>{{ person.fullName }}</span>
+              </v-list-tile-title>
             </v-list-tile-content>
             <v-list-tile-avatar>
               <img v-if="person.picture" :src="person.picture" />
@@ -45,7 +51,7 @@
               <v-icon v-if="isTeacher(teacher)" color="yellow darken-2">star</v-icon>
             </v-list-tile-action>
             <v-list-tile-content>
-              <v-list-tile-title>{{ teacher.fullName }}</v-list-tile-title>
+              <v-list-tile-title>{{ teacher.displayName }}</v-list-tile-title>
             </v-list-tile-content>
             <v-list-tile-avatar>
               <img v-if="teacher.picture" :src="teacher.picture" />
@@ -63,7 +69,13 @@
           <v-list dense>
             <v-list-tile avatar v-for="person in otherPractitioners" :key="person._id" ripple @click="addToLesson(person)">
               <v-list-tile-content>
-                <v-list-tile-title>{{ person.fullName }}</v-list-tile-title>
+                <v-list-tile-title>
+                  <span v-if="person.nickName">
+                    {{ person.nickName }}
+                    <em class="grey--text"> - {{ person.fullName }}</em>
+                  </span>
+                  <span v-else>{{ person.fullName }}</span>
+                </v-list-tile-title>
               </v-list-tile-content>
               <v-list-tile-avatar>
                 <img v-if="person.picture" :src="person.picture" />

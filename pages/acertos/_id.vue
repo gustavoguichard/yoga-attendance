@@ -25,7 +25,13 @@
               <v-icon v-else>person</v-icon>
             </v-list-tile-avatar>
             <v-list-tile-content>
-              <v-list-tile-title>{{ person[0].fullName }}</v-list-tile-title>
+              <v-list-tile-title>
+                <span v-if="person[0].nickName">
+                  {{ person[0].nickName }}
+                  <em class="grey--text"> - {{ person[0].fullName }}</em>
+                </span>
+                <span v-else>{{ person[0].fullName }}</span>
+              </v-list-tile-title>
             </v-list-tile-content>
             <v-list-tile-action>
               <v-chip>

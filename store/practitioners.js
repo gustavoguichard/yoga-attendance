@@ -7,7 +7,7 @@ export const state = () => ({
 
 export const mutations = {
   update(current, data) {
-    current.list = sortBy(data, 'fullName')
+    current.list = sortBy(data, 'displayName')
   },
   updatePerson(current, person) {
     current.person = person

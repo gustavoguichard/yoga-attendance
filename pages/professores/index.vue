@@ -13,7 +13,7 @@
               <v-icon v-else>person</v-icon>
             </v-list-tile-avatar>
             <v-list-tile-content>
-              <v-list-tile-title>{{ teacher.fullName }}</v-list-tile-title>
+              <v-list-tile-title>{{ teacher.displayName }}</v-list-tile-title>
             </v-list-tile-content>
           </v-list-tile>
           <v-divider></v-divider>
