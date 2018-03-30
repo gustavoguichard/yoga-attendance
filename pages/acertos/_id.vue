@@ -21,7 +21,7 @@
           <v-divider />
           <v-list-tile avatar :key="id">
             <v-list-tile-avatar>
-              <img v-if="person[0].picture" :src="'/' + person[0].picture" />
+              <img v-if="person[0].picture" :src="person[0].picture" />
               <v-icon v-else>person</v-icon>
             </v-list-tile-avatar>
             <v-list-tile-content>

@@ -9,7 +9,7 @@
           <v-divider v-if="i !== 0"></v-divider>
           <v-list-tile avatar :key="teacher.name">
             <v-list-tile-avatar>
-              <img v-if="teacher.picture" :src="'/' + teacher.picture" />
+              <img v-if="teacher.picture" :src="teacher.picture" />
               <v-icon v-else>person</v-icon>
             </v-list-tile-avatar>
             <v-list-tile-content>

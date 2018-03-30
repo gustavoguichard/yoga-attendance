@@ -11,12 +11,21 @@
         <v-checkbox color="blue" v-model="editingPerson.teacher" name="teacher" label="Professor"></v-checkbox>
       </v-flex>
       <v-flex xs12>
+        <p class="text-xs-center">
+          <v-avatar size="80" class="grey lighten-4 my-2" @click="pickFile" style="cursor: pointer">
+            <img v-if="editingPerson.picture" :src="editingPerson.picture" alt="avatar">
+            <v-icon v-else alt="avatar">person</v-icon>
+          </v-avatar>
+        </p>
+        <input style="display: none" type="file" accept="image/*" ref="fileInput" @change="onFileChange">
+      </v-flex>
+      <v-flex xs12>
         <v-text-field @keyup.enter="submit" mask="(##) #####-####" v-model="editingPerson.phone" name="phone" label="Telefone" prepend-icon="phone" required></v-text-field>
       </v-flex>
       <v-flex xs12>
         <v-text-field @keyup.enter="submit" mask="##/##/####" v-model="editingPerson.birthdate" name="birthdate" label="Data de Nascimento" prepend-icon="cake" required></v-text-field>
       </v-flex>
-      <v-flex xs12>
+            <v-flex xs12>
         <v-checkbox
           v-for="lesson in classes"
           :label="lesson.title"
@@ -35,6 +44,7 @@
 </template>
 
 <script>
+/* global FileReader */
 import { mapState } from 'vuex'
 
 export default {
@@ -45,6 +55,7 @@ export default {
       email: '',
       phone: '',
       birthdate: '',
+      picture: '',
       teacher: false,
       classRooms: [],
     },
@@ -53,6 +64,20 @@ export default {
     ...mapState('classrooms', ['classes']),
   },
   methods: {
+    onFileChange(ev) {
+      ev.preventDefault()
+      const reader = new FileReader()
+      const file = ev.target.files[0]
+
+      reader.onloadend = () => {
+        this.editingPerson.picture = reader.result
+      }
+
+      reader.readAsDataURL(file)
+    },
+    pickFile() {
+      this.$refs.fileInput.click()
+    },
     submit() {
       this.save(this.editingPerson)
     },
