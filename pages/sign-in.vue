@@ -69,8 +69,10 @@ export default {
     height: auto !important;
   }
 
+@media (min-width: 800px) {
   .card {
     min-width: 400px;
     width: 60%;
   }
+}
 </style>

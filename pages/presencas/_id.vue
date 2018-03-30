@@ -58,9 +58,11 @@ export default {
 </script>
 
 <style scoped>
-.card {
-  margin: 1em;
-  min-width: 400px;
-  width: 60%;
+@media (min-width: 800px) {
+  .card {
+    margin: 1em;
+    min-width: 400px;
+    width: 60%;
+  }
 }
 </style>
