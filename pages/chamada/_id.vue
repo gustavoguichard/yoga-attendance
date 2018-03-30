@@ -118,8 +118,9 @@ export default {
       }
     },
     toggleRestituting(person) {
-      const restitution = without(this.restitution, person)
-      this.restitution = [...restitution, { ...person, restituting: !person.restituting }]
+      this.restitution = map(this.restitution, item =>
+        item._id === person._id ? { ...item, restituting: !item.restituting } : item
+      )
     },
     isSelected(person) {
       const index = findIndex(this.selected, id => id === person._id)
