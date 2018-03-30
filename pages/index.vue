@@ -59,7 +59,7 @@ export default {
       this.$router.push(`/chamada/${_id}`)
     },
     viewFrequency({ _id }) {
-      this.$router.push(`/presencas/${_id}`)
+      this.$router.push(`/chamada/${_id}/lista`)
     },
   },
   async fetch({ store }) {

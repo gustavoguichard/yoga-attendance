@@ -1,56 +1,57 @@
 <template>
-  <v-layout justify-center wrap>
+  <v-layout align-content-center align-center column>
+    <div class="text-xs-center grey--text text--darken-2 mb-4 mt-2">
+      <v-avatar class="mb-2" size="100">
+        <img v-if="peopleList.classRoom.teacher.picture" :src="peopleList.classRoom.teacher.picture" alt="Professor" />
+        <v-icon v-else>person</v-icon>
+      </v-avatar>
+      <h2 class="headline">{{ peopleList.classRoom.title }}</h2>
+      <span v-if="substitution(peopleList)" class="subheading grey--text">Substituto: {{ peopleList.teacher.displayName }}</span>
+    </div>
     <v-card>
       <v-toolbar color="blue-grey lighten-1" dark>
-        <v-toolbar-title>{{ lesson.title }} <br> {{ teacherName }}</v-toolbar-title>
+        <v-toolbar-title>Alunos presentes:</v-toolbar-title>
       </v-toolbar>
       <v-list two-line subheader>
-        <div v-for="(item, i) in result.data" :key="i">
+        <div v-for="(person, i) in peopleList.practitioners" :key="i">
           <v-divider></v-divider>
-          <v-list-tile ripple @click.native="">
+          <v-list-tile avatar>
+            <v-list-tile-avatar>
+              <img v-if="person.picture" :src="person.picture" alt="Professor" />
+              <v-icon v-else>person</v-icon>
+            </v-list-tile-avatar>
             <v-list-tile-content>
-              <v-list-tile-title>{{ parseDate(item) }}</v-list-tile-title>
-              <v-list-tile-sub-title>{{ item.teacher.displayName }}</v-list-tile-sub-title>
+              <v-list-tile-title>{{ person.displayName }}</v-list-tile-title>
             </v-list-tile-content>
-             <v-list-tile-action>
-                <v-list-tile-action-text>{{ item.practitioners.length }}</v-list-tile-action-text>
-              </v-list-tile-action>
           </v-list-tile>
         </div>
       </v-list>
     </v-card>
-    <v-btn color="blue" dark fab fixed bottom right :to="`/chamada/${lesson._id}`">
-      <v-icon>playlist_add</v-icon>
-    </v-btn>
   </v-layout>
 </template>
 
 <script>
 import { mapState } from 'vuex'
-import moment from 'moment'
+import { get } from 'lodash'
 
 export default {
   middleware: 'check-auth',
   computed: {
-    ...mapState('frequency', ['result']),
-    ...mapState('classrooms', ['lesson']),
-    teacherName() {
-      const { teacher } = this.lesson
-      return teacher ? teacher.displayName : null
-    },
+    ...mapState('frequency', ['peopleList']),
   },
   methods: {
-    parseDate({ createdAt }) {
-      moment.locale('pt-BR')
-      return moment(createdAt).format('ddd DD/MM/YYYY')
+    substitution(item) {
+      return get(item, 'teacher._id') !== get(item, 'classRoom.teacher._id')
     },
   },
   async fetch({ store, ...context }) {
     await store.dispatch('auth/ensureAuth')
-    await store.dispatch('classrooms/get', context.params.id)
-    await store.dispatch('frequency/find', {
-      page: context.query.page,
-      query: { classId: context.params.id },
+    await store.dispatch('frequency/get', {
+      id: context.params.id,
+      query: {
+        populatePractitioners: true,
+        populateClassroom: true,
+      },
     })
   },
 };
