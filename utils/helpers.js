@@ -4,12 +4,6 @@ import {
   upperCase, orderBy, groupBy,
 } from 'lodash'
 
-export const firstLetter = string => first(split(string, ''))
-export const groupByFirstLetter = (items, field) => {
-  const ordered = orderBy(items, field)
-  return groupBy(ordered, item => upperCase(firstLetter(get(item, field))))
-}
-
 export const searchInFields = (items, fields, text) => {
   const searchText = lowerCase(text)
   return filter(items, item =>

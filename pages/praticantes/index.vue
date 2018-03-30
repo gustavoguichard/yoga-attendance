@@ -4,20 +4,15 @@
       <v-toolbar color="blue-grey lighten-1" dark>
         <v-toolbar-title>Praticantes</v-toolbar-title>
       </v-toolbar>
-      <v-list dense subheader>
-        <div v-for="(people, letter) in practitionersByLetter" :key="letter">
-          <v-divider></v-divider>
-          <v-subheader>{{ letter }}</v-subheader>
-          <v-divider></v-divider>
-          <v-list-tile v-for="person in people" :key="person.fullName" ripple @click="clicked(person)">
-            <v-list-tile-avatar>
-              <v-icon>person</v-icon>
-            </v-list-tile-avatar>
-            <v-list-tile-content>
-              <v-list-tile-title>{{ person.fullName }}</v-list-tile-title>
-            </v-list-tile-content>
-          </v-list-tile>
-        </div>
+      <v-list dense>
+        <v-list-tile v-for="person in list" :key="person.fullName" ripple @click="clicked(person)">
+          <v-list-tile-avatar>
+            <v-icon>person</v-icon>
+          </v-list-tile-avatar>
+          <v-list-tile-content>
+            <v-list-tile-title>{{ person.fullName }}</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
       </v-list>
     </v-card>
     <v-btn color="blue" dark fab fixed bottom right to="/praticantes/new">
@@ -27,13 +22,13 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 import { pick } from 'lodash'
 
 export default {
   middleware: 'check-auth',
   computed: {
-    ...mapGetters('practitioners', ['list', 'practitionersByLetter']),
+    ...mapState('practitioners', ['list']),
   },
   methods: {
     async clicked(person) {

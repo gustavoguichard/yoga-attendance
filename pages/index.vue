@@ -21,7 +21,7 @@
             v-for="lesson in teacher.classes"
             :key="lesson.title"
             :lesson="lesson"
-            :openLesson="openLesson"
+            :callback="openLesson"
             :viewFrequency="viewFrequency"
           ></class-tile>
         </template>
@@ -36,7 +36,7 @@
           v-for="lesson in classWithoutTeacher"
           :key="lesson.title"
           :lesson="lesson"
-          :openLesson="openLesson"
+          :callback="openLesson"
           :viewFrequency="viewFrequency"
         ></class-tile>
       </v-list>

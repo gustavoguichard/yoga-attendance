@@ -1,6 +1,5 @@
 import api from '@/api'
 import { filter, sortBy } from 'lodash'
-import { groupByFirstLetter } from '@/utils/helpers'
 
 export const state = () => ({
   list: [],
@@ -44,9 +43,6 @@ export const actions = {
 }
 
 export const getters = {
-  practitionersByLetter({ list }) {
-    return groupByFirstLetter(list, 'fullName')
-  },
   teachers({ list }) {
     return filter(list, person => person.teacher)
   },

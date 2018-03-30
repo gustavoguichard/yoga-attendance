@@ -3,8 +3,8 @@
     <v-card>
       <v-toolbar color="blue-grey lighten-1" dark>
         <v-btn icon @click="selectAll">
-          <v-icon v-if="allSelected" color="yellow">group</v-icon>
-          <v-icon v-else>group_add</v-icon>
+          <v-icon v-if="allSelected" color="blue darken-4">check_circle</v-icon>
+          <v-icon v-else>check</v-icon>
         </v-btn>
         <v-btn color="blue" dark fab absolute right @click.stop="dialog = true">
           <v-icon>add</v-icon>
@@ -14,13 +14,13 @@
       <v-list dense subheader>
         <div v-for="person in listedPeople" :key="person._id">
           <v-list-tile avatar ripple @click="toggle(person)">
-            <v-list-tile-action v-if="isRestituting(person)">
-              <v-icon v-if="person.restituting" color="grey">compare_arrows</v-icon>
-              <v-icon v-else color="yellow darken-2">star</v-icon>
+            <v-list-tile-action v-if="isRestituting(person)" @click.stop="toggleRestituting(person)">
+              <v-icon v-if="person.restituting" color="orange darken-4">compare_arrows</v-icon>
+              <v-icon v-else color="green darken-2">check_circle</v-icon>
             </v-list-tile-action>
             <v-list-tile-action v-else>
-              <v-icon v-if="isSelected(person)" color="blue darken-2">person</v-icon>
-              <v-icon v-else color="grey lighten-1">person_add</v-icon>
+              <v-icon v-if="isSelected(person)" color="blue darken-2">check_circle</v-icon>
+              <v-icon v-else color="grey lighten-1">check</v-icon>
             </v-list-tile-action>
             <v-list-tile-content>
               <v-list-tile-title>{{ person.fullName }}</v-list-tile-title>
@@ -108,6 +108,10 @@ export default {
         const newList = fn(this.selected, person._id)
         this.selected = uniq(newList)
       }
+    },
+    toggleRestituting(person) {
+      const restitution = without(this.restitution, person)
+      this.restitution = [...restitution, { ...person, restituting: !person.restituting }]
     },
     isSelected(person) {
       const index = findIndex(this.selected, id => id === person._id)

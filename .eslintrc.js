@@ -38,6 +38,7 @@ module.exports = {
     'object-curly-newline': 0,
     'function-paren-newline': 0,
     'no-underscore-dangle': 0,
+    'no-confusing-arrow': 0,
     'comma-dangle': ['error', {
       'arrays': 'always-multiline',
       'objects': 'always-multiline',

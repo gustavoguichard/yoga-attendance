@@ -1,5 +1,4 @@
 import api from '@/api'
-import { flatten, groupBy, map } from 'lodash'
 
 const PAGE_LIMIT = 20
 
@@ -26,12 +25,5 @@ export const actions = {
       },
     })
     context.commit('update', response)
-  },
-}
-
-export const getters = {
-  byPractitioner({ result }) {
-    const allFrequencies = flatten(map(result.data, 'practitioners'))
-    return groupBy(allFrequencies, 'fullName')
   },
 }
