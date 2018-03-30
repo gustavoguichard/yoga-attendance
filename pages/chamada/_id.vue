@@ -25,6 +25,10 @@
             <v-list-tile-content>
               <v-list-tile-title>{{ person.fullName }}</v-list-tile-title>
             </v-list-tile-content>
+            <v-list-tile-avatar>
+              <img v-if="person.picture" :src="person.picture" />
+              <v-icon v-else>person</v-icon>
+            </v-list-tile-avatar>
           </v-list-tile>
         </div>
       </v-list>
@@ -37,16 +41,16 @@
         <div v-for="(teacher, i) in teachers" :key="teacher._id">
           <v-divider v-if="i > 0"></v-divider>
           <v-list-tile avatar ripple @click="selectTeacher(teacher)">
-            <v-list-tile-avatar>
-              <img v-if="teacher.picture" :src="'/' + teacher.picture" />
-              <v-icon v-else>person</v-icon>
-            </v-list-tile-avatar>
-            <v-list-tile-content>
-              <v-list-tile-title>{{ teacher.fullName }}</v-list-tile-title>
-            </v-list-tile-content>
             <v-list-tile-action>
               <v-icon v-if="isTeacher(teacher)" color="yellow darken-2">star</v-icon>
             </v-list-tile-action>
+            <v-list-tile-content>
+              <v-list-tile-title>{{ teacher.fullName }}</v-list-tile-title>
+            </v-list-tile-content>
+            <v-list-tile-avatar>
+              <img v-if="teacher.picture" :src="teacher.picture" />
+              <v-icon v-else>person</v-icon>
+            </v-list-tile-avatar>
           </v-list-tile>
         </div>
       </v-list>
@@ -55,12 +59,16 @@
       <v-card>
         <v-card-title>Adicione um praticante à turma</v-card-title>
         <v-divider></v-divider>
-        <v-card-text style="height: 300px; overflow: scroll;">
+        <v-card-text style="max-height: 600px; overflow: scroll;">
           <v-list dense>
-            <v-list-tile v-for="person in otherPractitioners" :key="person._id" ripple @click="addToLesson(person)">
+            <v-list-tile avatar v-for="person in otherPractitioners" :key="person._id" ripple @click="addToLesson(person)">
               <v-list-tile-content>
                 <v-list-tile-title>{{ person.fullName }}</v-list-tile-title>
               </v-list-tile-content>
+              <v-list-tile-avatar>
+                <img v-if="person.picture" :src="person.picture" />
+                <v-icon v-else>person</v-icon>
+              </v-list-tile-avatar>
             </v-list-tile>
           </v-list>
         </v-card-text>

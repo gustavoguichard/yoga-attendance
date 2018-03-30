@@ -7,7 +7,10 @@
       <v-list dense>
         <v-list-tile v-for="person in list" :key="person.fullName" ripple @click="clicked(person)">
           <v-list-tile-avatar>
-            <v-icon>person</v-icon>
+            <v-avatar size="28">
+              <img v-if="person.picture" :src="person.picture" alt="avatar">
+              <v-icon v-else>person</v-icon>
+            </v-avatar>
           </v-list-tile-avatar>
           <v-list-tile-content>
             <v-list-tile-title>{{ person.fullName }}</v-list-tile-title>
