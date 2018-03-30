@@ -4,7 +4,7 @@
       <v-toolbar color="blue-grey lighten-1" dark>
         <v-toolbar-title>Novo praticante</v-toolbar-title>
       </v-toolbar>
-      <practitioner-form :save="submit"></practitioner-form>
+      <practitioner-form @submit="submit"></practitioner-form>
     </v-card>
   </v-layout>
 </template>

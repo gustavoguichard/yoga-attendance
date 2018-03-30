@@ -4,7 +4,7 @@
       <v-toolbar color="blue-grey lighten-1" dark>
         <v-toolbar-title>Editando: {{ person.fullName }}</v-toolbar-title>
       </v-toolbar>
-      <practitioner-form :person="person" :save="submit"></practitioner-form>
+      <practitioner-form :person="person" @submit="submit"></practitioner-form>
     </v-card>
   </v-layout>
 </template>
