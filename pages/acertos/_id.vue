@@ -25,7 +25,6 @@
               </v-chip>
             </v-list-tile-action>
           </v-list-tile>
-          <v-divider></v-divider>
         </template>
       </v-list>
     </v-card>

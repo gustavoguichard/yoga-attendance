@@ -33,6 +33,14 @@ export const actions = {
   async create(context, data) {
     return api.service('practitioners').create(data)
   },
+
+  async subscribeToClass(context, data) {
+    return Promise.all(data.practitioners.map(async person =>
+      api.service('practitioners').patch(person._id, {
+        classRooms: [...person.classRooms, data.classId],
+      })
+    ))
+  },
 }
 
 export const getters = {

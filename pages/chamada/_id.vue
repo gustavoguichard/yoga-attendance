@@ -6,12 +6,19 @@
           <v-icon v-if="allSelected" color="yellow">group</v-icon>
           <v-icon v-else>group_add</v-icon>
         </v-btn>
+        <v-btn color="blue" dark fab absolute right @click.stop="dialog = true">
+          <v-icon>add</v-icon>
+        </v-btn>
         <v-toolbar-title>Praticantes da turma</v-toolbar-title>
       </v-toolbar>
       <v-list dense subheader>
-        <div v-for="person in subscribedPractitioners" :key="person._id">
+        <div v-for="person in listedPeople" :key="person._id">
           <v-list-tile avatar ripple @click="toggle(person)">
-            <v-list-tile-action>
+            <v-list-tile-action v-if="isRestituting(person)">
+              <v-icon v-if="person.restituting" color="grey">compare_arrows</v-icon>
+              <v-icon v-else color="yellow darken-2">star</v-icon>
+            </v-list-tile-action>
+            <v-list-tile-action v-else>
               <v-icon v-if="isSelected(person)" color="blue darken-2">person</v-icon>
               <v-icon v-else color="grey lighten-1">person_add</v-icon>
             </v-list-tile-action>
@@ -44,6 +51,25 @@
         </div>
       </v-list>
     </v-card>
+    <v-dialog v-model="dialog" max-width="500px">
+      <v-card>
+        <v-card-title>Adicione um praticante à turma</v-card-title>
+        <v-divider></v-divider>
+        <v-card-text style="height: 300px; overflow: scroll;">
+          <v-list dense>
+            <v-list-tile v-for="person in otherPractitioners" :key="person._id" ripple @click="addToLesson(person)">
+              <v-list-tile-content>
+                <v-list-tile-title>{{ person.fullName }}</v-list-tile-title>
+              </v-list-tile-content>
+            </v-list-tile>
+          </v-list>
+        </v-card-text>
+        <v-divider></v-divider>
+        <v-card-actions>
+          <v-switch :label="`Reposição${restituting ? '' : '?'}`" v-model="restituting"></v-switch>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
     <v-btn color="blue" dark fab fixed bottom right @click="submit()">
       <v-icon>done_all</v-icon>
     </v-btn>
@@ -53,26 +79,45 @@
 <script>
 import { mapState, mapGetters } from 'vuex'
 import {
-  concat, findIndex, filter, includes, map, uniq, without
+  concat, difference, findIndex, filter,
+  includes, map, uniq, without
 } from 'lodash'
 
 export default {
   middleware: 'check-auth',
   data() {
     return {
+      dialog: false,
       selected: [],
+      restitution: [],
+      restituting: false,
       currentTeacher: undefined,
     }
   },
   methods: {
+    addToLesson(person) {
+      const { restituting } = this
+      this.restitution = uniq([...this.restitution, { ...person, restituting }])
+      this.dialog = false
+    },
     toggle(person) {
-      const fn = this.isSelected(person) ? without : concat
-      const newList = fn(this.selected, person._id)
-      this.selected = uniq(newList)
+      if (this.isRestituting(person)) {
+        this.restitution = filter(this.restitution, record => record._id !== person._id)
+      } else {
+        const fn = this.isSelected(person) ? without : concat
+        const newList = fn(this.selected, person._id)
+        this.selected = uniq(newList)
+      }
     },
     isSelected(person) {
       const index = findIndex(this.selected, id => id === person._id)
       return index >= 0
+    },
+    isRestituting(person) {
+      return includes(map(this.restitution, '_id'), person._id)
+    },
+    isntTeaching(person) {
+      return person._id !== this.teacher._id
     },
     selectAll() {
       this.selected = this.allSelected ? [] : map(this.subscribedPractitioners, '_id')
@@ -85,8 +130,12 @@ export default {
     },
     async submit() {
       await this.$store.dispatch('auth/ensureAuth')
+      await this.$store.dispatch('practitioners/subscribeToClass', {
+        practitioners: filter(this.restitution, p => !p.restituting),
+        classId: this.lesson._id,
+      })
       await this.$store.dispatch('classrooms/addAttendance', {
-        practitioners: this.selected,
+        practitioners: this.everyAttendant,
         teacher: this.teacher._id,
         classId: this.lesson._id,
       })
@@ -100,11 +149,22 @@ export default {
     allSelected() {
       return this.subscribedPractitioners.length === this.selected.length
     },
+    everyAttendant() {
+      return [...this.selected, ...map(this.restitution, '_id')]
+    },
     subscribedPractitioners() {
-      const isntTeaching = person => person._id !== this.teacher._id
       const isSubscribed = person => includes(person.classRooms, this.lesson._id)
       return filter(this.list, person =>
-        isSubscribed(person) && isntTeaching(person)
+        isSubscribed(person) && this.isntTeaching(person)
+      )
+    },
+    listedPeople() {
+      return [...this.subscribedPractitioners, ...this.restitution]
+    },
+    otherPractitioners() {
+      const notSubscribed = difference(this.list, this.subscribedPractitioners)
+      return filter(notSubscribed, p =>
+        !includes(map(this.restitution, '_id'), p._id) && this.isntTeaching(p)
       )
     },
     teacher() {
