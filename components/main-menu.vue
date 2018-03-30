@@ -17,10 +17,11 @@
 export default {
   data: () => ({
     items: [
-      { name: 'Aulas Regulares', to: '/', icon: 'spa' },
+      { name: 'Aulas Regulares', to: '/', icon: 'event_note' },
       { name: 'Praticantes', to: '/praticantes', icon: 'group' },
       { name: 'Professores', to: '/professores', icon: 'record_voice_over' },
-      { name: 'Acertos', to: '/acertos', icon: 'monetization_on' },
+      { name: 'Presenças', to: '/presencas', icon: 'playlist_add_check' },
+      { name: 'Acertos', to: '/acertos', icon: 'account_balance_wallet' },
     ],
   }),
 };

@@ -19,7 +19,7 @@
     <v-footer color="blue-grey" class="white--text" app>
       <v-layout row wrap justify-center>
         <v-flex xs12 py-3 text-xs-center white--text>
-          <span>Gustavo Guichard &copy; 2018</span>
+          <span>&copy; 2018</span>
         </v-flex>
       </v-layout>
     </v-footer>
