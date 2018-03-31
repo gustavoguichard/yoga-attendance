@@ -31,7 +31,8 @@
 
 <script>
 import { mapState } from 'vuex'
-import moment from 'moment'
+import { get } from 'lodash'
+import { parseDate } from '@/utils/date-helpers'
 
 export default {
   middleware: 'check-auth',
@@ -39,14 +40,12 @@ export default {
     ...mapState('frequency', ['result']),
     ...mapState('classrooms', ['lesson']),
     teacherName() {
-      const { teacher } = this.lesson
-      return teacher ? teacher.displayName : null
+      return get(this.lesson, 'teacher.displayName')
     },
   },
   methods: {
     parseDate({ createdAt }) {
-      moment.locale('pt-BR')
-      return moment(createdAt).format('ddd DD/MM/YYYY')
+      return parseDate(createdAt)
     },
   },
   async fetch({ store, ...context }) {

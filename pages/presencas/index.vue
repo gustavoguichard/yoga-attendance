@@ -5,13 +5,13 @@
         <v-toolbar-title>Selecione a lista pelo dia:</v-toolbar-title>
       </v-toolbar>
       <v-card-title>
-        <v-layout column>
-          <span class="grey--text ml-2">Semana do dia: {{ dayDisplay }}</span>
-          <v-layout justify-space-between>
-            <v-btn color="primary" :to="prevWeek">Semana anterior</v-btn>
-            <v-btn v-if="weeks > 0" color="primary" :to="nextWeek">Próximo mês</v-btn>
-          </v-layout>
-        </v-layout>
+        <date-navigator
+          display="Semana do dia: "
+          format="DD/MM"
+          unit="week"
+          prevLabel="Semana anterior"
+          nextLabel="Próxima semana"
+        />
       </v-card-title>
       <v-list two-line subheader>
         <div v-for="(item, i) in result.data" :key="i">
@@ -43,35 +43,21 @@
 
 <script>
 import { mapState } from 'vuex'
-import moment from 'moment'
 import { get } from 'lodash'
+import { getTimeRangeQuery, parseDate } from '@/utils/date-helpers'
+import dateNavigator from '@/components/date-navigator'
 
-const getWeekDate = (weeksAgo = 0) => moment().subtract(weeksAgo, 'week')
 
 export default {
   middleware: 'check-auth',
   watchQuery: ['weeks'],
+  components: { dateNavigator },
   computed: {
     ...mapState('frequency', ['result']),
-    dayDisplay() {
-      return getWeekDate(this.$route.query.weeks).startOf('week').format('DD/MM')
-    },
-    weeks() {
-      return parseInt(this.$route.query.weeks, 10) || 0
-    },
-    prevWeek() {
-      const weeks = this.weeks + 1
-      return { query: { weeks } }
-    },
-    nextWeek() {
-      const weeks = Math.max(this.weeks - 1, 0)
-      return { query: { weeks } }
-    },
   },
   methods: {
     parseDate({ createdAt }) {
-      moment.locale('pt-BR')
-      return moment(createdAt).format('ddd DD/MM/YYYY')
+      return parseDate(createdAt)
     },
     substitution(item) {
       return get(item, 'teacher._id') !== get(item, 'classRoom.teacher._id')
@@ -81,10 +67,7 @@ export default {
     await store.dispatch('auth/ensureAuth')
     await store.dispatch('frequency/find', {
       query: {
-        createdAt: {
-          $gte: getWeekDate(query.weeks).startOf('week')._d,
-          $lt: getWeekDate(query.weeks).endOf('week')._d,
-        },
+        createdAt: getTimeRangeQuery('week', query.weeks),
         populateClassroom: true,
         $limit: 10000,
       },

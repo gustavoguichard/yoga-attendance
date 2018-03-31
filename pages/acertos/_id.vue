@@ -8,13 +8,12 @@
         </v-toolbar-title>
       </v-toolbar>
       <v-card-title>
-        <v-layout column>
-          <span class="grey--text ml-2">{{ monthDisplay }}</span>
-          <v-layout justify-space-between>
-            <v-btn color="primary" :to="prevMonth">Mês anterior</v-btn>
-            <v-btn v-if="months > 0" color="primary" :to="nextMonth">Próximo mês</v-btn>
-          </v-layout>
-        </v-layout>
+        <date-navigator
+          format="MMMM YYYY"
+          unit="month"
+          prevLabel="Mês anterior"
+          nextLabel="Próximo mês"
+        />
       </v-card-title>
       <v-list two-line>
         <template v-for="(person, id) in byPractitioner">
@@ -49,14 +48,13 @@
 <script>
 import { mapState } from 'vuex'
 import { flatten, filter, groupBy, includes, map, round } from 'lodash'
-import moment from 'moment'
-
-moment.locale('pt-BR')
-const getMonthDate = (monthsAgo = 0) => moment().subtract(monthsAgo, 'month')
+import { getTimeRangeQuery } from '@/utils/date-helpers'
+import dateNavigator from '@/components/date-navigator'
 
 export default {
   middleware: 'check-auth',
   watchQuery: ['months'],
+  components: { dateNavigator },
   computed: {
     ...mapState('frequency', ['result']),
     ...mapState('classrooms', ['lesson']),
@@ -65,20 +63,6 @@ export default {
       const list = filter(data, d => d.classId === this.lesson._id)
       const allFrequencies = flatten(map(list, 'practitioners'))
       return groupBy(allFrequencies, '_id')
-    },
-    monthDisplay() {
-      return getMonthDate(this.$route.query.months).format('MMMM YYYY')
-    },
-    months() {
-      return parseInt(this.$route.query.months, 10) || 0
-    },
-    prevMonth() {
-      const months = this.months + 1
-      return { query: { months } }
-    },
-    nextMonth() {
-      const months = Math.max(this.months - 1, 0)
-      return { query: { months } }
     },
   },
   methods: {
@@ -90,10 +74,8 @@ export default {
       }).length
     },
     countPercent(lessons) {
-      const { length } = lessons
-      const person = lessons[0]
-      const total = this.classFrequency(person)
-      return round((length * 100) / total)
+      const total = this.classFrequency(lessons[0])
+      return round((lessons.length / total) * 100)
     },
   },
   async fetch({ store, params, query }) {
@@ -101,10 +83,7 @@ export default {
     await store.dispatch('classrooms/get', params.id)
     await store.dispatch('frequency/find', {
       query: {
-        createdAt: {
-          $gte: getMonthDate(query.months).startOf('month')._d,
-          $lt: getMonthDate(query.months).endOf('month')._d,
-        },
+        createdAt: getTimeRangeQuery('month', query.months),
         populatePractitioners: true,
         $limit: 10000,
       },
