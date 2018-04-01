@@ -14,14 +14,7 @@
       <v-list dense subheader>
         <div v-for="person in listedPeople" :key="person._id">
           <person-list-item avatar="right" :person="person" @click="toggle(person)">
-            <v-list-tile-action slot="left" v-if="isRestituting(person)" @click.stop="toggleRestituting(person)">
-              <v-icon v-if="person.restituting" color="orange darken-4">compare_arrows</v-icon>
-              <v-icon v-else color="green darken-2">check_circle</v-icon>
-            </v-list-tile-action>
-            <v-list-tile-action slot="left" v-else>
-              <v-icon v-if="isSelected(person)" color="blue darken-2">check_circle</v-icon>
-              <v-icon v-else color="grey lighten-1">check</v-icon>
-            </v-list-tile-action>
+            <v-icon slot="left" @click.stop="toggleRestituting(person)" :color="icon(person).color">{{ icon(person).name }}</v-icon>
           </person-list-item>
         </div>
       </v-list>
@@ -77,7 +70,7 @@ export default {
       dialog: false,
       selected: [],
       restitution: [],
-      restituting: false,
+      restituting: true,
       currentTeacher: undefined,
     }
   },
@@ -86,6 +79,16 @@ export default {
       const { restituting } = this
       this.restitution = uniq([...this.restitution, { ...person, restituting }])
       this.dialog = false
+    },
+    icon(person) {
+      if (this.isRestituting(person)) {
+        return person.restituting
+          ? { color: 'orange darken-4', name: 'compare_arrows' }
+          : { color: 'green darken-2', name: 'check_circle' }
+      }
+      return this.isSelected(person)
+        ? { color: 'blue darken-2', name: 'check_circle' }
+        : { color: 'grey lighten-1', name: 'check' }
     },
     toggle(person) {
       if (this.isRestituting(person)) {
@@ -97,9 +100,11 @@ export default {
       }
     },
     toggleRestituting(person) {
-      this.restitution = map(this.restitution, item =>
-        item._id === person._id ? { ...item, restituting: !item.restituting } : item
-      )
+      if (this.isRestituting(person)) {
+        this.restitution = map(this.restitution, item =>
+          item._id === person._id ? { ...item, restituting: !item.restituting } : item
+        )
+      }
     },
     isSelected(person) {
       const index = findIndex(this.selected, id => id === person._id)

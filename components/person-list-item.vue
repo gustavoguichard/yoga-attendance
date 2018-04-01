@@ -4,7 +4,9 @@
       <img v-if="person.picture" :src="person.picture" />
       <v-icon v-else>person</v-icon>
     </v-list-tile-avatar>
-    <slot name="left"></slot>
+    <v-list-tile-action v-if="$slots['left']">
+      <slot name="left"></slot>
+    </v-list-tile-action>
     <v-list-tile-content>
       <v-list-tile-title v-if="property">
         {{ person[property] }}
@@ -21,7 +23,9 @@
       <img v-if="person.picture" :src="person.picture" />
       <v-icon v-else>person</v-icon>
     </v-list-tile-avatar>
-    <slot name="right"></slot>
+    <v-list-tile-action v-if="$slots['right']">
+      <slot name="right"></slot>
+    </v-list-tile-action>
   </v-list-tile>
 
 </template>

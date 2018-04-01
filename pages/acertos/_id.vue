@@ -19,12 +19,10 @@
         <template v-for="(personArray, id) in byPractitioner">
           <v-divider />
           <person-list-item :avatar="true" :person="personArray[0]" :disabled="true">
-            <v-list-tile-action slot="right">
-              <v-chip>
-                <v-avatar class="blue white-txt">{{ classFrequency(personArray[0], true) }}</v-avatar>
-                Aulas ({{ countPercent(personArray) }}%)
-              </v-chip>
-            </v-list-tile-action>
+            <v-chip slot="right">
+              <v-avatar class="blue white-txt">{{ classFrequency(personArray[0], true) }}</v-avatar>
+              Aulas ({{ countPercent(personArray) }}%)
+            </v-chip>
           </person-list-item>
         </template>
       </v-list>
