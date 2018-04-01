@@ -23,9 +23,6 @@ export const actions = {
     const response = await api.service('classrooms').get(id)
     context.commit('updateLesson', response)
   },
-  async addAttendance(context, payload) {
-    return api.service('frequency').create(payload)
-  },
 }
 
 const groupedByTeacher = rooms => {
