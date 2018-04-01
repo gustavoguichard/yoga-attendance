@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import { get, mapState } from 'vuex'
+import { mapState } from 'vuex'
 import { getTimeRangeQuery, parseDate } from '@/utils/date-helpers'
 import dateNavigator from '@/components/date-navigator'
 import pageTitle from '@/components/page-title'
@@ -51,9 +51,6 @@ export default {
   methods: {
     parseDate({ createdAt }) {
       return parseDate(createdAt)
-    },
-    substitution(item) {
-      return get(item, 'teacher._id') !== get(item, 'classRoom.teacher._id')
     },
   },
   async fetch({ store, params, query }) {

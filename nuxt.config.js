@@ -17,9 +17,9 @@ module.exports = {
       { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' },
     ]
   },
-  plugins: ['~/plugins/vuetify.js'],
+  plugins: ['@/plugins/vuetify.js'],
   css: [
-    '~/assets/style/app.styl'
+    '@/assets/style/app.styl'
   ],
   /*
   ** Customize the progress bar color
@@ -40,7 +40,7 @@ module.exports = {
       ]
     },
     vendor: [
-      '~/plugins/vuetify.js',
+      '@/plugins/vuetify.js',
       '@feathersjs/feathers',
       '@feathersjs/socketio-client',
       'socket.io-client',
