@@ -1,37 +1,34 @@
 <template>
   <v-layout justify-center wrap>
-    <v-card>
-      <v-toolbar color="blue-grey lighten-1" dark>
-        <v-toolbar-title>Professores</v-toolbar-title>
-      </v-toolbar>
-      <v-list two-line>
-        <template v-for="(teacher, i) in list">
-          <v-divider v-if="i !== 0"></v-divider>
-          <person-list-item :avatar="true" :person="teacher" property="displayName" :to="`/praticantes/${teacher._id}`" />
-          <v-divider></v-divider>
-        </template>
-      </v-list>
-    </v-card>
-    <page-cta icon="person_add" to="/praticantes?teacher=false&add_teacher=true" />
+    <practitioners-list v-if="chooseList" title="Escolha o praticante" @selected="selected" :query="{ teacher: false }" />
+    <practitioners-list v-else title="Professores" to="/praticantes/:id" :twoLine="true" :query="{ teacher: true }" />
+    <page-cta :icon="chooseList ? 'arrow_back' : 'person_add'" @click.stop="toggleChooseList" />
   </v-layout>
 </template>
 
 <script>
-import { mapState } from 'vuex'
 import pageCta from '@/components/page-cta'
-import personListItem from '@/components/person-list-item'
+import practitionersList from '@/components/practitioners-list'
 
 export default {
   middleware: 'check-auth',
-  components: { pageCta, personListItem },
+  watchQuery: ['add'],
+  components: { pageCta, practitionersList },
   computed: {
-    ...mapState('practitioners', ['list']),
+    chooseList() {
+      return !!this.$route.query.add
+    },
   },
-  async fetch({ store }) {
-    await store.dispatch('auth/ensureAuth')
-    await store.dispatch('practitioners/find', {
-      query: { teacher: true },
-    })
+  methods: {
+    toggleChooseList() {
+      const query = this.chooseList ? null : { add: 'teacher' }
+      this.$router.push({ query })
+    },
+    async selected({ _id }) {
+      await this.$store.dispatch('auth/ensureAuth')
+      await this.$store.dispatch('practitioners/patch', { _id, teacher: true })
+      this.$router.push({ query: null })
+    },
   },
 };
 </script>

@@ -1,13 +1,21 @@
 <template>
-  <v-layout justify-center wrap>
+  <v-layout v-if="chooseList" justify-center wrap>
+    <practitioners-list :practitioners="otherPractitioners" title="Escolha o praticante" @selected="addToLesson">
+      <template slot="footer">
+        <v-switch :label="`Reposição${restituting ? '' : '?'}`" v-model="restituting"></v-switch>
+        <v-spacer></v-spacer>
+        <v-btn @click="toggleChooseList" flat color="primary">
+          Voltar
+        </v-btn>
+      </template>
+    </practitioners-list>
+  </v-layout>
+  <v-layout v-else justify-center wrap>
     <v-card>
       <v-toolbar color="blue-grey lighten-1" dark>
         <v-btn icon @click="selectAll">
           <v-icon v-if="allSelected" color="blue darken-4">check_circle</v-icon>
           <v-icon v-else>check</v-icon>
-        </v-btn>
-        <v-btn color="blue" dark fab absolute right @click.stop="dialog = true">
-          <v-icon>add</v-icon>
         </v-btn>
         <v-toolbar-title>Praticantes da turma</v-toolbar-title>
       </v-toolbar>
@@ -18,6 +26,10 @@
           </person-list-item>
         </div>
       </v-list>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn @click.stop="toggleChooseList" flat color="primary">Adicionar</v-btn>
+      </v-card-actions>
     </v-card>
     <v-card>
       <v-toolbar color="blue-grey lighten-1" dark>
@@ -34,21 +46,6 @@
         </div>
       </v-list>
     </v-card>
-    <v-dialog v-model="dialog" max-width="500px">
-      <v-card>
-        <v-card-title>Adicione um praticante à turma</v-card-title>
-        <v-divider></v-divider>
-        <v-card-text style="max-height: 600px; overflow: scroll;">
-          <v-list dense>
-            <person-list-item v-for="person in otherPractitioners" :key="person._id" :person="person" @click="addToLesson(person)" avatar="right" />
-          </v-list>
-        </v-card-text>
-        <v-divider></v-divider>
-        <v-card-actions>
-          <v-switch :label="`Reposição${restituting ? '' : '?'}`" v-model="restituting"></v-switch>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
     <page-cta @click="submit()" icon="done_all" />
   </v-layout>
 </template>
@@ -59,11 +56,13 @@ import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import { difference, filter, includes, map } from 'lodash'
 import pageCta from '@/components/page-cta'
 import personListItem from '@/components/person-list-item'
+import practitionersList from '@/components/practitioners-list'
 
 export default {
   middleware: 'check-auth',
-  components: { pageCta, personListItem },
-  data: () => ({ dialog: false, restituting: true }),
+  watchQuery: ['add'],
+  components: { pageCta, personListItem, practitionersList },
+  data: () => ({ restituting: true }),
   computed: {
     ...mapGetters('practitioners', ['teachers']),
     ...mapGetters('attendance', ['everyAttendant']),
@@ -72,6 +71,9 @@ export default {
     ...mapState('classrooms', ['lesson']),
     allSelected() {
       return this.subscribedList.length === this.selected.length
+    },
+    chooseList() {
+      return !!this.$route.query.add
     },
     subscribedList() {
       const isSubscribed = person => includes(person.classRooms, this.lesson._id)
@@ -97,7 +99,7 @@ export default {
     ...mapMutations('attendance', ['cleanStore', 'updateTeacher', 'updateSelected']),
     addToLesson(person) {
       this.addRestitution({ ...person, restituting: this.restituting })
-      this.dialog = false
+      this.$router.push({ query: false })
     },
     icon(person) {
       if (this.isRestituting(person)) {
@@ -124,6 +126,10 @@ export default {
     },
     isRestituting({ _id }) {
       return includes(map(this.restitution, '_id'), _id)
+    },
+    toggleChooseList() {
+      const query = this.chooseList ? null : { add: 'practitioner' }
+      this.$router.push({ query })
     },
     async submit() {
       await this.$store.dispatch('auth/ensureAuth')

@@ -7,7 +7,7 @@
     />
     <v-card>
       <v-toolbar color="blue-grey lighten-1" dark>
-        <v-toolbar-title>Lista de presenças:</v-toolbar-title>
+        <v-toolbar-title>Lista de presenças: ({{ result.data.length }})</v-toolbar-title>
       </v-toolbar>
       <v-card-title>
         <date-navigator
