@@ -1,5 +1,10 @@
 <template>
-  <v-layout align-content-center align-center column>
+  <v-layout align-content-center align-center column  v-if="chooseList">
+    <practitioners-list title="Adicionar praticante à aula" :query="{ _id: { $nin: peopleIds } }" @selected="selected" />
+    </practitioners-list>
+    <page-cta icon="arrow_back" @click.stop="toggleChooseList" />
+  </v-layout>
+  <v-layout align-content-center align-center column v-else>
     <page-title icon="person"
       :title="peopleList.classRoom.title"
       :subtitle="substitution(peopleList) && `Substituto: ${peopleList.teacher.displayName}`"
@@ -12,27 +17,40 @@
       <v-list two-line subheader>
         <div v-for="(person, i) in peopleList.practitioners" :key="i">
           <v-divider></v-divider>
-          <person-list-item v-if="isSubscribed(person)" :avatar="true" :person="person" property="displayName" :disabled="true" />
-          <person-list-item v-else :avatar="true" :person="person" property="displayName" :disabled="true">
+          <person-list-item v-if="isSubscribed(person)" :avatar="true" :person="person" property="displayName">
+            <v-btn slot="right" @click.stop="remove(person)" flat icon><v-icon color="red darken-4">delete</v-icon></v-btn>
+          </person-list-item>
+          <person-list-item v-else :avatar="true" :person="person" property="displayName">
             <v-icon slot="right" color="orange darken-4">compare_arrows</v-icon>
+            <v-btn slot="right" @click.stop="remove(person)" flat icon><v-icon color="red darken-4">delete</v-icon></v-btn>
           </person-list-item>
         </div>
       </v-list>
     </v-card>
+    <page-cta icon="person_add" @click.stop="toggleChooseList" />
   </v-layout>
 </template>
 
 <script>
 import { mapState } from 'vuex'
-import { get, includes } from 'lodash'
+import { get, includes, map, reduce } from 'lodash'
+import pageCta from '@/components/page-cta'
 import pageTitle from '@/components/page-title'
 import personListItem from '@/components/person-list-item'
+import practitionersList from '@/components/practitioners-list'
 
 export default {
   middleware: 'check-auth',
-  components: { pageTitle, personListItem },
+  components: { pageCta, pageTitle, personListItem, practitionersList },
+  watchQuery: ['add'],
   computed: {
     ...mapState('frequency', ['peopleList']),
+    chooseList() {
+      return !!this.$route.query.add
+    },
+    peopleIds() {
+      return map(this.peopleList.practitioners, '_id')
+    },
   },
   methods: {
     isSubscribed({ classRooms }) {
@@ -40,6 +58,34 @@ export default {
     },
     substitution(item) {
       return get(item, 'teacher._id') !== get(item, 'classRoom.teacher._id')
+    },
+    toggleChooseList() {
+      const query = this.chooseList ? null : { add: 'practitioner' }
+      this.$router.push({ query })
+    },
+    remove({ _id }) {
+      const { practitioners } = this.peopleList
+      const list = reduce(practitioners, (sum, curr) =>
+        curr._id === _id ? sum : [...sum, curr._id]
+        , [])
+      this.updatePractitioners(list)
+    },
+    async selected({ _id }) {
+      const { practitioners } = this.peopleList
+      await this.updatePractitioners([...map(practitioners, '_id'), _id])
+      this.toggleChooseList()
+    },
+    async updatePractitioners(practitioners) {
+      const { _id } = this.peopleList
+      await this.$store.dispatch('auth/ensureAuth')
+      await this.$store.dispatch('frequency/patch', { _id, practitioners })
+      return this.$store.dispatch('frequency/get', {
+        id: _id,
+        query: {
+          populatePractitioners: true,
+          populateClassroom: true,
+        },
+      })
     },
   },
   async fetch({ store, ...context }) {
