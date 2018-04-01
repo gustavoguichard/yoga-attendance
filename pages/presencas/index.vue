@@ -28,7 +28,7 @@
                 {{ item.teacher.displayName }}
               </v-list-tile-sub-title>
             </v-list-tile-content>
-             <v-list-tile-action>
+              <v-list-tile-action>
                 <v-list-tile-action-text>{{ item.practitioners.length }}</v-list-tile-action-text>
               </v-list-tile-action>
           </v-list-tile>

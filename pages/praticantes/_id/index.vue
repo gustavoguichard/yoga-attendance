@@ -20,7 +20,7 @@
       <v-list two-line subheader>
         <div v-for="(item, i) in result.data" :key="i">
           <v-divider></v-divider>
-          <v-list-tile ripple>
+          <v-list-tile ripple :to="`/presencas/${item._id}`">
             <v-list-tile-content>
               <v-list-tile-title>{{ parseDate(item) }}</v-list-tile-title>
               <v-list-tile-sub-title>
