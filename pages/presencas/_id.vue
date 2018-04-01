@@ -12,7 +12,10 @@
       <v-list two-line subheader>
         <div v-for="(person, i) in peopleList.practitioners" :key="i">
           <v-divider></v-divider>
-          <person-list-item :avatar="true" :person="person" property="displayName" :disabled="true" />
+          <person-list-item v-if="isSubscribed(person)" :avatar="true" :person="person" property="displayName" :disabled="true" />
+          <person-list-item v-else :avatar="true" :person="person" property="displayName" :disabled="true">
+            <v-icon slot="right" color="orange darken-4">compare_arrows</v-icon>
+          </person-list-item>
         </div>
       </v-list>
     </v-card>
@@ -21,7 +24,7 @@
 
 <script>
 import { mapState } from 'vuex'
-import { get } from 'lodash'
+import { get, includes } from 'lodash'
 import pageTitle from '@/components/page-title'
 import personListItem from '@/components/person-list-item'
 
@@ -32,6 +35,9 @@ export default {
     ...mapState('frequency', ['peopleList']),
   },
   methods: {
+    isSubscribed({ classRooms }) {
+      return includes(classRooms, this.peopleList.classId)
+    },
     substitution(item) {
       return get(item, 'teacher._id') !== get(item, 'classRoom.teacher._id')
     },
