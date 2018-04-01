@@ -29,5 +29,5 @@ export default {
       return { query: { [`${this.unit}s`]: unitFromQuery(this.currentUnit, 1) } }
     },
   },
-};
+}
 </script>

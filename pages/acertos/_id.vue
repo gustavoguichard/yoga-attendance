@@ -16,29 +16,16 @@
         />
       </v-card-title>
       <v-list two-line>
-        <template v-for="(person, id) in byPractitioner">
+        <template v-for="(personArray, id) in byPractitioner">
           <v-divider />
-          <v-list-tile avatar :key="id">
-            <v-list-tile-avatar>
-              <img v-if="person[0].picture" :src="person[0].picture" />
-              <v-icon v-else>person</v-icon>
-            </v-list-tile-avatar>
-            <v-list-tile-content>
-              <v-list-tile-title>
-                <span v-if="person[0].nickName">
-                  {{ person[0].nickName }}
-                  <em class="grey--text"> - {{ person[0].fullName }}</em>
-                </span>
-                <span v-else>{{ person[0].fullName }}</span>
-              </v-list-tile-title>
-            </v-list-tile-content>
-            <v-list-tile-action>
+          <person-list-item :avatar="true" :person="personArray[0]" :disabled="true">
+            <v-list-tile-action slot="right">
               <v-chip>
-                <v-avatar class="blue white-txt">{{ classFrequency(person[0], true) }}</v-avatar>
-                Aulas ({{ countPercent(person) }}%)
+                <v-avatar class="blue white-txt">{{ classFrequency(personArray[0], true) }}</v-avatar>
+                Aulas ({{ countPercent(personArray) }}%)
               </v-chip>
             </v-list-tile-action>
-          </v-list-tile>
+          </person-list-item>
         </template>
       </v-list>
     </v-card>
@@ -50,11 +37,12 @@ import { mapState } from 'vuex'
 import { flatten, filter, groupBy, includes, map, round } from 'lodash'
 import { getTimeRangeQuery } from '@/utils/date-helpers'
 import dateNavigator from '@/components/date-navigator'
+import personListItem from '@/components/person-list-item'
 
 export default {
   middleware: 'check-auth',
   watchQuery: ['months'],
-  components: { dateNavigator },
+  components: { dateNavigator, personListItem },
   computed: {
     ...mapState('frequency', ['result']),
     ...mapState('classrooms', ['lesson']),

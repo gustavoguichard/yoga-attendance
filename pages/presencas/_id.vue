@@ -1,13 +1,10 @@
 <template>
   <v-layout align-content-center align-center column>
-    <div class="text-xs-center grey--text text--darken-2 mb-4 mt-2">
-      <v-avatar class="mb-2" size="100">
-        <img v-if="peopleList.classRoom.teacher.picture" :src="peopleList.classRoom.teacher.picture" alt="Professor" />
-        <v-icon v-else>person</v-icon>
-      </v-avatar>
-      <h2 class="headline">{{ peopleList.classRoom.title }}</h2>
-      <span v-if="substitution(peopleList)" class="subheading grey--text">Substituto: {{ peopleList.teacher.displayName }}</span>
-    </div>
+    <page-title icon="person"
+      :title="peopleList.classRoom.title"
+      :subtitle="substitution(peopleList) && `Substituto: ${peopleList.teacher.displayName}`"
+      :picture="peopleList.classRoom.teacher.picture"
+    />
     <v-card>
       <v-toolbar color="blue-grey lighten-1" dark>
         <v-toolbar-title>Alunos presentes:</v-toolbar-title>
@@ -15,15 +12,7 @@
       <v-list two-line subheader>
         <div v-for="(person, i) in peopleList.practitioners" :key="i">
           <v-divider></v-divider>
-          <v-list-tile avatar>
-            <v-list-tile-avatar>
-              <img v-if="person.picture" :src="person.picture" alt="Professor" />
-              <v-icon v-else>person</v-icon>
-            </v-list-tile-avatar>
-            <v-list-tile-content>
-              <v-list-tile-title>{{ person.displayName }}</v-list-tile-title>
-            </v-list-tile-content>
-          </v-list-tile>
+          <person-list-item :avatar="true" :person="person" property="displayName" :disabled="true" />
         </div>
       </v-list>
     </v-card>
@@ -33,9 +22,12 @@
 <script>
 import { mapState } from 'vuex'
 import { get } from 'lodash'
+import pageTitle from '@/components/page-title'
+import personListItem from '@/components/person-list-item'
 
 export default {
   middleware: 'check-auth',
+  components: { pageTitle, personListItem },
   computed: {
     ...mapState('frequency', ['peopleList']),
   },

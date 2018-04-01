@@ -7,30 +7,23 @@
       <v-list two-line>
         <template v-for="(teacher, i) in list">
           <v-divider v-if="i !== 0"></v-divider>
-          <v-list-tile avatar :key="i" :to="`/praticantes/${teacher._id}`">
-            <v-list-tile-avatar>
-              <img v-if="teacher.picture" :src="teacher.picture" />
-              <v-icon v-else>person</v-icon>
-            </v-list-tile-avatar>
-            <v-list-tile-content>
-              <v-list-tile-title>{{ teacher.displayName }}</v-list-tile-title>
-            </v-list-tile-content>
-          </v-list-tile>
+          <person-list-item :avatar="true" :person="teacher" property="displayName" :to="`/praticantes/${teacher._id}`" />
           <v-divider></v-divider>
         </template>
       </v-list>
     </v-card>
-    <v-btn color="blue" dark fab fixed bottom right to="/praticantes?teacher=false&add_teacher=true">
-      <v-icon>person_add</v-icon>
-    </v-btn>
+    <page-cta icon="person_add" to="/praticantes?teacher=false&add_teacher=true" />
   </v-layout>
 </template>
 
 <script>
 import { mapState } from 'vuex'
+import pageCta from '@/components/page-cta'
+import personListItem from '@/components/person-list-item'
 
 export default {
   middleware: 'check-auth',
+  components: { pageCta, personListItem },
   computed: {
     ...mapState('practitioners', ['list']),
   },

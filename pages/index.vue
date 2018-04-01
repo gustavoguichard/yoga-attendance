@@ -7,15 +7,7 @@
       <v-list two-line>
         <template v-for="(teacher, i) in classByTeacher">
           <v-divider v-if="i !== 0"></v-divider>
-          <v-list-tile avatar :key="teacher.name">
-            <v-list-tile-avatar>
-              <img v-if="teacher.picture" :src="teacher.picture" />
-              <v-icon v-else>person</v-icon>
-            </v-list-tile-avatar>
-            <v-list-tile-content>
-              <v-list-tile-title>{{ teacher.name }}</v-list-tile-title>
-            </v-list-tile-content>
-          </v-list-tile>
+          <person-list-item :avatar="true" :person="teacher" property="name" :disabled="true" />
           <v-divider></v-divider>
           <class-tile
             v-for="lesson in teacher.classes"
@@ -46,11 +38,12 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import classTile from '@/components/class-tile.vue'
+import classTile from '@/components/class-tile'
+import personListItem from '@/components/person-list-item'
 
 export default {
   middleware: 'check-auth',
-  components: { classTile },
+  components: { classTile, personListItem },
   computed: {
     ...mapGetters('classrooms', ['classByTeacher', 'classWithoutTeacher']),
   },

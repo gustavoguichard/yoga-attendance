@@ -13,7 +13,7 @@
       <v-flex xs12>
         <v-avatar size="80" class="grey lighten-4 mt-2 mb-4" @click="pickFile" style="cursor: pointer">
           <img v-if="editingPerson.picture" :src="editingPerson.picture" alt="avatar">
-          <v-icon v-else alt="avatar">person</v-icon>
+          <v-icon v-else alt="avatar">add_a_photo</v-icon>
         </v-avatar>
         <input style="display: none" type="file" accept="image/*" ref="fileInput" @change="onFileChange">
       </v-flex>
@@ -38,17 +38,17 @@
         ></v-checkbox>
       </v-flex>
     </v-layout>
-    <v-btn color="blue" dark fab fixed bottom right @click="submit">
-      <v-icon>check</v-icon>
-    </v-btn>
+    <page-cta @click="submit" icon="check" />
   </v-card-text>
 </template>
 
 <script>
 /* global FileReader */
 import { mapState } from 'vuex'
+import pageCta from '@/components/page-cta'
 
 export default {
+  components: { pageCta },
   props: ['person', 'save'],
   data: () => ({
     editingPerson: {

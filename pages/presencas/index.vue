@@ -35,9 +35,7 @@
         </div>
       </v-list>
     </v-card>
-    <v-btn color="blue" dark fab fixed bottom right to="/">
-      <v-icon>playlist_add</v-icon>
-    </v-btn>
+    <page-cta icon="playlist_add" to="/" />
   </v-layout>
 </template>
 
@@ -46,12 +44,12 @@ import { mapState } from 'vuex'
 import { get } from 'lodash'
 import { getTimeRangeQuery, parseDate } from '@/utils/date-helpers'
 import dateNavigator from '@/components/date-navigator'
-
+import pageCta from '@/components/page-cta'
 
 export default {
   middleware: 'check-auth',
   watchQuery: ['weeks'],
-  components: { dateNavigator },
+  components: { dateNavigator, pageCta },
   computed: {
     ...mapState('frequency', ['result']),
   },

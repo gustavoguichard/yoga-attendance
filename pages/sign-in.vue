@@ -18,8 +18,7 @@
         <v-text-field @keyup.enter.native="submit" v-model="password" type="password" name="password" label="Senha" id="password"></v-text-field>
       </v-card-text>
     </v-layout>
-    <v-btn color="blue" dark fab absolute bottom right @click="submit">
-      <v-icon>check</v-icon>
+    <page-cta :absolute="true" @click="submit" icon="check" />
     </v-btn>
   </v-card>
 </v-layout>
@@ -27,8 +26,10 @@
 
 <script>
 import { mapActions } from 'vuex'
+import pageCta from '@/components/page-cta'
 
 export default {
+  components: { pageCta },
   data() {
     return {
       email: '',

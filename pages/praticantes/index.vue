@@ -6,39 +6,25 @@
       </v-toolbar>
       <v-list>
         <template v-for="person in list">
-          <v-list-tile ripple @click="clicked(person)">
-            <v-list-tile-avatar>
-              <v-avatar size="28">
-                <img v-if="person.picture" :src="person.picture" alt="avatar">
-                <v-icon v-else>person</v-icon>
-              </v-avatar>
-            </v-list-tile-avatar>
-            <v-list-tile-content>
-              <v-list-tile-title>
-                <span v-if="person.nickName">
-                  {{ person.nickName }}
-                  <em class="grey--text"> - {{ person.fullName }}</em>
-                </span>
-                <span v-else>{{ person.fullName }}</span>
-              </v-list-tile-title>
-            </v-list-tile-content>
-          </v-list-tile>
+          <person-list-item :avatar="true" avatarSize="28" :person="person" @click="clicked(person)" />
           <v-divider />
         </template>
       </v-list>
     </v-card>
-    <v-btn color="blue" dark fab fixed bottom right to="/praticantes/new">
-      <v-icon>person_add</v-icon>
-    </v-btn>
+    <page-cta icon="person_add" to="/praticantes/new" />
   </v-layout>
 </template>
 
 <script>
 import { mapState } from 'vuex'
 import { pick } from 'lodash'
+import pageCta from '@/components/page-cta'
+import personListItem from '@/components/person-list-item'
 
 export default {
   middleware: 'check-auth',
+  watchQuery: ['teacher', 'add_teacher'],
+  components: { pageCta, personListItem },
   computed: {
     ...mapState('practitioners', ['list']),
   },

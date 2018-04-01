@@ -1,9 +1,6 @@
 <template>
   <v-layout align-content-center align-center column>
-    <div class="text-xs-center grey--text text--darken-2 mb-4 mt-2">
-      <h2 class="headline">{{ lesson.title }}</h2>
-      <span class="subheading grey--text">{{ teacherName }}</span>
-    </div>
+    <page-title :title="lesson.title" :subtitle="teacherName" />
     <v-card>
       <v-toolbar color="blue-grey lighten-1" dark>
         <v-toolbar-title>Selecione a lista pelo dia:</v-toolbar-title>
@@ -23,9 +20,7 @@
         </div>
       </v-list>
     </v-card>
-    <v-btn color="blue" dark fab fixed bottom right :to="`/chamada/${lesson._id}`">
-      <v-icon>playlist_add</v-icon>
-    </v-btn>
+    <page-cta :to="`/chamada/${lesson._id}`" icon="playlist_add" />
   </v-layout>
 </template>
 
@@ -33,9 +28,12 @@
 import { mapState } from 'vuex'
 import { get } from 'lodash'
 import { parseDate } from '@/utils/date-helpers'
+import pageCta from '@/components/page-cta'
+import pageTitle from '@/components/page-title'
 
 export default {
   middleware: 'check-auth',
+  components: { pageCta, pageTitle },
   computed: {
     ...mapState('frequency', ['result']),
     ...mapState('classrooms', ['lesson']),

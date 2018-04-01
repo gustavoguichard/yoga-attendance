@@ -13,29 +13,16 @@
       </v-toolbar>
       <v-list dense subheader>
         <div v-for="person in listedPeople" :key="person._id">
-          <v-list-tile avatar ripple @click="toggle(person)">
-            <v-list-tile-action v-if="isRestituting(person)" @click.stop="toggleRestituting(person)">
+          <person-list-item avatar="right" :person="person" @click="toggle(person)">
+            <v-list-tile-action slot="left" v-if="isRestituting(person)" @click.stop="toggleRestituting(person)">
               <v-icon v-if="person.restituting" color="orange darken-4">compare_arrows</v-icon>
               <v-icon v-else color="green darken-2">check_circle</v-icon>
             </v-list-tile-action>
-            <v-list-tile-action v-else>
+            <v-list-tile-action slot="left" v-else>
               <v-icon v-if="isSelected(person)" color="blue darken-2">check_circle</v-icon>
               <v-icon v-else color="grey lighten-1">check</v-icon>
             </v-list-tile-action>
-            <v-list-tile-content>
-              <v-list-tile-title>
-                <span v-if="person.nickName">
-                  {{ person.nickName }}
-                  <em class="grey--text"> - {{ person.fullName }}</em>
-                </span>
-                <span v-else>{{ person.fullName }}</span>
-              </v-list-tile-title>
-            </v-list-tile-content>
-            <v-list-tile-avatar>
-              <img v-if="person.picture" :src="person.picture" />
-              <v-icon v-else>person</v-icon>
-            </v-list-tile-avatar>
-          </v-list-tile>
+          </person-list-item>
         </div>
       </v-list>
     </v-card>
@@ -46,18 +33,11 @@
       <v-list>
         <div v-for="(teacher, i) in teachers" :key="teacher._id">
           <v-divider v-if="i > 0"></v-divider>
-          <v-list-tile avatar ripple @click="selectTeacher(teacher)">
-            <v-list-tile-action>
+          <person-list-item :person="teacher" property="displayName" @click="selectTeacher(teacher)" avatar="right">
+            <v-list-tile-action slot="left">
               <v-icon v-if="isTeacher(teacher)" color="yellow darken-2">star</v-icon>
             </v-list-tile-action>
-            <v-list-tile-content>
-              <v-list-tile-title>{{ teacher.displayName }}</v-list-tile-title>
-            </v-list-tile-content>
-            <v-list-tile-avatar>
-              <img v-if="teacher.picture" :src="teacher.picture" />
-              <v-icon v-else>person</v-icon>
-            </v-list-tile-avatar>
-          </v-list-tile>
+          </person-list-item>
         </div>
       </v-list>
     </v-card>
@@ -67,21 +47,7 @@
         <v-divider></v-divider>
         <v-card-text style="max-height: 600px; overflow: scroll;">
           <v-list dense>
-            <v-list-tile avatar v-for="person in otherPractitioners" :key="person._id" ripple @click="addToLesson(person)">
-              <v-list-tile-content>
-                <v-list-tile-title>
-                  <span v-if="person.nickName">
-                    {{ person.nickName }}
-                    <em class="grey--text"> - {{ person.fullName }}</em>
-                  </span>
-                  <span v-else>{{ person.fullName }}</span>
-                </v-list-tile-title>
-              </v-list-tile-content>
-              <v-list-tile-avatar>
-                <img v-if="person.picture" :src="person.picture" />
-                <v-icon v-else>person</v-icon>
-              </v-list-tile-avatar>
-            </v-list-tile>
+            <person-list-item v-for="person in otherPractitioners" :key="person._id" :person="person" @click="addToLesson(person)" avatar="right" />
           </v-list>
         </v-card-text>
         <v-divider></v-divider>
@@ -90,9 +56,7 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <v-btn color="blue" dark fab fixed bottom right @click="submit()">
-      <v-icon>done_all</v-icon>
-    </v-btn>
+    <page-cta @click="submit()" icon="done_all" />
   </v-layout>
 </template>
 
@@ -102,9 +66,12 @@ import {
   concat, difference, findIndex, filter,
   includes, map, uniq, without
 } from 'lodash'
+import pageCta from '@/components/page-cta'
+import personListItem from '@/components/person-list-item'
 
 export default {
   middleware: 'check-auth',
+  components: { pageCta, personListItem },
   data() {
     return {
       dialog: false,

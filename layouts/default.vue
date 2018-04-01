@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import mainMenu from '@/components/main-menu.vue'
+import mainMenu from '@/components/main-menu'
 import { mapState } from 'vuex'
 
 export default {
