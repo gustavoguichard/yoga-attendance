@@ -33,7 +33,9 @@
                 </v-list-tile-title>
               </v-list-tile-content>
               <v-list-tile-action>
-                <v-chip outline color="primary">{{ items.length }}</v-chip>
+                <v-chip outline color="primary">
+                  {{ items.length }} ({{ getPercent(items) }})
+                </v-chip>
               </v-list-tile-action>
             </v-list-tile>
           </v-list>
@@ -61,6 +63,7 @@
 import { mapState } from 'vuex'
 import { get, groupBy } from 'lodash'
 import { getTimeRangeQuery, parseDate } from '@/utils/date-helpers'
+import { percent } from '@/utils/helpers'
 import dateNavigator from '@/components/date-navigator'
 import pageTitle from '@/components/page-title'
 
@@ -76,6 +79,9 @@ export default {
     },
   },
   methods: {
+    getPercent(items) {
+      return percent(items.length, this.result.data.length)
+    },
     getTeacherPicture(item) {
       return get(item, 'classRoom.teacher.picture')
     },

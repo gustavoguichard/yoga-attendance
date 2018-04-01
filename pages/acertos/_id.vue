@@ -21,7 +21,7 @@
           <person-list-item :avatar="true" :person="personArray[0]" :disabled="true">
             <v-chip slot="right">
               <v-avatar class="blue white-txt">{{ classFrequency(personArray[0], true) }}</v-avatar>
-              Aulas ({{ countPercent(personArray) }}%)
+              Aulas ({{ countPercent(personArray) }})
             </v-chip>
           </person-list-item>
         </template>
@@ -32,8 +32,9 @@
 
 <script>
 import { mapState } from 'vuex'
-import { flatten, filter, groupBy, includes, map, round } from 'lodash'
+import { flatten, filter, groupBy, includes, map } from 'lodash'
 import { getTimeRangeQuery } from '@/utils/date-helpers'
+import { percent } from '@/utils/helpers'
 import dateNavigator from '@/components/date-navigator'
 import personListItem from '@/components/person-list-item'
 
@@ -61,7 +62,7 @@ export default {
     },
     countPercent(lessons) {
       const total = this.classFrequency(lessons[0])
-      return round((lessons.length / total) * 100)
+      return percent(lessons.length, total)
     },
   },
   async fetch({ store, params, query }) {
