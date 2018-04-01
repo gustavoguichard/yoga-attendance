@@ -94,7 +94,7 @@ export default {
   },
   methods: {
     ...mapActions('attendance', ['addRestitution', 'toggleRestituting', 'toggle']),
-    ...mapMutations('attendance', ['updateTeacher', 'updateSelected']),
+    ...mapMutations('attendance', ['cleanStore', 'updateTeacher', 'updateSelected']),
     addToLesson(person) {
       this.addRestitution({ ...person, restituting: this.restituting })
       this.dialog = false
@@ -138,6 +138,7 @@ export default {
         teacher: this.teacher._id,
         classId: this.lesson._id,
       })
+      await this.$store.commit('attendance/cleanStore')
       this.$router.push('/')
     },
   },
