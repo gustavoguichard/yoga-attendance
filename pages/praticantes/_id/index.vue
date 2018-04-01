@@ -7,7 +7,7 @@
     />
     <v-card>
       <v-toolbar color="blue-grey lighten-1" dark>
-        <v-toolbar-title>Lista de presenças: ({{ result.data.length }})</v-toolbar-title>
+        <v-toolbar-title>Lista de presenças</v-toolbar-title>
       </v-toolbar>
       <v-card-title>
         <date-navigator
@@ -17,6 +17,29 @@
           nextLabel="Próximo mês"
         />
       </v-card-title>
+      <v-subheader>Resumo:</v-subheader>
+      <v-card-title class="pt-0" primary-title>
+        <div class="summary">
+          <h3 class="headline">Aulas: {{ result.data.length }}</h3>
+          <v-list>
+            <v-list-tile v-for="(items, title) in byClassRoom" :key="title">
+              <v-list-tile-avatar>
+                <img v-if="getTeacherPicture(items[0])" :src="getTeacherPicture(items[0])">
+                <v-icon v-else>person</v-icon>
+              </v-list-tile-avatar>
+              <v-list-tile-content>
+                <v-list-tile-title>
+                  {{ title }}
+                </v-list-tile-title>
+              </v-list-tile-content>
+              <v-list-tile-action>
+                <v-chip outline color="primary">{{ items.length }}</v-chip>
+              </v-list-tile-action>
+            </v-list-tile>
+          </v-list>
+        </div>
+      </v-card-title>
+      <v-subheader>Presenças do mês:</v-subheader>
       <v-list two-line subheader>
         <div v-for="(item, i) in result.data" :key="i">
           <v-divider></v-divider>
@@ -36,6 +59,7 @@
 
 <script>
 import { mapState } from 'vuex'
+import { get, groupBy } from 'lodash'
 import { getTimeRangeQuery, parseDate } from '@/utils/date-helpers'
 import dateNavigator from '@/components/date-navigator'
 import pageTitle from '@/components/page-title'
@@ -47,8 +71,14 @@ export default {
   computed: {
     ...mapState('practitioners', ['person']),
     ...mapState('frequency', ['result']),
+    byClassRoom() {
+      return groupBy(this.result.data, 'classRoom.title')
+    },
   },
   methods: {
+    getTeacherPicture(item) {
+      return get(item, 'classRoom.teacher.picture')
+    },
     parseDate({ createdAt }) {
       return parseDate(createdAt)
     },
@@ -74,6 +104,10 @@ export default {
     margin: 1em;
     min-width: 400px;
     width: 60%;
+  }
+
+  .summary {
+    width: 100%;
   }
 }
 </style>
