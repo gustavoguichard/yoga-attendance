@@ -6,7 +6,11 @@
       </v-toolbar>
       <v-list>
         <template v-for="person in list">
-          <person-list-item :avatar="true" avatarSize="28" :person="person" @click="clicked(person)" />
+          <person-list-item :avatar="true" avatarSize="28" :person="person" @click="clicked(person)">
+            <v-btn icon ripple slot="right" @click.stop="$router.push(`/praticantes/${person._id}/edit`)">
+              <v-icon color="grey">edit</v-icon>
+            </v-btn>
+          </person-list-item>
           <v-divider />
         </template>
       </v-list>
