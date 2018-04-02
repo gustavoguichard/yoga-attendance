@@ -7,8 +7,8 @@
   <v-layout align-content-center align-center column v-else>
     <page-title icon="person"
       :title="peopleList.classRoom.title"
-      :subtitle="substitution(peopleList) && `Substituto: ${peopleList.teacher.displayName}`"
-      :picture="peopleList.classRoom.teacher.picture"
+      :subtitle="substitution(peopleList) && `Lecionando: ${peopleList.teacher.displayName}`"
+      :picture="peopleList.classRoom.teacher && peopleList.classRoom.teacher.picture"
     />
     <v-card>
       <v-toolbar color="blue-grey lighten-1" dark>

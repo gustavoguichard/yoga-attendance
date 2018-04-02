@@ -16,7 +16,7 @@
       <v-list dense subheader>
         <div v-for="person in listedPeople" :key="person._id">
           <person-list-item avatar="right" :person="person" @click="toggle(person)">
-            <v-icon slot="left" @click.stop="toggleRestituting(person)" :color="icon(person).color">{{ icon(person).name }}</v-icon>
+            <v-icon slot="left" @click="togglePerson(person, $event)" :color="icon(person).color">{{ icon(person).name }}</v-icon>
           </person-list-item>
         </div>
       </v-list>
@@ -94,6 +94,12 @@ export default {
     addToLesson(person) {
       this.addRestitution({ ...person, restituting: this.restituting })
       this.$router.push({ query: false })
+    },
+    togglePerson(person, event) {
+      if (this.isRestituting(person)) {
+        this.toggleRestituting(person)
+        event.stopPropagation()
+      }
     },
     icon(person) {
       if (this.isRestituting(person)) {

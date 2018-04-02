@@ -38,13 +38,11 @@ export const actions = {
       commit('updateSelected', list)
     }
   },
-  toggleRestituting({ commit, getters, state: st }, person) {
-    if (getters.isRestituting(person)) {
-      const isPerson = ({ _id }) => _id === person._id
-      const toggle = item => ({ ...item, restituting: !item.restituting })
-      const list = map(st.restitution, item => isPerson(item) ? toggle(item) : item)
-      commit('updateRestitution', list)
-    }
+  toggleRestituting({ commit, state: st }, person) {
+    const isPerson = ({ _id }) => _id === person._id
+    const toggle = item => ({ ...item, restituting: !item.restituting })
+    const list = map(st.restitution, item => isPerson(item) ? toggle(item) : item)
+    commit('updateRestitution', list)
   },
 }
 

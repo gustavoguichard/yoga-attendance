@@ -1,11 +1,6 @@
 <template>
   <v-layout justify-center wrap>
-    <v-card>
-      <v-toolbar color="blue-grey lighten-1" dark>
-        <v-toolbar-title>Editando: {{ person.fullName }}</v-toolbar-title>
-      </v-toolbar>
-      <practitioner-form :person="person" @submit="submit"></practitioner-form>
-    </v-card>
+    <practitioner-form :title="`Editando ${person.fullName}`" :person="person" @submit="submit"></practitioner-form>
   </v-layout>
 </template>
 
@@ -29,7 +24,9 @@ export default {
   async fetch({ store, params }) {
     await store.dispatch('auth/ensureAuth')
     await store.dispatch('classrooms/find')
-    await store.dispatch('practitioners/get', params.id)
+    await store.dispatch('practitioners/get', { id: params.id,
+      query: { populateFamily: true },
+    })
   },
 };
 </script>

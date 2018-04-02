@@ -1,11 +1,6 @@
 <template>
   <v-layout justify-center wrap>
-    <v-card>
-      <v-toolbar color="blue-grey lighten-1" dark>
-        <v-toolbar-title>Novo praticante</v-toolbar-title>
-      </v-toolbar>
-      <practitioner-form @submit="submit"></practitioner-form>
-    </v-card>
+    <practitioner-form title="Novo Praticante" @submit="submit"></practitioner-form>
   </v-layout>
 </template>
 

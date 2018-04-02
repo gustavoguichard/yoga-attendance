@@ -25,7 +25,7 @@
                 {{ item.teacher.displayName }} - Substituindo: {{ item.classRoom.teacher.displayName }}
               </v-list-tile-sub-title>
               <v-list-tile-sub-title v-else>
-                {{ item.teacher.displayName }}
+                {{ item.teacher && item.teacher.displayName }}
               </v-list-tile-sub-title>
             </v-list-tile-content>
               <v-list-tile-action>
