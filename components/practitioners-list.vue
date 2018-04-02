@@ -16,8 +16,12 @@
         </person-list-item>
       </template>
     </v-list>
-    <v-card-actions v-if="$slots['footer']">
+    <v-card-actions v-if="$slots['footer'] || chooseList">
       <slot name="footer"></slot>
+      <v-spacer></v-spacer>
+      <v-btn v-if="chooseList" @click="$router.push({ query: null })" flat color="primary">
+        Voltar
+      </v-btn>
     </v-card-actions>
   </v-card>
 </template>
@@ -36,6 +40,7 @@ export default {
     },
   },
   props: {
+    chooseList: { type: Boolean },
     dense: { type: Boolean },
     editLink: { type: Boolean },
     practitioners: { type: Array },

@@ -91,7 +91,7 @@ export default {
   },
   async fetch({ store, params, query }) {
     await store.dispatch('auth/ensureAuth')
-    await store.dispatch('practitioners/get', params.id)
+    await store.dispatch('practitioners/get', { id: params.id })
     await store.dispatch('frequency/find', {
       query: {
         createdAt: getTimeRangeQuery('month', query.months),

@@ -1,6 +1,6 @@
 <template>
   <v-layout align-content-center align-center column  v-if="chooseList">
-    <practitioners-list title="Adicionar praticante à aula" :query="{ _id: { $nin: peopleIds } }" @selected="selected" />
+    <practitioners-list title="Adicionar praticante à aula" :query="{ _id: { $nin: peopleIds } }" @selected="selected" :chooseList="true" />
     </practitioners-list>
     <page-cta icon="arrow_back" @click.stop="toggleChooseList" />
   </v-layout>

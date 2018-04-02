@@ -20,8 +20,8 @@ export const actions = {
     context.commit('update', response.data)
   },
 
-  async get(context, id) {
-    const response = await api.service('practitioners').get(id)
+  async get(context, { id, query }) {
+    const response = await api.service('practitioners').get(id, { query })
     context.commit('updatePerson', response)
   },
 

@@ -1,6 +1,6 @@
 <template>
   <v-layout justify-center wrap>
-    <practitioners-list v-if="chooseList" title="Escolha o praticante" @selected="selected" :query="{ teacher: false }" />
+    <practitioners-list v-if="chooseList" title="Escolha o praticante" @selected="selected" :query="{ teacher: false }" :chooseList="true" />
     <practitioners-list v-else title="Professores" to="/praticantes/:id" :twoLine="true" :query="{ teacher: true }" />
     <page-cta :icon="chooseList ? 'arrow_back' : 'person_add'" @click.stop="toggleChooseList" />
   </v-layout>

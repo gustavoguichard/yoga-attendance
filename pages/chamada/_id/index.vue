@@ -1,13 +1,7 @@
 <template>
   <v-layout v-if="chooseList" justify-center wrap>
-    <practitioners-list :practitioners="otherPractitioners" title="Escolha o praticante" @selected="addToLesson">
-      <template slot="footer">
-        <v-switch :label="`Reposição${restituting ? '' : '?'}`" v-model="restituting"></v-switch>
-        <v-spacer></v-spacer>
-        <v-btn @click="toggleChooseList" flat color="primary">
-          Voltar
-        </v-btn>
-      </template>
+    <practitioners-list :practitioners="otherPractitioners" title="Escolha o praticante" @selected="addToLesson" :chooseList="true">
+      <v-switch slot="footer" :label="`Reposição${restituting ? '' : '?'}`" v-model="restituting"></v-switch>
     </practitioners-list>
   </v-layout>
   <v-layout v-else justify-center wrap>
@@ -28,7 +22,7 @@
       </v-list>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn @click.stop="toggleChooseList" flat color="primary">Adicionar</v-btn>
+        <v-btn @click.stop="$router.push('?add=practitioner')" flat color="primary">Adicionar</v-btn>
       </v-card-actions>
     </v-card>
     <v-card>
@@ -126,10 +120,6 @@ export default {
     },
     isRestituting({ _id }) {
       return includes(map(this.restitution, '_id'), _id)
-    },
-    toggleChooseList() {
-      const query = this.chooseList ? null : { add: 'practitioner' }
-      this.$router.push({ query })
     },
     async submit() {
       await this.$store.dispatch('auth/ensureAuth')
