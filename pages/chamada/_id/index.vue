@@ -21,8 +21,9 @@
         </div>
       </v-list>
       <v-card-actions>
-        <v-spacer></v-spacer>
-        <v-btn @click.stop="$router.push('?add=practitioner')" flat color="primary">Adicionar</v-btn>
+        <v-btn @click.stop="$router.push('?add=practitioner')" icon depressed color="primary">
+          <v-icon>person_add</v-icon>
+        </v-btn>
       </v-card-actions>
     </v-card>
     <v-card>
@@ -93,7 +94,6 @@ export default {
     ...mapMutations('attendance', ['cleanStore', 'updateTeacher', 'updateSelected']),
     addToLesson(person) {
       this.addRestitution({ ...person, restituting: this.restituting })
-      this.$router.push({ query: false })
     },
     togglePerson(person, event) {
       if (this.isRestituting(person)) {
