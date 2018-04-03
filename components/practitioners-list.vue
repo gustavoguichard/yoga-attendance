@@ -1,7 +1,14 @@
 <template>
   <v-card>
-    <v-toolbar color="blue-grey lighten-1" dark>
-      <v-toolbar-title>{{ title }}</v-toolbar-title>
+    <v-toolbar @click.stop="openSearch" color="blue-grey lighten-1" dark>
+      <v-text-field ref="search" v-model="filter" @blur="search = false" v-if="search" class="mx-4" label="Buscar" hide-details single-line></v-text-field>
+      <template v-else>
+        <v-toolbar-title>{{ title }}</v-toolbar-title>
+        <v-spacer></v-spacer>
+      </template>
+      <v-btn icon>
+        <v-icon>search</v-icon>
+      </v-btn>
     </v-toolbar>
     <v-card-title v-if="$slots['header']">
       <slot name="header"></slot>
@@ -30,13 +37,20 @@
 import personListItem from '@/components/person-list-item'
 import { mapState } from 'vuex'
 import { isString } from 'lodash'
+import { searchInFields } from '@/utils/helpers'
 
 export default {
   components: { personListItem },
+  data: () => ({
+    search: false,
+    filter: '',
+  }),
   computed: {
     ...mapState('practitioners', ['list']),
     people() {
-      return this.practitioners || this.list
+      const list = this.practitioners || this.list
+      const filtered = searchInFields(list, ['displayName', 'fullName'], this.filter)
+      return filtered
     },
   },
   props: {
@@ -58,6 +72,11 @@ export default {
         this.$router.push(path)
       }
       this.$emit('selected', person)
+    },
+    async openSearch() {
+      this.search = true
+      await this.$nextTick()
+      this.$refs.search.focus()
     },
   },
   watch: {
