@@ -35,6 +35,7 @@
         ></class-tile>
       </v-list>
     </v-card>
+    <page-cta to="/aulas/new" icon="add" />
   </v-layout>
 </template>
 
@@ -42,10 +43,11 @@
 import { mapGetters } from 'vuex'
 import classTile from '@/components/class-tile'
 import personListItem from '@/components/person-list-item'
+import pageCta from '@/components/page-cta'
 
 export default {
   middleware: 'check-auth',
-  components: { classTile, personListItem },
+  components: { classTile, pageCta, personListItem },
   computed: {
     ...mapGetters('classrooms', ['classByTeacher', 'classWithoutTeacher']),
   },
