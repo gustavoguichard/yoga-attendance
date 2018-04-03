@@ -46,7 +46,10 @@
           </v-btn>
         </v-flex>
         <v-flex xs12>
-          <v-subheader>Aulas inscritas:</v-subheader>
+          <v-subheader class="pl-0">
+            <v-icon class="mr-1">date_range</v-icon>
+            Aulas inscritas:
+          </v-subheader>
           <v-checkbox
             v-for="lesson in classes"
             :label="lesson.title"
@@ -56,6 +59,23 @@
             :value="lesson._id"
             hide-details
           ></v-checkbox>
+        </v-flex>
+        <v-flex xs12>
+          <v-divider class="my-3"></v-divider>
+          <v-subheader class="pl-0">
+            Frequência:
+          </v-subheader>
+          <v-select
+            :items="items"
+            v-model="editingPerson.attendances"
+            label="Selecionar"
+            item-text="label"
+            item-value="value"
+            prepend-icon="insert_chart"
+            multiple
+            single-line
+          ></v-select>
+          <v-text-field @keyup.enter="submit" v-model="editingPerson.discount" name="discount" label="Acerto" prepend-icon="card_membership"></v-text-field>
         </v-flex>
       </v-layout>
       <page-cta @click="submit" icon="check" />
@@ -86,7 +106,17 @@ export default {
       family: [],
       teacher: false,
       classRooms: [],
+      discount: '',
+      attendances: [],
     },
+    items: [
+      { label: '1x por semana', value: '1x' },
+      { label: '2x por semana', value: '2x' },
+      { label: '3x por semana', value: '3x' },
+      { label: '4x por semana', value: '4x' },
+      { label: '5x por semana', value: '5x' },
+      { label: 'Aula terapêutica', value: '160' },
+    ],
   }),
   computed: {
     ...mapState('classrooms', ['classes']),

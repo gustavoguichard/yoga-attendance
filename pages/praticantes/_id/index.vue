@@ -39,6 +39,7 @@
               </v-list-tile-action>
             </v-list-tile>
           </v-list>
+          <h4 class="subheading">Pagamento: {{ debth }}</h4>
         </div>
       </v-card-title>
       <v-subheader>Presenças do mês:</v-subheader>
@@ -61,11 +62,13 @@
 
 <script>
 import { mapState } from 'vuex'
-import { get, groupBy } from 'lodash'
+import { get, groupBy, includes, map, replace, sum, toInteger } from 'lodash'
 import { getTimeRangeQuery, parseDate } from '@/utils/date-helpers'
 import { percent } from '@/utils/helpers'
 import dateNavigator from '@/components/date-navigator'
 import pageTitle from '@/components/page-title'
+
+const values = { '1x': 130, '2x': 160, '3x': 200, '4x': 220, '5x': 250 }
 
 export default {
   middleware: 'check-auth',
@@ -76,6 +79,17 @@ export default {
     ...mapState('frequency', ['result']),
     byClassRoom() {
       return groupBy(this.result.data, 'classRoom.title')
+    },
+    debth() {
+      const { discount, family, attendances } = this.person
+      const regular = map(attendances, x => toInteger(get(values, x) || x))
+      const familyDiscount = family.length ? -10 : 0
+      const off = includes(discount, '-')
+        ? -toInteger(replace(discount, '-', ''))
+        : 0
+      const perc = includes(discount, '%') ? 100 - toInteger(replace(discount, '%', '')) : 100
+      const value = ((sum(regular) + familyDiscount + off) * perc) / 100
+      return `R$ ${value},00`
     },
   },
   methods: {
