@@ -1,5 +1,6 @@
 .nuxt/
 node_modules/
+.editorconfig
 *.log
 *.sublime-project
 *.sublime-workspace

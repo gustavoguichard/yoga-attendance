@@ -17,7 +17,7 @@
 export default {
   data: () => ({
     items: [
-      { name: 'Aulas Regulares', to: '/', icon: 'event_note' },
+      { name: 'Aulas e eventos', to: '/', icon: 'event_note' },
       { name: 'Praticantes', to: '/praticantes', icon: 'group' },
       { name: 'Professores', to: '/professores', icon: 'record_voice_over' },
       { name: 'Presenças', to: '/presencas', icon: 'playlist_add_check' },

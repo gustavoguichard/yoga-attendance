@@ -15,6 +15,7 @@
             :lesson="lesson"
             :callback="openLesson"
             :viewFrequency="viewFrequency"
+            :editClass="editClass"
           ></class-tile>
         </template>
       </v-list>
@@ -30,6 +31,7 @@
           :lesson="lesson"
           :callback="openLesson"
           :viewFrequency="viewFrequency"
+          :editClass="editClass"
         ></class-tile>
       </v-list>
     </v-card>
@@ -53,6 +55,9 @@ export default {
     },
     viewFrequency({ _id }) {
       this.$router.push(`/chamada/${_id}/lista`)
+    },
+    editClass({ _id }) {
+      this.$router.push(`/aulas/${_id}/edit`)
     },
   },
   async fetch({ store }) {

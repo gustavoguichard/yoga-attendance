@@ -19,9 +19,12 @@ export const actions = {
     const response = await api.service('classrooms').find()
     context.commit('update', response.data)
   },
-  async get(context, id) {
-    const response = await api.service('classrooms').get(id)
+  async get(context, { id, query }) {
+    const response = await api.service('classrooms').get(id, { query })
     context.commit('updateLesson', response)
+  },
+  async patch(context, { _id, ...data }) {
+    return api.service('classrooms').patch(_id, data)
   },
 }
 

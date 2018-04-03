@@ -36,7 +36,7 @@
             <v-icon class="mr-1">home</v-icon>
             Familiares:
           </v-subheader>
-          <person-list-item v-for="person in editingPerson.family" :avatar="true" avatarSize="28" :person="person" :to="`/praticantes/${person._id}/edit`">
+          <person-list-item v-for="person in editingPerson.family" :key="person._id" :avatar="true" avatarSize="28" :person="person" :to="`/praticantes/${person._id}/edit`">
             <v-btn icon ripple slot="right" @click.stop="removeRelative(person)">
               <v-icon color="orange">delete</v-icon>
             </v-btn>
@@ -94,7 +94,7 @@ import practitionersList from '@/components/practitioners-list'
 export default {
   components: { pageCta, personListItem, practitionersList },
   watchQuery: ['add'],
-  props: ['person', 'title', 'save'],
+  props: ['person', 'title'],
   data: () => ({
     editingPerson: {
       fullName: '',
