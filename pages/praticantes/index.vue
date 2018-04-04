@@ -1,6 +1,6 @@
 <template>
   <v-layout justify-center wrap>
-    <practitioners-list @selected="selected" :editLink="true" />
+    <practitioners-list @selected="selected" :editLink="true" :twoLine="true" />
     <page-cta icon="person_add" to="/praticantes/new" />
   </v-layout>
 </template>

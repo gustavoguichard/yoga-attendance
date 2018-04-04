@@ -18,6 +18,7 @@
         </span>
         <span v-else>{{ person.fullName }}</span>
       </v-list-tile-title>
+      <v-list-tile-sub-title v-if="showMail">{{ person.email }}</v-list-tile-sub-title>
     </v-list-tile-content>
     <v-list-tile-avatar :size="avatarSize" v-if="!!avatar && avatar === 'right'">
       <img v-if="person.picture" :src="person.picture" />
@@ -34,7 +35,7 @@
 import { isString } from 'lodash'
 
 export default {
-  props: ['person', 'avatar', 'avatarSize', 'to', 'property', 'disabled'],
+  props: ['person', 'avatar', 'avatarSize', 'to', 'property', 'disabled', 'showMail'],
   computed: {
     isString() {
       return isString(this.person)

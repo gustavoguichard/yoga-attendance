@@ -16,7 +16,7 @@
     <v-list :dense="dense" :two-line="twoLine">
       <template v-for="(person, i) in people">
         <v-divider v-if="i > 0" />
-        <person-list-item :avatar="true" avatarSize="28" :person="person" @click="clicked(person)">
+        <person-list-item :avatar="true" :showMail="twoLine" avatarSize="28" :person="person" @click="clicked(person)">
           <v-btn icon v-if="editLink" ripple slot="right" @click.stop="$router.push(`/praticantes/${person._id}/edit`)">
             <v-icon color="grey">edit</v-icon>
           </v-btn>
@@ -40,19 +40,6 @@ import { isString } from 'lodash'
 import { searchInFields } from '@/utils/helpers'
 
 export default {
-  components: { personListItem },
-  data: () => ({
-    search: false,
-    filter: '',
-  }),
-  computed: {
-    ...mapState('practitioners', ['list']),
-    people() {
-      const list = this.practitioners || this.list
-      const filtered = searchInFields(list, ['displayName', 'fullName'], this.filter)
-      return filtered
-    },
-  },
   props: {
     chooseList: { type: Boolean },
     dense: { type: Boolean },
@@ -62,6 +49,20 @@ export default {
     title: { type: String, default: 'Praticantes' },
     to: { type: String },
     twoLine: { type: Boolean },
+  },
+  components: { personListItem },
+  data: () => ({
+    search: false,
+    filter: '',
+  }),
+  computed: {
+    ...mapState('practitioners', ['list']),
+    people() {
+      const list = this.practitioners || this.list
+      const optFields = this.twoLine ? ['email'] : []
+      const filtered = searchInFields(list, ['displayName', 'fullName', ...optFields], this.filter)
+      return filtered
+    },
   },
   methods: {
     clicked(person) {

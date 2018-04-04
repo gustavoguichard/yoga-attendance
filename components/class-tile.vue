@@ -11,7 +11,7 @@
     </v-list-tile-content>
     <v-list-tile-action v-if="editClass">
       <v-btn icon @click.stop="editClass(lesson)">
-        <v-icon>edit</v-icon>
+        <v-icon color="grey">edit</v-icon>
       </v-btn>
     </v-list-tile-action>
   </v-list-tile>

@@ -1,7 +1,6 @@
 <template>
   <v-layout align-content-center align-center column  v-if="chooseList">
-    <practitioners-list title="Adicionar praticante à aula" :query="chooseQuery" @selected="selected" :chooseList="true" />
-    </practitioners-list>
+    <practitioners-list title="Adicionar praticante à aula" :query="chooseQuery" @selected="selected" :chooseList="true" :twoLine="true" />
     <page-cta icon="arrow_back" @click.stop="toggleChooseList" />
   </v-layout>
   <v-layout align-content-center align-center column v-else>
@@ -25,7 +24,7 @@
         </div>
       </v-list>
     </v-card>
-    <page-cta icon="person_add" @click.stop="toggleChooseList" />
+    <page-cta icon="person_add" @click.stop="toggleChooseList('practitioner')" />
   </v-layout>
 </template>
 
