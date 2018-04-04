@@ -23,6 +23,7 @@ export default {
   },
   async fetch({ store, params }) {
     await store.dispatch('auth/ensureAuth')
+    await store.dispatch('enrollment/find')
     await store.dispatch('practitioners/get', { id: params.id,
       query: { populateFamily: true },
     })

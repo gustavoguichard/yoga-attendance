@@ -34,11 +34,11 @@
             <v-icon class="mr-1">monetization_on</v-icon>
             Precificação:
           </v-subheader>
-          <template v-for="option in editing.pricing">
+          <template v-for="(option, i) in editing.pricing">
             <v-divider class="mt-2 mb-2 pt-2"></v-divider>
-            <v-text-field @keyup.enter="submit" v-model="option.desc" name="desc" label="Descrição" prepend-icon="title" required></v-text-field>
-            <v-text-field @keyup.enter="submit" v-model="option.value" name="value" label="Valor" prepend-icon="attach_money" required></v-text-field>
-            <v-text-field type="number" @keyup.enter="submit" v-model="option.amount" name="amount" label="Aulas / mês" prepend-icon="more_horiz"></v-text-field>
+            <v-text-field @keyup.enter="submit" :value="option.desc" @input="changePricing('desc', i, $event)" name="desc" label="Descrição" prepend-icon="title" required></v-text-field>
+            <v-text-field @keyup.enter="submit" :value="option.value" @input="changePricing('value', i, $event)" name="value" label="Valor" prepend-icon="attach_money" required></v-text-field>
+            <v-text-field type="number" @keyup.enter="submit" :value="option.amount" @input="changePricing('amount', i, $event)" name="amount" label="Aulas / mês" prepend-icon="more_horiz"></v-text-field>
           </template>
           <v-card-actions>
             <v-spacer></v-spacer>
@@ -55,7 +55,7 @@
 
 <script>
 import { mapState } from 'vuex'
-import { filter } from 'lodash'
+import { map, filter } from 'lodash'
 import pageCta from '@/components/page-cta'
 
 const blankPricing = () => ({
@@ -90,6 +90,14 @@ export default {
   methods: {
     addPricing() {
       this.editing.pricing = [...this.editing.pricing, blankPricing()]
+    },
+    changePricing(field, index, value) {
+      this.editing.pricing = map(this.editing.pricing, (opt, i) => {
+        if (i === index) {
+          opt = { ...opt, [field]: value }
+        }
+        return opt
+      })
     },
     submit() {
       const enrollment = { ...this.editing, pricing: filter(this.editing.pricing, p => p.desc !== '') }

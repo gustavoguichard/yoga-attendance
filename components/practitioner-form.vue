@@ -26,6 +26,9 @@
           <v-checkbox color="blue" v-model="editing.teacher" name="teacher" label="Professor"></v-checkbox>
         </v-flex>
         <v-flex xs12>
+          <v-text-field @keyup.enter="submit" v-model="editing.discount" name="discount" label="Desconto base" prepend-icon="card_membership"></v-text-field>
+        </v-flex>
+        <v-flex xs12>
           <v-text-field @keyup.enter="submit" mask="(##) #####-####" v-model="editing.phone" name="phone" label="Telefone" prepend-icon="phone" required></v-text-field>
         </v-flex>
         <v-flex xs12>
@@ -50,19 +53,41 @@
         <v-flex xs12>
           <v-divider class="my-3"></v-divider>
           <v-subheader class="pl-0">
-            Frequência:
+            <v-icon class="mr-1">all_inclusive</v-icon>
+            Matrículas:
           </v-subheader>
-          <v-select
-            :items="items"
-            v-model="editing.attendances"
-            label="Selecionar"
-            item-text="label"
-            item-value="value"
-            prepend-icon="insert_chart"
-            multiple
-            single-line
-          ></v-select>
-          <v-text-field @keyup.enter="submit" v-model="editing.discount" name="discount" label="Acerto" prepend-icon="card_membership"></v-text-field>
+          <template v-for="(option, i) in editing.enrollments">
+            <v-divider class="mt-2 mb-2 pt-2"></v-divider>
+            <v-select
+              :items="enrollmentOptions"
+              :value="option.enrollmentId"
+              @input="changeEnrollment('enrollmentId', i, $event)"
+              item-text="name"
+              item-value="_id"
+              prepend-icon="autorenew"
+              label="Tipo de matrícula"
+              single-line
+            ></v-select>
+            <v-select
+              v-if="option.enrollmentId"
+              :items="enrollmentPricing(option)"
+              :value="option.enrollmentPrice"
+              @input="changeEnrollment('enrollmentPrice', i, $event)"
+              item-text="desc"
+              item-value="_id"
+              prepend-icon="autorenew"
+              label="Opções"
+              single-line
+            ></v-select>
+            <v-text-field @keyup.enter="submit" :value="option.discount" @input="changeEnrollment('discount', i, $event)" name="discount" label="Desconto base" prepend-icon="card_membership"></v-text-field>
+            <v-text-field @keyup.enter="submit" :value="option.note" @input="changeEnrollment('note', i, $event)" name="note" label="Observação" prepend-icon="note"></v-text-field>
+          </template>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn @click.stop="addEnrollment" icon depressed color="primary">
+              <v-icon>add</v-icon>
+            </v-btn>
+          </v-card-actions>
         </v-flex>
       </v-layout>
       <page-cta @click="submit" icon="check" />
@@ -72,11 +97,20 @@
 
 <script>
 /* global FileReader */
-import { filter } from 'lodash'
+import { mapState } from 'vuex'
+import { map, filter, find } from 'lodash'
+import decorate from '@/utils/decorateEnrollment'
 import pageCta from '@/components/page-cta'
 import personListItem from '@/components/person-list-item'
 import practitionersList from '@/components/practitioners-list'
 import confirmationDialog from '@/components/confirmation-dialog'
+
+const blankEnrollment = () => ({
+  enrollmentId: null,
+  enrollmentPrice: null,
+  discount: '',
+  note: '',
+})
 
 export default {
   components: { confirmationDialog, pageCta, personListItem, practitionersList },
@@ -91,22 +125,18 @@ export default {
       birthdate: '',
       picture: '',
       family: [],
+      enrollments: [blankEnrollment()],
       teacher: false,
       discount: '',
-      attendances: [],
     },
-    items: [
-      { label: '1x por semana', value: '1x' },
-      { label: '2x por semana', value: '2x' },
-      { label: '3x por semana', value: '3x' },
-      { label: '4x por semana', value: '4x' },
-      { label: '5x por semana', value: '5x' },
-      { label: 'Aula terapêutica', value: '160' },
-    ],
   }),
   computed: {
+    ...mapState('enrollment', ['options']),
     chooseList() {
       return !!this.$route.query.add
+    },
+    enrollmentOptions() {
+      return map(this.options, decorate)
     },
     possibleFamilyQuery() {
       const alreadyMembers = [...this.editing.family, this.editing._id]
@@ -116,6 +146,21 @@ export default {
   methods: {
     addFamily(person) {
       this.editing.family = [...this.editing.family, person]
+    },
+    addEnrollment() {
+      this.editing.enrollments = [...this.editing.enrollments, blankEnrollment()]
+    },
+    changeEnrollment(field, index, value) {
+      this.editing.enrollments = map(this.editing.enrollments, (opt, i) => {
+        if (i === index) {
+          opt = { ...opt, [field]: value }
+        }
+        return opt
+      })
+    },
+    enrollmentPricing({ enrollmentId }) {
+      const option = find(this.enrollmentOptions, opt => enrollmentId === opt._id)
+      return option.pricing
     },
     removeRelative({ _id }) {
       this.editing.family = filter(this.editing.family, p => p._id !== _id)
@@ -135,7 +180,9 @@ export default {
       this.$refs.fileInput.click()
     },
     submit() {
-      this.$emit('submit', this.editing)
+      const enrollments = filter(this.editing.enrollments, e => !!e.enrollmentId)
+      const practitioner = { ...this.editing, enrollments }
+      this.$emit('submit', practitioner)
     },
   },
   mounted() {
