@@ -49,6 +49,7 @@
                   <v-list-tile-title>{{ desc.name }} - {{ desc.total }}</v-list-tile-title>
                   <v-list-tile-sub-title v-if="desc.discount">
                     <span class="old-value">{{ desc.value }}</span> - {{ desc.discount }}
+                    <i v-if="desc.note">{{ desc.note }}</i>
                   </v-list-tile-sub-title>
                 </v-list-tile-content>
               </v-list-tile>

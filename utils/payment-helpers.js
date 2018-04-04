@@ -2,18 +2,19 @@ import { find, includes, map, replace, some, sumBy, toInteger } from 'lodash'
 import { toMoney } from '@/utils/helpers'
 import decorate from '@/utils/decorateEnrollment'
 
-export const calculateEnrollment = ({ enrollmentPrice, data, discount }) => {
+export const calculateEnrollment = ({ enrollmentPrice, data, discount, note }) => {
   const { name } = decorate(data)
   const { value } = find(data.pricing, p => p._id === enrollmentPrice) || { value: 0 }
+  const result = { name, note }
   if (includes(discount, '%')) {
     const perc = 100 - toInteger(replace(discount, '%', ''))
-    return { name, discount: `Desconto: ${discount}`, value, total: (value * perc) / 100 }
+    return { ...result, discount: `Desconto: ${discount}`, value, total: (value * perc) / 100 }
   } else if (includes(discount, '-')) {
-    return { name, discount: `Desconto: ${toMoney(discount)}`, value, total: value + (discount * 1) }
+    return { ...result, discount: `Desconto: ${toMoney(discount)}`, value, total: value + (discount * 1) }
   } else if (discount) {
-    return { name, discount: 'Valor combinado', value, total: discount * 1 }
+    return { ...result, discount: 'Valor combinado', value, total: discount * 1 }
   }
-  return { name, value, total: value }
+  return { ...result, value, total: value }
 }
 
 export const calculatePayment = ({ enrollments, family }) => {
