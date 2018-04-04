@@ -39,7 +39,11 @@
               </v-list-tile-action>
             </v-list-tile>
           </v-list>
-          <h4 class="subheading">Pagamento: {{ debth }}</h4>
+          <h4 class="subheading">Pagamento calculado: {{ debth }}</h4>
+          <h4 class="subheading" v-if="absDiscount">Acerto: {{ absDiscount }}</h4>
+          <h4 class="subheading" v-if="percDiscount">Desconto: {{ percDiscount }}%</h4>
+          <h4 class="subheading" v-if="offDiscount">Desconto: R$ {{ offDiscount }},00</h4>
+          <h4 class="subheading" v-if="familyDiscount">Desconto família: R$ {{ familyDiscount }},00</h4>
         </div>
       </v-card-title>
       <v-subheader>Presenças do mês:</v-subheader>
@@ -78,18 +82,32 @@ export default {
     ...mapState('practitioners', ['person']),
     ...mapState('frequency', ['result']),
     byClassRoom() {
-      return groupBy(this.result.data, 'classRoom.title')
+      return groupBy(this.result.data, 'classroom.title')
     },
     debth() {
-      const { discount, family, attendances } = this.person
-      const regular = map(attendances, x => toInteger(get(values, x) || x))
-      const familyDiscount = family.length ? -10 : 0
-      const off = includes(discount, '-')
-        ? -toInteger(replace(discount, '-', ''))
-        : 0
-      const perc = includes(discount, '%') ? 100 - toInteger(replace(discount, '%', '')) : 100
-      const value = ((sum(regular) + familyDiscount + off) * perc) / 100
+      const result = sum(this.price) - this.familyDiscount - this.offDiscount
+      const value = this.absDiscount
+        || (result * (100 - this.percDiscount)) / 100
       return `R$ ${value},00`
+    },
+    price() {
+      return map(this.person.attendances, x => toInteger(get(values, x) || x))
+    },
+    familyDiscount() {
+      return this.person.family.length ? 10 : 0
+    },
+    absDiscount() {
+      return (!this.percDiscount && !this.offDiscount) ? this.person.discount : false
+    },
+    percDiscount() {
+      return includes(this.person.discount, '%')
+        ? toInteger(replace(this.person.discount, '%', ''))
+        : 0
+    },
+    offDiscount() {
+      return includes(this.person.discount, '-')
+        ? toInteger(this.person.discount) * -1
+        : 0
     },
   },
   methods: {
@@ -97,7 +115,7 @@ export default {
       return percent(items.length, this.result.data.length)
     },
     getTeacherPicture(item) {
-      return get(item, 'classRoom.teacher.picture')
+      return get(item, 'classroom.teacher.picture')
     },
     parseDate({ createdAt }) {
       return parseDate(createdAt)
