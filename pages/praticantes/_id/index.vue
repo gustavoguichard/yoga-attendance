@@ -39,11 +39,23 @@
               </v-list-tile-action>
             </v-list-tile>
           </v-list>
-          <h4 class="subheading">Pagamento calculado: {{ debth }}</h4>
-          <h4 class="subheading" v-if="absDiscount">Acerto: {{ absDiscount }}</h4>
-          <h4 class="subheading" v-if="percDiscount">Desconto: {{ percDiscount }}%</h4>
-          <h4 class="subheading" v-if="offDiscount">Desconto: R$ {{ offDiscount }},00</h4>
-          <h4 class="subheading" v-if="familyDiscount">Desconto família: R$ {{ familyDiscount }},00</h4>
+          <v-divider class="my-3 pt-2"></v-divider>
+          <v-subheader class="pl-0">Pagamento:</v-subheader>
+          <v-list dense two-line>
+            <template v-for="(desc, i) in payment.detailing">
+              <v-divider v-if="i > 0"></v-divider>
+              <v-list-tile>
+                <v-list-tile-content>
+                  <v-list-tile-title>{{ desc.name }} - {{ desc.total }}</v-list-tile-title>
+                  <v-list-tile-sub-title v-if="desc.discount">
+                    <span class="old-value">{{ desc.value }}</span> - {{ desc.discount }}
+                  </v-list-tile-sub-title>
+                </v-list-tile-content>
+              </v-list-tile>
+            </template>
+          </v-list>
+          <h4 class="headline">Pagamento calculado: {{ payment.total }}</h4>
+          <v-divider class="my-3 pt-2"></v-divider>
         </div>
       </v-card-title>
       <v-subheader>Presenças do mês:</v-subheader>
@@ -66,13 +78,12 @@
 
 <script>
 import { mapState } from 'vuex'
-import { get, groupBy, includes, map, replace, sum, toInteger } from 'lodash'
+import { get, groupBy } from 'lodash'
 import { getTimeRangeQuery, parseDate } from '@/utils/date-helpers'
-import { percent } from '@/utils/helpers'
+import { describePayment } from '@/utils/payment-helpers'
+import { percent, toMoney } from '@/utils/helpers'
 import dateNavigator from '@/components/date-navigator'
 import pageTitle from '@/components/page-title'
-
-const values = { '1x': 130, '2x': 160, '3x': 200, '4x': 220, '5x': 250 }
 
 export default {
   middleware: 'check-auth',
@@ -84,30 +95,8 @@ export default {
     byClassRoom() {
       return groupBy(this.result.data, 'classroom.title')
     },
-    debth() {
-      const result = sum(this.price) - this.familyDiscount - this.offDiscount
-      const value = this.absDiscount
-        || (result * (100 - this.percDiscount)) / 100
-      return `R$ ${value},00`
-    },
-    price() {
-      return map(this.person.attendances, x => toInteger(get(values, x) || x))
-    },
-    familyDiscount() {
-      return this.person.family.length ? 10 : 0
-    },
-    absDiscount() {
-      return (!this.percDiscount && !this.offDiscount) ? this.person.discount : false
-    },
-    percDiscount() {
-      return includes(this.person.discount, '%')
-        ? toInteger(replace(this.person.discount, '%', ''))
-        : 0
-    },
-    offDiscount() {
-      return includes(this.person.discount, '-')
-        ? toInteger(this.person.discount) * -1
-        : 0
+    payment() {
+      return describePayment(this.person)
     },
   },
   methods: {
@@ -151,6 +140,10 @@ export default {
 
   .summary {
     width: 100%;
+  }
+
+  .old-value {
+    text-decoration: line-through;
   }
 }
 </style>
