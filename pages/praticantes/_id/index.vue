@@ -50,7 +50,7 @@
             <v-list-tile-content>
               <v-list-tile-title>{{ parseDate(item) }}</v-list-tile-title>
               <v-list-tile-sub-title>
-                {{ item.classRoom.title }}{{ item.teacher && ` - ${item.teacher.displayName}` }}
+                {{ item.classroom.title }}{{ item.teacher && ` - ${item.teacher.displayName}` }}
               </v-list-tile-sub-title>
             </v-list-tile-content>
           </v-list-tile>

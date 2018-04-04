@@ -5,7 +5,7 @@
     </v-navigation-drawer>
     <v-toolbar color="blue-grey" dark fixed app clipped-left>
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-      <v-toolbar-title>Yoga Attendance</v-toolbar-title>
+      <v-toolbar-title>Centro Iyengar Yoga Florianópolis</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn icon to="/sign-out" v-if="userData">
         <v-icon>exit_to_app</v-icon>

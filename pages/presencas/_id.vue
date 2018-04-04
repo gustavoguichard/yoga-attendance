@@ -6,8 +6,8 @@
   </v-layout>
   <v-layout align-content-center align-center column v-else>
     <page-title icon="person"
-      :title="peopleList.classRoom.title"
-      :subtitle="substitution(peopleList) && `Professor: ${peopleList.teacher.displayName} (substituindo: ${peopleList.classRoom.teacher.displayName})`"
+      :title="peopleList.classroom.title"
+      :subtitle="substitution(peopleList) && `Professor: ${peopleList.teacher.displayName} (substituindo: ${peopleList.classroom.teacher.displayName})`"
       :picture="peopleList.teacher && peopleList.teacher.picture"
     />
     <v-btn @click.stop="toggleChooseList('teacher')" color="primary" depressed>Trocar professor</v-btn>
@@ -53,11 +53,11 @@ export default {
     },
   },
   methods: {
-    isSubscribed({ classRooms }) {
-      return includes(classRooms, this.peopleList.classId)
+    isSubscribed({ classrooms }) {
+      return includes(classrooms, this.peopleList.classId)
     },
     substitution(item) {
-      const hasTeacherId = get(item, 'classRoom.teacher._id')
+      const hasTeacherId = get(item, 'classroom.teacher._id')
       const differentTeacher = get(item, 'teacher._id') !== hasTeacherId
       return differentTeacher && hasTeacherId
     },
@@ -91,10 +91,10 @@ export default {
       })
     },
   },
-  async fetch({ store, ...context }) {
+  async fetch({ store, params }) {
     await store.dispatch('auth/ensureAuth')
     await store.dispatch('frequency/get', {
-      id: context.params.id,
+      id: params.id,
       query: {
         populatePractitioners: true,
         populateClassroom: true,

@@ -7,36 +7,36 @@
     <v-card-text>
       <v-layout wrap>
         <v-flex xs12>
-          <v-text-field @keyup.enter="submit" v-model="editingPerson.fullName" name="fullName" label="Nome completo" prepend-icon="perm_identity" required></v-text-field>
+          <v-text-field @keyup.enter="submit" v-model="editing.fullName" name="fullName" label="Nome completo" prepend-icon="perm_identity" required></v-text-field>
         </v-flex>
         <v-flex xs12>
-          <v-text-field @keyup.enter="submit" v-model="editingPerson.nickName" name="nickName" label="Apelido" prepend-icon="face"></v-text-field>
+          <v-text-field @keyup.enter="submit" v-model="editing.nickName" name="nickName" label="Apelido" prepend-icon="face"></v-text-field>
         </v-flex>
         <v-flex xs12>
-          <v-text-field @keyup.enter="submit" v-model="editingPerson.email" name="email" label="E-mail" prepend-icon="email" required></v-text-field>
+          <v-text-field @keyup.enter="submit" v-model="editing.email" name="email" label="E-mail" prepend-icon="email" required></v-text-field>
         </v-flex>
         <v-flex xs12>
           <v-avatar size="80" class="grey lighten-4 mt-2 mb-4" @click="pickFile" style="cursor: pointer">
-            <img v-if="editingPerson.picture" :src="editingPerson.picture" alt="avatar">
+            <img v-if="editing.picture" :src="editing.picture" alt="avatar">
             <v-icon v-else alt="avatar">add_a_photo</v-icon>
           </v-avatar>
           <input style="display: none" type="file" accept="image/*" ref="fileInput" @change="onFileChange">
         </v-flex>
         <v-flex xs12>
-          <v-checkbox color="blue" v-model="editingPerson.teacher" name="teacher" label="Professor"></v-checkbox>
+          <v-checkbox color="blue" v-model="editing.teacher" name="teacher" label="Professor"></v-checkbox>
         </v-flex>
         <v-flex xs12>
-          <v-text-field @keyup.enter="submit" mask="(##) #####-####" v-model="editingPerson.phone" name="phone" label="Telefone" prepend-icon="phone" required></v-text-field>
+          <v-text-field @keyup.enter="submit" mask="(##) #####-####" v-model="editing.phone" name="phone" label="Telefone" prepend-icon="phone" required></v-text-field>
         </v-flex>
         <v-flex xs12>
-          <v-text-field @keyup.enter="submit" mask="##/##/####" v-model="editingPerson.birthdate" name="birthdate" label="Data de Nascimento" prepend-icon="cake" required></v-text-field>
+          <v-text-field @keyup.enter="submit" mask="##/##/####" v-model="editing.birthdate" name="birthdate" label="Data de Nascimento" prepend-icon="cake" required></v-text-field>
         </v-flex>
         <v-flex xs12>
           <v-subheader class="pl-0">
             <v-icon class="mr-1">home</v-icon>
             Familiares:
           </v-subheader>
-          <person-list-item v-for="person in editingPerson.family" :key="person._id" :avatar="true" avatarSize="28" :person="person" :to="`/praticantes/${person._id}/edit`">
+          <person-list-item v-for="person in editing.family" :key="person._id" :avatar="true" avatarSize="28" :person="person" :to="`/praticantes/${person._id}/edit`">
             <v-btn icon ripple slot="right" @click.stop="removeRelative(person)">
               <v-icon color="orange">delete</v-icon>
             </v-btn>
@@ -54,7 +54,7 @@
             v-for="lesson in classes"
             :label="lesson.title"
             :key="lesson.title"
-            v-model="editingPerson.classRooms"
+            v-model="editing.classrooms"
             color="blue"
             :value="lesson._id"
             hide-details
@@ -67,7 +67,7 @@
           </v-subheader>
           <v-select
             :items="items"
-            v-model="editingPerson.attendances"
+            v-model="editing.attendances"
             label="Selecionar"
             item-text="label"
             item-value="value"
@@ -75,7 +75,7 @@
             multiple
             single-line
           ></v-select>
-          <v-text-field @keyup.enter="submit" v-model="editingPerson.discount" name="discount" label="Acerto" prepend-icon="card_membership"></v-text-field>
+          <v-text-field @keyup.enter="submit" v-model="editing.discount" name="discount" label="Acerto" prepend-icon="card_membership"></v-text-field>
         </v-flex>
       </v-layout>
       <page-cta @click="submit" icon="check" />
@@ -96,7 +96,7 @@ export default {
   watchQuery: ['add'],
   props: ['person', 'title'],
   data: () => ({
-    editingPerson: {
+    editing: {
       fullName: '',
       nickName: '',
       email: '',
@@ -105,7 +105,7 @@ export default {
       picture: '',
       family: [],
       teacher: false,
-      classRooms: [],
+      classrooms: [],
       discount: '',
       attendances: [],
     },
@@ -124,16 +124,16 @@ export default {
       return !!this.$route.query.add
     },
     possibleFamilyQuery() {
-      const alreadyMembers = [...this.editingPerson.family, this.editingPerson._id]
+      const alreadyMembers = [...this.editing.family, this.editing._id]
       return { _id: { $nin: alreadyMembers } }
     },
   },
   methods: {
     addFamily(person) {
-      this.editingPerson.family = [...this.editingPerson.family, person]
+      this.editing.family = [...this.editing.family, person]
     },
     removeRelative({ _id }) {
-      this.editingPerson.family = filter(this.editingPerson.family, p => p._id !== _id)
+      this.editing.family = filter(this.editing.family, p => p._id !== _id)
     },
     onFileChange(ev) {
       ev.preventDefault()
@@ -141,7 +141,7 @@ export default {
       const file = ev.target.files[0]
 
       reader.onloadend = () => {
-        this.editingPerson.picture = reader.result
+        this.editing.picture = reader.result
       }
 
       reader.readAsDataURL(file)
@@ -150,12 +150,12 @@ export default {
       this.$refs.fileInput.click()
     },
     submit() {
-      this.$emit('submit', this.editingPerson)
+      this.$emit('submit', this.editing)
     },
   },
   mounted() {
-    this.editingPerson = {
-      ...this.editingPerson,
+    this.editing = {
+      ...this.editing,
       ...this.person,
     }
   },

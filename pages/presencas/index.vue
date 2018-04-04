@@ -19,10 +19,10 @@
           <v-list-tile ripple :to="`/presencas/${item._id}`">
             <v-list-tile-content>
               <v-list-tile-title>
-                {{ parseDate(item) }} <span class="grey--text text--darken-1">- {{ item.classRoom.title }}</span>
+                {{ parseDate(item) }} <span class="grey--text text--darken-1">- {{ item.classroom.title }}</span>
               </v-list-tile-title>
-              <v-list-tile-sub-title v-if="item.classRoom.teacher && substitution(item)">
-                {{ item.teacher.displayName }} - Substituindo: {{ item.classRoom.teacher.displayName }}
+              <v-list-tile-sub-title v-if="item.classroom.teacher && substitution(item)">
+                {{ item.teacher.displayName }} - Substituindo: {{ item.classroom.teacher.displayName }}
               </v-list-tile-sub-title>
               <v-list-tile-sub-title v-else>
                 {{ item.teacher && item.teacher.displayName }}
@@ -58,7 +58,7 @@ export default {
       return parseDate(createdAt)
     },
     substitution(item) {
-      return get(item, 'teacher._id') !== get(item, 'classRoom.teacher._id')
+      return get(item, 'teacher._id') !== get(item, 'classroom.teacher._id')
     },
   },
   async fetch({ store, query }) {

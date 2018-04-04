@@ -7,12 +7,12 @@
     <v-card-text>
       <v-layout wrap>
         <v-flex xs12>
-          <v-text-field @keyup.enter="submit" v-model="editingClass.title" name="title" label="Título" prepend-icon="title" required></v-text-field>
+          <v-text-field @keyup.enter="submit" v-model="editing.title" name="title" label="Título" prepend-icon="title" required></v-text-field>
         </v-flex>
         <v-flex xs12>
           <v-select
             :items="teacherSelection"
-            v-model="editingClass.teacher"
+            v-model="editing.teacher"
             item-text="displayName"
             item-value="_id"
             prepend-icon="person"
@@ -21,7 +21,7 @@
           ></v-select>
         </v-flex>
         <v-flex xs12>
-          <v-switch slot="footer" :label="`É aula regular${editingClass.regularClass ? '' : '?'}`" v-model="editingClass.regularClass"></v-switch>
+          <v-switch slot="footer" :label="`É aula regular${editing.regularClass ? '' : '?'}`" v-model="editing.regularClass"></v-switch>
         </v-flex>
         <v-flex xs12>
           <v-divider class="my-3"></v-divider>
@@ -61,11 +61,10 @@ export default {
   watchQuery: ['add'],
   props: ['lesson', 'title'],
   data: () => ({
-    editingClass: {
+    editing: {
       title: '',
       teacher: undefined,
       practitioners: [],
-      attendances: [],
       regularClass: true,
     },
   }),
@@ -76,32 +75,32 @@ export default {
       return !!this.$route.query.add
     },
     practitionersList() {
-      return filter(this.list, person => includes(this.editingClass.practitioners, person._id))
+      return filter(this.list, person => includes(this.editing.practitioners, person._id))
     },
     teacherSelection() {
-      return [{ _id: undefined, displayName: 'Sem professor definido' }, ...this.teachers]
+      return [{ _id: null, displayName: 'Sem professor definido' }, ...this.teachers]
     },
     notPractitioners() {
       return filter(this.list, person =>
-        !includes(this.editingClass.practitioners, person._id)
-        && (!this.editingClass.teacher || (person._id !== this.editingClass.teacher._id))
+        !includes(this.editing.practitioners, person._id)
+        && (!this.editing.teacher || (person._id !== this.editing.teacher._id))
       )
     },
   },
   methods: {
     addPractitioner({ _id }) {
-      this.editingClass.practitioners = uniq([...this.editingClass.practitioners, _id])
+      this.editing.practitioners = uniq([...this.editing.practitioners, _id])
     },
     removePractitioner({ _id }) {
-      this.editingClass.practitioners = without(this.editingClass.practitioners, _id)
+      this.editing.practitioners = without(this.editing.practitioners, _id)
     },
     submit() {
-      this.$emit('submit', this.editingClass)
+      this.$emit('submit', this.editing)
     },
   },
   mounted() {
-    this.editingClass = {
-      ...this.editingClass,
+    this.editing = {
+      ...this.editing,
       ...this.lesson,
     }
   },

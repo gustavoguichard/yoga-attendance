@@ -22,6 +22,7 @@ export default {
       { name: 'Professores', to: '/professores', icon: 'record_voice_over' },
       { name: 'Presenças', to: '/presencas', icon: 'playlist_add_check' },
       { name: 'Acertos', to: '/acertos', icon: 'account_balance_wallet' },
+      { name: 'Regras de pagamento', to: '/matriculas', icon: 'settings' },
     ],
   }),
 };

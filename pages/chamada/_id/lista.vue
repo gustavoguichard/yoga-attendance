@@ -46,12 +46,12 @@ export default {
       return parseDate(createdAt)
     },
   },
-  async fetch({ store, ...context }) {
+  async fetch({ store, query, params }) {
     await store.dispatch('auth/ensureAuth')
-    await store.dispatch('classrooms/get', context.params.id)
+    await store.dispatch('classrooms/get', { id: params.id })
     await store.dispatch('frequency/find', {
-      page: context.query.page,
-      query: { classId: context.params.id },
+      page: query.page,
+      query: { classId: params.id },
     })
   },
 };

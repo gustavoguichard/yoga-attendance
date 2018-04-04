@@ -5,7 +5,7 @@
     </practitioners-list>
   </v-layout>
   <v-layout v-else justify-center wrap>
-    <v-card>
+    <v-card class="half">
       <v-toolbar color="blue-grey lighten-1" dark>
         <v-btn icon @click="selectAll">
           <v-icon v-if="allSelected" color="blue darken-4">check_circle</v-icon>
@@ -26,7 +26,7 @@
         </v-btn>
       </v-card-actions>
     </v-card>
-    <v-card>
+    <v-card class="half">
       <v-toolbar color="blue-grey lighten-1" dark>
         <v-toolbar-title>Professor</v-toolbar-title>
       </v-toolbar>
@@ -71,7 +71,7 @@ export default {
       return !!this.$route.query.add
     },
     subscribedList() {
-      const isSubscribed = person => includes(person.classRooms, this.lesson._id)
+      const isSubscribed = person => includes(person.classrooms, this.lesson._id)
       return filter(this.list, person =>
         isSubscribed(person) && this.isntTeaching(person)
       )
@@ -146,7 +146,7 @@ export default {
   },
   async fetch({ store, params }) {
     await store.dispatch('auth/ensureAuth')
-    await store.dispatch('classrooms/get', params.id)
+    await store.dispatch('classrooms/get', { id: params.id })
     await store.dispatch('practitioners/find')
   },
 };
@@ -157,6 +157,10 @@ export default {
   .card {
     margin: 1em;
     min-width: 400px;
+    width: 60%;
+  }
+  .card.half {
+    width: auto;
   }
 }
 </style>

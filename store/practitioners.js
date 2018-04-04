@@ -36,7 +36,7 @@ export const actions = {
   async subscribeToClass(context, data) {
     return Promise.all(data.practitioners.map(async person =>
       api.service('practitioners').patch(person._id, {
-        classRooms: [...person.classRooms, data.classId],
+        classrooms: [...person.classrooms, data.classId],
       })
     ))
   },

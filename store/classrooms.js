@@ -15,8 +15,8 @@ export const mutations = {
 }
 
 export const actions = {
-  async find(context) {
-    const response = await api.service('classrooms').find()
+  async find(context, params) {
+    const response = await api.service('classrooms').find(params)
     context.commit('update', response.data)
   },
   async get(context, { id, query }) {
