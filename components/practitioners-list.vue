@@ -82,13 +82,11 @@ export default {
   },
   watch: {
     async query(newQuery) {
-      await this.$store.dispatch('auth/ensureAuth')
       await this.$store.dispatch('practitioners/find', { query: newQuery })
     },
   },
   async mounted() {
     if (!this.practitioners) {
-      await this.$store.dispatch('auth/ensureAuth')
       await this.$store.dispatch('practitioners/find', { query: this.query })
     }
   },

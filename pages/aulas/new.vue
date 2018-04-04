@@ -12,13 +12,11 @@ export default {
   components: { classroomForm },
   methods: {
     async submit(lesson) {
-      await this.$store.dispatch('auth/ensureAuth')
       await this.$store.dispatch('classrooms/create', lesson)
       this.$router.push('/')
     },
   },
   async fetch({ store }) {
-    await store.dispatch('auth/ensureAuth')
     await store.dispatch('practitioners/find')
   },
 };

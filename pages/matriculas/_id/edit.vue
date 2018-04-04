@@ -21,13 +21,11 @@ export default {
   },
   methods: {
     async submit(enrollment) {
-      await this.$store.dispatch('auth/ensureAuth')
       await this.$store.dispatch('enrollment/patch', enrollment)
       this.$router.push('/matriculas')
     },
   },
   async fetch({ store, params }) {
-    await store.dispatch('auth/ensureAuth')
     await store.dispatch('enrollment/get', { id: params.id })
     await store.dispatch('classrooms/find', { query: { regularClass: { $ne: true } } })
   },

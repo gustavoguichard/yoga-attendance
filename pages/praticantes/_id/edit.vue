@@ -16,13 +16,11 @@ export default {
   },
   methods: {
     async submit(person) {
-      await this.$store.dispatch('auth/ensureAuth')
       await this.$store.dispatch('practitioners/patch', person)
       this.$router.push('/praticantes')
     },
   },
   async fetch({ store, params }) {
-    await store.dispatch('auth/ensureAuth')
     await store.dispatch('enrollment/find')
     await store.dispatch('practitioners/get', { id: params.id,
       query: { populateFamily: true },

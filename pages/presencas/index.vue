@@ -62,7 +62,6 @@ export default {
     },
   },
   async fetch({ store, query }) {
-    await store.dispatch('auth/ensureAuth')
     await store.dispatch('frequency/find', {
       query: {
         createdAt: getTimeRangeQuery('week', query.weeks),

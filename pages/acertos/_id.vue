@@ -66,7 +66,6 @@ export default {
     },
   },
   async fetch({ store, params, query }) {
-    await store.dispatch('auth/ensureAuth')
     await store.dispatch('classrooms/get', { id: params.id })
     await store.dispatch('frequency/find', {
       query: {

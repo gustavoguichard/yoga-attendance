@@ -115,7 +115,6 @@ export default {
     },
   },
   async fetch({ store, params, query }) {
-    await store.dispatch('auth/ensureAuth')
     await store.dispatch('practitioners/get', { id: params.id,
       query: { populateEnrollments: true },
     })

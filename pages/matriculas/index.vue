@@ -50,13 +50,11 @@ export default {
       this.$router.push(`/matriculas/${_id}/edit`)
     },
     async remove(enrollment) {
-      await this.$store.dispatch('auth/ensureAuth')
       await api.service('enrollment/remove').remove(enrollment._id)
       await this.$store.dispatch('enrollment/find')
     },
   },
   async fetch({ store }) {
-    await store.dispatch('auth/ensureAuth')
     await store.dispatch('enrollment/find')
   },
 };

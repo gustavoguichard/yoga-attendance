@@ -16,7 +16,6 @@ export default {
   methods: {
     async selected(person) {
       if (this.$route.query.add_teacher) {
-        await this.$store.dispatch('auth/ensureAuth')
         await this.$store.dispatch('practitioners/patch', {
           _id: person._id,
           teacher: true,

@@ -25,7 +25,6 @@ export default {
       this.$router.push({ query })
     },
     async selected({ _id }) {
-      await this.$store.dispatch('auth/ensureAuth')
       await this.$store.dispatch('practitioners/patch', { _id, teacher: true })
       this.$router.push({ query: null })
     },

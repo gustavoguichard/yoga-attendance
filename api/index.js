@@ -1,12 +1,12 @@
 import feathers from '@feathersjs/feathers'
 import auth from '@feathersjs/authentication-client'
-import socketio from '@feathersjs/socketio-client'
+import rest from '@feathersjs/rest-client'
+import axios from 'axios'
 import storage from '@/utils/feathers-storage'
-import io from 'socket.io-client'
 
-const socket = io('http://localhost:3030')
+const restClient = rest('http://localhost:3030')
 const api = feathers()
-  .configure(socketio(socket))
+  .configure(restClient.axios(axios))
   .configure(auth({ storage }))
 
 export default api

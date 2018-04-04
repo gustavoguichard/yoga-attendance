@@ -12,13 +12,11 @@ export default {
   components: { practitionerForm },
   methods: {
     async submit(person) {
-      await this.$store.dispatch('auth/ensureAuth')
       await this.$store.dispatch('practitioners/create', person)
       this.$router.push('/praticantes')
     },
   },
   async fetch({ store }) {
-    await store.dispatch('auth/ensureAuth')
     await store.dispatch('enrollment/find')
   },
 };

@@ -22,13 +22,11 @@ export default {
   },
   methods: {
     async submit(lesson) {
-      await this.$store.dispatch('auth/ensureAuth')
       await this.$store.dispatch('classrooms/patch', lesson)
       this.$router.push('/')
     },
   },
   async fetch({ store, params }) {
-    await store.dispatch('auth/ensureAuth')
     await store.dispatch('classrooms/get', { id: params.id })
     await store.dispatch('practitioners/find')
   },

@@ -82,7 +82,6 @@ export default {
     },
     async updateFrequency(data) {
       const { _id } = this.peopleList
-      await this.$store.dispatch('auth/ensureAuth')
       await this.$store.dispatch('frequency/patch', { _id, ...data })
       return this.$store.dispatch('frequency/get', {
         id: _id,
@@ -91,7 +90,6 @@ export default {
     },
   },
   async fetch({ store, params }) {
-    await store.dispatch('auth/ensureAuth')
     await store.dispatch('frequency/get', {
       id: params.id,
       query: {

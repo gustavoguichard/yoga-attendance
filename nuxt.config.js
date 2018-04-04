@@ -42,8 +42,8 @@ module.exports = {
     vendor: [
       '@/plugins/vuetify.js',
       '@feathersjs/feathers',
-      '@feathersjs/socketio-client',
-      'socket.io-client',
+      '@feathersjs/rest-client',
+      'axios',
       '@feathersjs/authentication-client',
     ],
     extractCSS: true,

@@ -128,7 +128,6 @@ export default {
       return includes(map(this.restitution, '_id'), _id)
     },
     async submit() {
-      await this.$store.dispatch('auth/ensureAuth')
       const newSubscribers = filter(this.restitution, p => !p.restituting)
       if (newSubscribers.length) {
         await this.$store.dispatch('classrooms/patch',
@@ -145,7 +144,6 @@ export default {
     },
   },
   async fetch({ store, params }) {
-    await store.dispatch('auth/ensureAuth')
     await store.dispatch('classrooms/get', { id: params.id })
     await store.dispatch('practitioners/find')
   },
