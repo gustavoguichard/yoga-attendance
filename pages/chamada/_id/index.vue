@@ -71,7 +71,7 @@ export default {
       return !!this.$route.query.add
     },
     subscribedList() {
-      const isSubscribed = person => includes(person.classrooms, this.lesson._id)
+      const isSubscribed = person => includes(this.lesson.practitioners, person._id)
       return filter(this.list, person =>
         isSubscribed(person) && this.isntTeaching(person)
       )
@@ -131,8 +131,8 @@ export default {
       await this.$store.dispatch('auth/ensureAuth')
       const newSubscribers = filter(this.restitution, p => !p.restituting)
       if (newSubscribers.length) {
-        await this.$store.dispatch('practitioners/subscribeToClass',
-          { practitioners: newSubscribers, classId: this.lesson._id }
+        await this.$store.dispatch('classrooms/patch',
+          { practitioners: [...this.lesson.practitioners, ...newSubscribers], _id: this.lesson._id }
         )
       }
       await api.service('frequency').create({

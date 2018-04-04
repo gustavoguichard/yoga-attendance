@@ -52,8 +52,8 @@ export default {
     },
   },
   methods: {
-    isSubscribed({ classrooms }) {
-      return includes(classrooms, this.peopleList.classId)
+    isSubscribed(person) {
+      return includes(this.peopleList.classroom.practitioners, person._id)
     },
     substitution(item) {
       const hasTeacherId = get(item, 'classroom.teacher._id')
