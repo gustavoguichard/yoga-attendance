@@ -17,10 +17,6 @@ export default {
       this.$router.push('/praticantes')
     },
   },
-  async fetch({ store }) {
-    await store.dispatch('auth/ensureAuth')
-    await store.dispatch('classrooms/find')
-  },
 };
 </script>
 

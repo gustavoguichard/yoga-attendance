@@ -37,28 +37,15 @@
             Familiares:
           </v-subheader>
           <person-list-item v-for="person in editing.family" :key="person._id" :avatar="true" avatarSize="28" :person="person" :to="`/praticantes/${person._id}/edit`">
-            <v-btn icon ripple slot="right" @click.stop="removeRelative(person)">
-              <v-icon color="orange">delete</v-icon>
-            </v-btn>
+            <confirmation-dialog slot="right" @click.stop="removeRelative(person)">
+              <v-btn icon ripple>
+                <v-icon color="orange">delete</v-icon>
+              </v-btn>
+            </confirmation-dialog>
           </person-list-item>
           <v-btn color="blue" icon flat @click.stop="$router.push({ query: { add: 'relative' } })">
             <v-icon>group_add</v-icon>
           </v-btn>
-        </v-flex>
-        <v-flex xs12>
-          <v-subheader class="pl-0">
-            <v-icon class="mr-1">date_range</v-icon>
-            Aulas inscritas:
-          </v-subheader>
-          <v-checkbox
-            v-for="lesson in classes"
-            :label="lesson.title"
-            :key="lesson.title"
-            v-model="editing.classrooms"
-            color="blue"
-            :value="lesson._id"
-            hide-details
-          ></v-checkbox>
         </v-flex>
         <v-flex xs12>
           <v-divider class="my-3"></v-divider>
@@ -85,14 +72,14 @@
 
 <script>
 /* global FileReader */
-import { mapState } from 'vuex'
 import { filter } from 'lodash'
 import pageCta from '@/components/page-cta'
 import personListItem from '@/components/person-list-item'
 import practitionersList from '@/components/practitioners-list'
+import confirmationDialog from '@/components/confirmation-dialog'
 
 export default {
-  components: { pageCta, personListItem, practitionersList },
+  components: { confirmationDialog, pageCta, personListItem, practitionersList },
   watchQuery: ['add'],
   props: ['person', 'title'],
   data: () => ({
@@ -105,7 +92,6 @@ export default {
       picture: '',
       family: [],
       teacher: false,
-      classrooms: [],
       discount: '',
       attendances: [],
     },
@@ -119,7 +105,6 @@ export default {
     ],
   }),
   computed: {
-    ...mapState('classrooms', ['classes']),
     chooseList() {
       return !!this.$route.query.add
     },
