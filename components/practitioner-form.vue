@@ -26,9 +26,6 @@
           <v-checkbox color="blue" v-model="editing.teacher" name="teacher" label="Professor"></v-checkbox>
         </v-flex>
         <v-flex xs12>
-          <v-text-field @keyup.enter="submit" v-model="editing.discount" name="discount" label="Desconto base" prepend-icon="card_membership"></v-text-field>
-        </v-flex>
-        <v-flex xs12>
           <v-text-field @keyup.enter="submit" mask="(##) #####-####" v-model="editing.phone" name="phone" label="Telefone" prepend-icon="phone" required></v-text-field>
         </v-flex>
         <v-flex xs12>
@@ -73,7 +70,7 @@
               :items="enrollmentPricing(option)"
               :value="option.enrollmentPrice"
               @input="changeEnrollment('enrollmentPrice', i, $event)"
-              item-text="desc"
+              item-text="display"
               item-value="_id"
               prepend-icon="autorenew"
               label="Opções"
@@ -127,7 +124,6 @@ export default {
       family: [],
       enrollments: [blankEnrollment()],
       teacher: false,
-      discount: '',
     },
   }),
   computed: {
