@@ -1,7 +1,7 @@
 import { get, map } from 'lodash'
 import { toMoney } from '@/utils/helpers'
 
-const types = { tuition: 'Avulsa', monthly: 'Mensal', yearly: 'Anual' }
+const types = { monthly: 'Mensal', yearly: 'Anual' }
 
 export default (enrollment) => {
   const type = get(types, enrollment.type)

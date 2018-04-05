@@ -10,6 +10,9 @@
           <v-text-field @keyup.enter="submit" v-model="editing.title" name="title" label="Título" prepend-icon="title" required></v-text-field>
         </v-flex>
         <v-flex xs12>
+          <v-text-field @keyup.enter="submit" v-model="editing.tuition" name="tuition" label="Preço da aula avulsa" prepend-icon="attach_money" required></v-text-field>
+        </v-flex>
+        <v-flex xs12>
           <v-select
             :items="teacherSelection"
             v-model="editing.teacher"
@@ -63,6 +66,7 @@ export default {
   data: () => ({
     editing: {
       title: '',
+      tuition: undefined,
       teacher: undefined,
       practitioners: [],
       regularClass: true,

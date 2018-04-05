@@ -78,7 +78,6 @@ export default {
     ...mapState('classrooms', ['classes']),
     typeOptions() {
       return [
-        { text: 'Avulsa', value: 'tuition' },
         { text: 'Mensal', value: 'monthly' },
         { text: 'Anual', value: 'yearly' },
       ]
