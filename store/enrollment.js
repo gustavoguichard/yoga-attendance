@@ -22,7 +22,4 @@ export const actions = {
     const response = await api.service('enrollment').get(id, { query })
     context.commit('updateEnrollment', response)
   },
-  async patch(context, { _id, ...data }) {
-    return api.service('enrollment').patch(_id, data)
-  },
 }

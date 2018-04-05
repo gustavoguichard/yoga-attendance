@@ -35,8 +35,4 @@ export const actions = {
     const response = await api.service('frequency').get(id, { query })
     context.commit('updatePeopleList', response)
   },
-
-  async patch(context, { _id, ...data }) {
-    return api.service('frequency').patch(_id, data)
-  },
 }

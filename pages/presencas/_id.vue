@@ -29,6 +29,7 @@
 </template>
 
 <script>
+import api from '@/api'
 import { mapState } from 'vuex'
 import { get, includes, map, reduce } from 'lodash'
 import pageCta from '@/components/page-cta'
@@ -82,7 +83,7 @@ export default {
     },
     async updateFrequency(data) {
       const { _id } = this.peopleList
-      await this.$store.dispatch('frequency/patch', { _id, ...data })
+      await api.service('frequency').patch(_id, data)
       return this.$store.dispatch('frequency/get', {
         id: _id,
         query: { populatePractitioners: true, populateClassroom: true },

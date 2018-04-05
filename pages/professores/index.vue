@@ -7,6 +7,7 @@
 </template>
 
 <script>
+import api from '@/api'
 import pageCta from '@/components/page-cta'
 import practitionersList from '@/components/practitioners-list'
 
@@ -25,7 +26,7 @@ export default {
       this.$router.push({ query })
     },
     async selected({ _id }) {
-      await this.$store.dispatch('practitioners/patch', { _id, teacher: true })
+      await api.service('practitioners').patch(_id, { teacher: true })
       this.$router.push({ query: null })
     },
   },

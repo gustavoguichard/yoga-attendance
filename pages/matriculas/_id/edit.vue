@@ -5,6 +5,7 @@
 </template>
 
 <script>
+import api from '@/api'
 import { mapState } from 'vuex'
 import decorate from '@/utils/decorateEnrollment'
 import enrollmentForm from '@/components/enrollment-form'
@@ -20,8 +21,8 @@ export default {
     },
   },
   methods: {
-    async submit(enrollment) {
-      await this.$store.dispatch('enrollment/patch', enrollment)
+    async submit({ _id, ...data }) {
+      await api.service('enrollment').patch(_id, data)
       this.$router.push('/matriculas')
     },
   },

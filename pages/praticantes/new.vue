@@ -5,6 +5,7 @@
 </template>
 
 <script>
+import api from '@/api'
 import practitionerForm from '@/components/practitioner-form'
 
 export default {
@@ -12,7 +13,7 @@ export default {
   components: { practitionerForm },
   methods: {
     async submit(person) {
-      await this.$store.dispatch('practitioners/create', person)
+      await api.service('practitioners').create(person)
       this.$router.push('/praticantes')
     },
   },

@@ -10,6 +10,7 @@
 </template>
 
 <script>
+import api from '@/api'
 import pageTitle from '@/components/page-title'
 import classroomForm from '@/components/classroom-form'
 import { mapState } from 'vuex'
@@ -21,8 +22,8 @@ export default {
     ...mapState('classrooms', ['lesson']),
   },
   methods: {
-    async submit(lesson) {
-      await this.$store.dispatch('classrooms/patch', lesson)
+    async submit({ _id, ...data }) {
+      await api.service('classrooms').patch(_id, data)
       this.$router.push('/')
     },
   },

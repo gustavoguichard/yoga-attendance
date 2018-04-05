@@ -5,6 +5,7 @@
 </template>
 
 <script>
+import api from '@/api'
 import classroomForm from '@/components/classroom-form'
 
 export default {
@@ -12,7 +13,7 @@ export default {
   components: { classroomForm },
   methods: {
     async submit(lesson) {
-      await this.$store.dispatch('classrooms/create', lesson)
+      await api.service('classrooms').create(lesson)
       this.$router.push('/')
     },
   },

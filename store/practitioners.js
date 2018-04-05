@@ -24,14 +24,6 @@ export const actions = {
     const response = await api.service('practitioners').get(id, { query })
     context.commit('updatePerson', response)
   },
-
-  async patch(context, { _id, ...data }) {
-    return api.service('practitioners').patch(_id, data)
-  },
-
-  async create(context, data) {
-    return api.service('practitioners').create(data)
-  },
 }
 
 export const getters = {

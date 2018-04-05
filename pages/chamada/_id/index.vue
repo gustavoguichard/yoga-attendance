@@ -130,9 +130,7 @@ export default {
     async submit() {
       const newSubscribers = filter(this.restitution, p => !p.restituting)
       if (newSubscribers.length) {
-        await this.$store.dispatch('classrooms/patch',
-          { practitioners: [...this.lesson.practitioners, ...newSubscribers], _id: this.lesson._id }
-        )
+        await api.service('classrooms').patch(this.lesson._id, { practitioners: [...this.lesson.practitioners, ...newSubscribers] })
       }
       await api.service('frequency').create({
         practitioners: this.everyAttendant,

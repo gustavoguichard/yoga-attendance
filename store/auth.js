@@ -4,9 +4,6 @@ export const mutations = {
   update(state, data) {
     state.userData = data
   },
-  authClient(state) {
-    state.clientReady = true
-  },
   logout(state) {
     state.userData = null
   },

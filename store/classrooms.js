@@ -23,9 +23,6 @@ export const actions = {
     const response = await api.service('classrooms').get(id, { query })
     context.commit('updateLesson', response)
   },
-  async patch(context, { _id, ...data }) {
-    return api.service('classrooms').patch(_id, data)
-  },
 }
 
 const groupedByTeacher = rooms => {
