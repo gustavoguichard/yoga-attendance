@@ -34,7 +34,7 @@
               </v-list-tile-content>
               <v-list-tile-action>
                 <v-chip outline color="primary">
-                  {{ items.length }} ({{ getPercent(items) }})
+                  {{ items.length }} ({{ getPercent(items.length, result.data.length) }})
                 </v-chip>
               </v-list-tile-action>
             </v-list-tile>
@@ -42,20 +42,26 @@
           <v-divider class="my-3 pt-2"></v-divider>
           <v-subheader class="pl-0">Pagamento:</v-subheader>
           <v-list dense two-line>
-            <template v-for="(desc, i) in payment.detailing">
+            <template v-for="(desc, i) in paymentDescription.detailing">
               <v-divider v-if="i > 0"></v-divider>
               <v-list-tile>
                 <v-list-tile-content>
-                  <v-list-tile-title>{{ desc.name }} - {{ desc.total }}</v-list-tile-title>
+                  <v-list-tile-title>{{ desc.title }} - {{ toMoney(desc.total) }}</v-list-tile-title>
                   <v-list-tile-sub-title v-if="desc.discount">
-                    <span class="old-value">{{ desc.value }}</span> - {{ desc.discount }}
+                    <span class="old-value">{{ toMoney(desc.value) }}</span> - {{ desc.discount }}
                     <i v-if="desc.note">{{ desc.note }}</i>
                   </v-list-tile-sub-title>
                 </v-list-tile-content>
+                <v-list-tile-action>
+                <v-chip outline color="primary" v-if="desc.frequented !== undefined">
+                  {{ desc.frequented }}
+                  <span v-if="desc.amount" class="ml-1"> - {{ getPercent(desc.frequented, desc.amount) }}</span>
+                </v-chip>
+              </v-list-tile-action>
               </v-list-tile>
             </template>
           </v-list>
-          <h4 class="headline">Pagamento calculado: {{ payment.total }}</h4>
+          <h4 class="headline">Pagamento calculado: {{ toMoney(paymentDescription.total) }}</h4>
           <v-divider class="my-3 pt-2"></v-divider>
         </div>
       </v-card-title>
@@ -81,7 +87,6 @@
 import { mapState } from 'vuex'
 import { get, groupBy } from 'lodash'
 import { getTimeRangeQuery, parseDate } from '@/utils/date-helpers'
-import { describePayment } from '@/utils/payment-helpers'
 import { percent, toMoney } from '@/utils/helpers'
 import dateNavigator from '@/components/date-navigator'
 import pageTitle from '@/components/page-title'
@@ -93,16 +98,17 @@ export default {
   computed: {
     ...mapState('practitioners', ['person']),
     ...mapState('frequency', ['result']),
+    ...mapState('payment-description', ['currentDescription']),
     byClassRoom() {
       return groupBy(this.result.data, 'classroom.title')
     },
-    payment() {
-      return describePayment(this.person)
+    paymentDescription() {
+      return this.currentDescription.paymentDescription
     },
   },
   methods: {
-    getPercent(items) {
-      return percent(items.length, this.result.data.length)
+    getPercent(amount, total) {
+      return percent(amount, total)
     },
     getTeacherPicture(item) {
       return get(item, 'classroom.teacher.picture')
@@ -117,6 +123,9 @@ export default {
   async fetch({ store, params, query }) {
     await store.dispatch('practitioners/get', { id: params.id,
       query: { populateEnrollments: true },
+    })
+    await store.dispatch('payment-description/get', { id: params.id,
+      query: { months: query.months },
     })
     await store.dispatch('frequency/find', {
       query: {
