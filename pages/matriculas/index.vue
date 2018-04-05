@@ -50,7 +50,7 @@ export default {
       this.$router.push(`/matriculas/${_id}/edit`)
     },
     async remove(enrollment) {
-      await api.service('enrollment/remove').remove(enrollment._id)
+      await api.service('enrollment').remove(enrollment._id)
       await this.$store.dispatch('enrollment/find')
     },
   },

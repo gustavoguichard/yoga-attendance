@@ -76,7 +76,7 @@
               label="Opções"
               single-line
             ></v-select>
-            <v-text-field @keyup.enter="submit" :value="option.discount" @input="changeEnrollment('discount', i, $event)" name="discount" label="Desconto base" prepend-icon="card_membership"></v-text-field>
+            <v-text-field @keyup.enter="submit" :value="option.discount" @input="changeEnrollment('discount', i, $event)" name="discount" label="Desconto" prepend-icon="card_membership"></v-text-field>
             <v-text-field @keyup.enter="submit" :value="option.note" @input="changeEnrollment('note', i, $event)" name="note" label="Observação" prepend-icon="note"></v-text-field>
           </template>
           <v-card-actions>
