@@ -34,7 +34,7 @@
               </v-list-tile-content>
               <v-list-tile-action>
                 <v-chip outline color="primary">
-                  {{ items.length }} ({{ getPercent(items.length, result.data.length) }})
+                  {{ items.length }} ({{ fn.percent(items.length, result.data.length) }})
                 </v-chip>
               </v-list-tile-action>
             </v-list-tile>
@@ -46,22 +46,25 @@
               <v-divider v-if="i > 0"></v-divider>
               <v-list-tile>
                 <v-list-tile-content>
-                  <v-list-tile-title>{{ desc.title }} - {{ toMoney(desc.total) }}</v-list-tile-title>
+                  <v-list-tile-title>{{ desc.title }} - {{ fn.toMoney(desc.total) }}</v-list-tile-title>
                   <v-list-tile-sub-title v-if="desc.discount">
-                    <span class="old-value">{{ toMoney(desc.value) }}</span> - {{ desc.discount }}
+                    <span class="old-value">{{ fn.toMoney(desc.value) }}</span> - {{ desc.discount }}
                     <i v-if="desc.note">{{ desc.note }}</i>
                   </v-list-tile-sub-title>
                 </v-list-tile-content>
                 <v-list-tile-action>
                 <v-chip outline color="primary" v-if="desc.frequented !== undefined">
                   {{ desc.frequented }}
-                  <span v-if="desc.amount" class="ml-1"> - {{ getPercent(desc.frequented, desc.amount) }}</span>
+                  <span v-if="desc.amount" class="ml-1"> - {{ fn.percent(desc.frequented, desc.amount) }}</span>
+                </v-chip>
+                <v-chip outline color="primary" v-else-if="desc.date">
+                  {{ fn.parseDate(desc.date, 'ddd DD/MM') }}
                 </v-chip>
               </v-list-tile-action>
               </v-list-tile>
             </template>
           </v-list>
-          <h4 class="headline">Pagamento calculado: {{ toMoney(paymentDescription.total) }}</h4>
+          <h4 class="headline">Pagamento calculado: {{ fn.toMoney(paymentDescription.total) }}</h4>
           <v-divider class="my-3 pt-2"></v-divider>
         </div>
       </v-card-title>
@@ -71,7 +74,7 @@
           <v-divider></v-divider>
           <v-list-tile ripple :to="`/presencas/${item._id}`">
             <v-list-tile-content>
-              <v-list-tile-title>{{ parseDate(item) }}</v-list-tile-title>
+              <v-list-tile-title>{{ fn.parseDate(item.createdAt) }}</v-list-tile-title>
               <v-list-tile-sub-title>
                 {{ item.classroom.title }}{{ item.teacher && ` - ${item.teacher.displayName}` }}
               </v-list-tile-sub-title>
@@ -105,19 +108,13 @@ export default {
     paymentDescription() {
       return this.currentDescription.paymentDescription
     },
+    fn() {
+      return { parseDate, percent, toMoney }
+    },
   },
   methods: {
-    getPercent(amount, total) {
-      return percent(amount, total)
-    },
     getTeacherPicture(item) {
       return get(item, 'classroom.teacher.picture')
-    },
-    parseDate({ createdAt }) {
-      return parseDate(createdAt)
-    },
-    toMoney(amount) {
-      return toMoney(amount)
     },
   },
   async fetch({ store, params, query }) {
