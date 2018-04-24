@@ -101,7 +101,7 @@ export default {
   computed: {
     ...mapState('practitioners', ['person']),
     ...mapState('frequency', ['result']),
-    ...mapState('payment-description', ['currentDescription']),
+    ...mapState('payments', ['currentDescription']),
     byClassRoom() {
       return groupBy(this.result.data, 'classroom.title')
     },
@@ -121,7 +121,7 @@ export default {
     await store.dispatch('practitioners/get', { id: params.id,
       query: { populateEnrollments: true },
     })
-    await store.dispatch('payment-description/get', { id: params.id,
+    await store.dispatch('payments/get', { id: params.id,
       query: { months: query.months },
     })
     await store.dispatch('frequency/find', {
