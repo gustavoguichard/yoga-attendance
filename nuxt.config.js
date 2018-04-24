@@ -47,6 +47,7 @@ module.exports = {
       '@feathersjs/authentication-client',
     ],
     extractCSS: true,
+    cssSourceMap: false, // Disabling to avoid huge output in console
     /*
     ** Run ESLint on save
     */
