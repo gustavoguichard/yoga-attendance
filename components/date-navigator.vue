@@ -23,10 +23,10 @@ export default {
     },
 
     nextUnit() {
-      return { query: { [`${this.unit}s`]: unitFromQuery(this.currentUnit, -1) } }
+      return { query: { ...this.$route.query, [`${this.unit}s`]: unitFromQuery(this.currentUnit, -1) } }
     },
     prevUnit() {
-      return { query: { [`${this.unit}s`]: unitFromQuery(this.currentUnit, 1) } }
+      return { query: { ...this.$route.query, [`${this.unit}s`]: unitFromQuery(this.currentUnit, 1) } }
     },
   },
 }

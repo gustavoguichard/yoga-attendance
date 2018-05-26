@@ -127,16 +127,22 @@ export default {
     isRestituting({ _id }) {
       return includes(map(this.restitution, '_id'), _id)
     },
+    async createFrequency(id, teacher = false) {
+      return api.service('frequency').create({
+        teacher,
+        practitionerId: id,
+        classId: this.lesson._id,
+      })
+    },
     async submit() {
       const newSubscribers = filter(this.restitution, p => !p.restituting)
       if (newSubscribers.length) {
         await api.service('classrooms').patch(this.lesson._id, { practitioners: [...this.lesson.practitioners, ...newSubscribers] })
       }
-      await api.service('frequency').create({
-        practitioners: this.everyAttendant,
-        teacher: this.teacher._id,
-        classId: this.lesson._id,
-      })
+      await Promise.all(this.everyAttendant.map(async person => this.createFrequency(person)))
+      if (this.teacher._id) {
+        await this.createFrequency(this.teacher._id, true)
+      }
       await this.$store.commit('attendance/cleanStore')
       this.$router.push('/')
     },

@@ -56,7 +56,7 @@ export default {
       this.$router.push(`/chamada/${_id}`)
     },
     viewFrequency({ _id }) {
-      this.$router.push(`/chamada/${_id}/lista`)
+      this.$router.push(`/presencas?classId=${_id}`)
     },
     editClass({ _id }) {
       this.$router.push(`/aulas/${_id}/edit`)

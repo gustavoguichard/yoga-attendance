@@ -76,7 +76,7 @@
             <v-list-tile-content>
               <v-list-tile-title>{{ fn.parseDate(item.createdAt) }}</v-list-tile-title>
               <v-list-tile-sub-title>
-                {{ item.classroom.title }}{{ item.teacher && ` - ${item.teacher.displayName}` }}
+                {{ item.classroom.title }}{{ item.teacher ? ` - como professor` : '' }}
               </v-list-tile-sub-title>
             </v-list-tile-content>
           </v-list-tile>
@@ -128,7 +128,7 @@ export default {
       query: {
         createdAt: getTimeRangeQuery('month', query.months),
         populateClassroom: true,
-        practitioners: params.id,
+        practitionerId: params.id,
         $limit: 10000,
       },
     })

@@ -14,24 +14,23 @@
         />
       </v-card-title>
       <v-list two-line subheader>
-        <div v-for="(item, i) in result.data" :key="i">
-          <v-divider></v-divider>
-          <v-list-tile ripple :to="`/presencas/${item._id}`">
-            <v-list-tile-content>
-              <v-list-tile-title>
-                {{ parseDate(item) }} <span class="grey--text text--darken-1">- {{ item.classroom.title }}</span>
-              </v-list-tile-title>
-              <v-list-tile-sub-title v-if="item.classroom.teacher && substitution(item)">
-                {{ item.teacher.displayName }} - Substituindo: {{ item.classroom.teacher.displayName }}
-              </v-list-tile-sub-title>
-              <v-list-tile-sub-title v-else>
-                {{ item.teacher && item.teacher.displayName }}
-              </v-list-tile-sub-title>
-            </v-list-tile-content>
-              <v-list-tile-action>
-                <v-list-tile-action-text>{{ item.practitioners.length }}</v-list-tile-action-text>
-              </v-list-tile-action>
-          </v-list-tile>
+        <div v-for="(item, classId) in frequencyByDate" :key="classId">
+          <template v-for="(data, dateTitle) in item">
+            <v-divider></v-divider>
+            <v-list-tile ripple :to="`/presencas/${classId}/${dateTitle}`">
+              <v-list-tile-content>
+                <v-list-tile-title>
+                  {{ fn.parseDate(dateTitle) }} <span class="grey--text text--darken-1">- {{ data.title }}</span>
+                </v-list-tile-title>
+                <v-list-tile-sub-title>
+                  {{ data.teacher }}
+                </v-list-tile-sub-title>
+              </v-list-tile-content>
+                <v-list-tile-action>
+                  <v-list-tile-action-text>{{ data.amount }}</v-list-tile-action-text>
+                </v-list-tile-action>
+            </v-list-tile>
+          </template>
         </div>
       </v-list>
     </v-card>
@@ -41,7 +40,7 @@
 
 <script>
 import { mapState } from 'vuex'
-import { get } from 'lodash'
+import { reduce } from 'lodash'
 import { getTimeRangeQuery, parseDate } from '@/utils/date-helpers'
 import dateNavigator from '@/components/date-navigator'
 import pageCta from '@/components/page-cta'
@@ -52,20 +51,33 @@ export default {
   components: { dateNavigator, pageCta },
   computed: {
     ...mapState('frequency', ['result']),
-  },
-  methods: {
-    parseDate({ createdAt }) {
-      return parseDate(createdAt)
+    frequencyByDate() {
+      return reduce(this.result.data, (res, curr) => {
+        const date = parseDate(curr.createdAt, 'YYYY-MM-DD')
+        const prevDate = (res[curr.classId] && res[curr.classId][date]) || {}
+        res[curr.classId] = {
+          ...res[curr.classId],
+          [date]: {
+            teacher: curr.teacher ? curr.practitioner.displayName : prevDate.teacher,
+            title: prevDate.title || curr.classroom.title,
+            amount: (prevDate.amount || 0) + !curr.teacher,
+          },
+        }
+        return res
+      }, {})
     },
-    substitution(item) {
-      return get(item, 'teacher._id') !== get(item, 'classroom.teacher._id')
+    fn() {
+      return { parseDate }
     },
   },
   async fetch({ store, query }) {
+    const { weeks, classId } = query
     await store.dispatch('frequency/find', {
       query: {
-        createdAt: getTimeRangeQuery('week', query.weeks),
+        classId,
+        createdAt: getTimeRangeQuery('week', weeks),
         populateClassroom: true,
+        populatePractitioners: true,
         $limit: 10000,
       },
     })
