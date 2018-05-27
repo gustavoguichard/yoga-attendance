@@ -16,6 +16,8 @@ export const getTimeRangeQuery = (unit = 'month', unitsAgo = 0) => ({
 export const parseDate = (date, format = 'ddd DD/MM/YYYY') =>
   moment(date).format(format)
 
+export const unparseDate = (date) => moment(date)._d
+
 export const unitFromQuery = (units, add = 0) => {
   const base = parseInt(units, 10) || 0
   return Math.max(base + add, 0)

@@ -10,7 +10,27 @@
       :picture="teacher && teacher.picture"
     />
     <v-btn @click.stop="toggleChooseList('teacher')" color="primary" depressed>Trocar professor</v-btn>
-    <v-card>
+    <v-dialog
+      ref="dialog"
+      v-model="datePicker"
+      lazy
+      full-width
+      width="290px"
+    >
+      <v-text-field
+        slot="activator"
+        v-model="date"
+        label="Alterar data"
+        prepend-icon="event"
+        readonly
+      ></v-text-field>
+      <v-date-picker v-model="classDate" locale="pt-br" scrollable>
+        <v-spacer></v-spacer>
+        <v-btn flat color="primary" @click="datePicker = false">Cancel</v-btn>
+        <v-btn flat color="primary" @click="changeDate">OK</v-btn>
+      </v-date-picker>
+    </v-dialog>
+    <v-card class="main-card">
       <v-toolbar color="blue-grey lighten-1" dark>
         <v-toolbar-title>Alunos presentes:</v-toolbar-title>
       </v-toolbar>
@@ -32,6 +52,7 @@
 import api from '@/api'
 import { mapState } from 'vuex'
 import { filter, find, get, includes, map } from 'lodash'
+import { parseDate, unparseDate } from '@/utils/date-helpers'
 import pageCta from '@/components/page-cta'
 import pageTitle from '@/components/page-title'
 import personListItem from '@/components/person-list-item'
@@ -56,13 +77,23 @@ export default {
   middleware: 'check-auth',
   components: { pageCta, pageTitle, personListItem, practitionersList },
   watchQuery: ['add'],
+  data: () => ({
+    datePicker: false,
+    classDate: undefined,
+  }),
+  asyncData: ({ route }) => ({
+    classDate: route.params.date,
+  }),
   computed: {
     ...mapState('frequency', ['result']),
     chooseList() {
       return this.$route.query.add
     },
     classroom() {
-      return get(this, 'result[0].classroom')
+      return get(this, 'result[0].classroom') || {}
+    },
+    date() {
+      return parseDate(this.classDate, 'DD/MM/YYYY')
     },
     practitionersFreq() {
       return filter(this.result, f => f.practitionerId !== this.teacher._id)
@@ -90,6 +121,14 @@ export default {
     toggleChooseList(add = 'practitioner') {
       const query = this.chooseList ? null : { add }
       this.$router.push({ query })
+    },
+    async changeDate() {
+      this.datePicker = false
+      const createdAt = unparseDate(this.classDate)
+      await Promise.all(this.result.map(async f =>
+        api.service('frequency').patch(f._id, { createdAt })
+      ))
+      this.$router.push(`/presencas/${this.$route.params.id}/${this.classDate}`)
     },
     async remove({ _id }) {
       await api.service('frequency').remove(_id)
@@ -124,7 +163,7 @@ export default {
 
 <style scoped>
 @media (min-width: 800px) {
-  .card {
+  .main-card {
     margin: 1em;
     min-width: 400px;
     width: 60%;
