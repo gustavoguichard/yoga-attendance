@@ -20,7 +20,7 @@
       <v-subheader>Resumo:</v-subheader>
       <v-card-title class="pt-0" primary-title>
         <div class="summary">
-          <h3 class="headline">Aulas: {{ result.data.length }}</h3>
+          <h3 class="headline">Aulas: {{ result.length }}</h3>
           <v-list>
             <v-list-tile v-for="(items, title) in byClassRoom" :key="title">
               <v-list-tile-avatar>
@@ -34,7 +34,7 @@
               </v-list-tile-content>
               <v-list-tile-action>
                 <v-chip outline color="primary">
-                  {{ items.length }} ({{ fn.percent(items.length, result.data.length) }})
+                  {{ items.length }} ({{ fn.percent(items.length, result.length) }})
                 </v-chip>
               </v-list-tile-action>
             </v-list-tile>
@@ -42,35 +42,35 @@
           <v-divider class="my-3 pt-2"></v-divider>
           <v-subheader class="pl-0">Pagamento:</v-subheader>
           <v-list dense two-line>
-            <template v-for="(desc, i) in paymentDescription.detailing">
+            <template v-for="(desc, i) in paymentDescriptions">
               <v-divider v-if="i > 0"></v-divider>
               <v-list-tile>
                 <v-list-tile-content>
-                  <v-list-tile-title>{{ desc.title }} - {{ fn.toMoney(desc.total) }}</v-list-tile-title>
-                  <v-list-tile-sub-title v-if="desc.discount">
-                    <span class="old-value">{{ fn.toMoney(desc.value) }}</span> - {{ desc.discount }}
-                    <i v-if="desc.note">{{ desc.note }}</i>
+                  <v-list-tile-title>{{ desc.description.title }} - {{ fn.toMoney(desc.total) }}</v-list-tile-title>
+                  <v-list-tile-sub-title v-if="desc.description.discount">
+                    <span class="old-value">{{ fn.toMoney(desc.description.value) }}</span> - {{ desc.description.discount }}
+                    <i v-if="desc.description.note">{{ desc.description.note }}</i>
                   </v-list-tile-sub-title>
                 </v-list-tile-content>
                 <v-list-tile-action>
-                <v-chip outline color="primary" v-if="desc.frequented !== undefined">
-                  {{ desc.frequented }}
-                  <span v-if="desc.amount" class="ml-1"> - {{ fn.percent(desc.frequented, desc.amount) }}</span>
+                <v-chip outline color="primary" v-if="desc.frequented.length">
+                  {{ desc.frequented.length }}
+                  <span v-if="desc.description.amount" class="ml-1"> - {{ fn.percent(desc.frequented.length, desc.description.amount) }}</span>
                 </v-chip>
-                <v-chip outline color="primary" v-else-if="desc.date">
+                <!-- <v-chip outline color="primary" v-else-if="desc.date">
                   {{ fn.parseDate(desc.date, 'ddd DD/MM') }}
-                </v-chip>
+                </v-chip> -->
               </v-list-tile-action>
               </v-list-tile>
             </template>
           </v-list>
-          <h4 class="headline">Pagamento calculado: {{ fn.toMoney(paymentDescription.total) }}</h4>
+          <h4 class="headline">Pagamento calculado: {{ fn.toMoney(fn.sumBy(paymentDescriptions, 'total')) }}</h4>
           <v-divider class="my-3 pt-2"></v-divider>
         </div>
       </v-card-title>
       <v-subheader>Presenças do mês:</v-subheader>
       <v-list two-line subheader>
-        <div v-for="(item, i) in result.data" :key="i">
+        <div v-for="(item, i) in result" :key="i">
           <v-divider></v-divider>
           <v-list-tile ripple :to="`/presencas/${item._id}`">
             <v-list-tile-content>
@@ -88,7 +88,7 @@
 
 <script>
 import { mapState } from 'vuex'
-import { get, groupBy } from 'lodash'
+import { get, groupBy, sumBy } from 'lodash'
 import { getTimeRangeQuery, parseDate } from '@/utils/date-helpers'
 import { percent, toMoney } from '@/utils/helpers'
 import dateNavigator from '@/components/date-navigator'
@@ -101,15 +101,12 @@ export default {
   computed: {
     ...mapState('practitioners', ['person']),
     ...mapState('frequency', ['result']),
-    ...mapState('payments', ['currentDescription']),
+    ...mapState('payments', ['paymentDescriptions']),
     byClassRoom() {
-      return groupBy(this.result.data, 'classroom.title')
-    },
-    paymentDescription() {
-      return this.currentDescription.paymentDescription
+      return groupBy(this.result, 'classroom.title')
     },
     fn() {
-      return { parseDate, percent, toMoney }
+      return { parseDate, percent, sumBy, toMoney }
     },
   },
   methods: {
@@ -121,8 +118,11 @@ export default {
     await store.dispatch('practitioners/get', { id: params.id,
       query: { populateEnrollments: true },
     })
-    await store.dispatch('payments/get', { id: params.id,
-      query: { months: query.months },
+    await store.dispatch('payments/find', {
+      query: {
+        createdAt: getTimeRangeQuery('month', query.months),
+        practitionerId: params.id,
+      },
     })
     await store.dispatch('frequency/find', {
       query: {

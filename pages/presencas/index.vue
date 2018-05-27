@@ -52,7 +52,7 @@ export default {
   computed: {
     ...mapState('frequency', ['result']),
     frequencyByDate() {
-      return reduce(this.result.data, (res, curr) => {
+      return reduce(this.result, (res, curr) => {
         const date = parseDate(curr.createdAt, 'YYYY-MM-DD')
         const prevDate = (res[curr.classId] && res[curr.classId][date]) || {}
         res[curr.classId] = {

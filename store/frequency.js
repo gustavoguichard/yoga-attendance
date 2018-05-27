@@ -28,7 +28,7 @@ export const actions = {
         ...query,
       },
     })
-    context.commit('update', response)
+    context.commit('update', response.data)
   },
 
   async get(context, { id, query }) {

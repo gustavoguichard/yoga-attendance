@@ -1,5 +1,5 @@
 <template>
-  <v-list-tile ripple :avatar="!!avatar" :style="disabled && 'pointer-events: none;'" @click.stop="clicked">
+  <v-list-tile v-if="person" ripple :avatar="!!avatar" :style="disabled && 'pointer-events: none;'" @click.stop="clicked">
     <v-list-tile-avatar :size="avatarSize" v-if="!!avatar && avatar !== 'right'">
       <img v-if="person.picture" :src="person.picture" />
       <v-icon v-else>person</v-icon>
@@ -11,7 +11,7 @@
       <v-list-tile-title v-if="property">
         {{ person[property] }}
       </v-list-tile-title>
-      <v-list-tile-title v-else>
+      <v-list-tile-title v-else="person">
         <span v-if="person.nickName">
           {{ person.nickName }}
           <em class="grey--text"> - {{ person.fullName }}</em>

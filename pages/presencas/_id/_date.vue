@@ -17,7 +17,7 @@
       <v-list two-line subheader>
         <div v-for="(freq, i) in practitionersFreq" :key="i">
           <v-divider></v-divider>
-          <person-list-item :avatar="true" :person="freq.practitioner" property="displayName">
+          <person-list-item :to="`/praticantes/${freq.practitionerId}`" :avatar="true" :person="freq.practitioner" property="displayName">
             <v-icon v-if="!isSubscribed(freq)" slot="right" color="orange darken-4">compare_arrows</v-icon>
             <v-btn slot="right" @click.stop="remove(freq)" flat icon><v-icon color="red darken-4">delete</v-icon></v-btn>
           </person-list-item>
@@ -47,27 +47,24 @@ export default {
       return this.$route.query.add
     },
     classroom() {
-      return get(this, 'result.data[0].classroom')
+      return get(this, 'result[0].classroom')
     },
     practitionersFreq() {
-      return filter(this.result.data, f => f.practitionerId !== this.teacher._id)
+      return filter(this.result, f => f.practitionerId !== this.teacher._id)
     },
     taughtBy() {
-      const temporary = find(this.result.data, f => f.teacher)
+      const temporary = find(this.result, f => f.teacher)
       return get(temporary, 'practitioner')
     },
     teacher() {
-      return this.taughtBy || this.classroom.teacher
+      return this.taughtBy || { _id: this.classroom.teacher }
     },
     isSubstitution() {
       const { teacher } = this.classroom
       return teacher && (this.teacher._id !== teacher._id)
     },
-    sample() {
-      return get(this, 'result.data[0]')
-    },
     chooseQuery() {
-      const peopleIds = map(this.result.data, 'practitioner._id')
+      const peopleIds = map(this.result, 'practitioner._id')
       return this.chooseList === 'teacher' ? { _id: peopleIds } : { _id: { $nin: peopleIds } }
     },
   },
@@ -81,27 +78,26 @@ export default {
     },
     async remove({ _id }) {
       await api.service('frequency').remove(_id)
-      this.updateFrequency()
+      this.refetch()
     },
     async selected({ _id }) {
       if (this.chooseList === 'teacher') {
-        const currTeacher = find(this.result.data, f => f.teacher === true)
-        const nextTeacher = find(this.result.data, f => f.practitionerId === _id)
-        await (currTeacher
-          && api.service('frequency').patch(currTeacher._id, { teacher: false }))
-        await api.service('frequency').patch(nextTeacher._id, { teacher: true })
+        await Promise.all(this.result.map(async f =>
+          api.service('frequency').patch(f._id, { teacher: f.practitionerId === _id })
+        ))
         this.toggleChooseList()
       } else {
+        const sample = this.result[0]
         await api.service('frequency').create({
-          ...this.sample,
-          _id: null,
+          classId: sample.classId,
+          createdAt: sample.createdAt,
           practitionerId: _id,
           teacher: false,
         })
-        this.updateFrequency()
+        this.refetch()
       }
     },
-    async updateFrequency() {
+    async refetch() {
       const { date, id } = this.$route.params
       return this.$store.dispatch('frequency/find', {
         query: {

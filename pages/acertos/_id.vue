@@ -54,7 +54,7 @@ export default {
   },
   methods: {
     classFrequency(person, fromLesson = false) {
-      return filter(this.result.data, lesson => {
+      return filter(this.result, lesson => {
         const isPerson = includes(map(lesson.practitioners, '_id'), person._id)
         const isLesson = lesson.classId === this.lesson._id
         return isPerson && (!fromLesson || isLesson)
