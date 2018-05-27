@@ -9,7 +9,7 @@ export const mutations = {
     current.paymentDescriptions = data
   },
   updateLesson(current, paymentDescription) {
-    current.currentDescription = paymentDescription
+    current.currentPayment = paymentDescription
   },
 }
 
@@ -20,7 +20,7 @@ export const actions = {
   },
 
   async get(context, { id, query }) {
-    const response = await api.service('payment-description').get(id, { query })
+    const response = await api.service('payments').get(id, { query })
     context.commit('updateLesson', response)
   },
 }

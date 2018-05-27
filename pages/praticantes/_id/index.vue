@@ -42,26 +42,9 @@
           <v-divider class="my-3 pt-2"></v-divider>
           <v-subheader class="pl-0">Pagamento:</v-subheader>
           <v-list dense two-line>
-            <template v-for="(desc, i) in paymentDescriptions">
+            <template v-for="(order, i) in paymentDescriptions">
               <v-divider v-if="i > 0"></v-divider>
-              <v-list-tile>
-                <v-list-tile-content>
-                  <v-list-tile-title>{{ desc.description.title }} - {{ fn.toMoney(desc.total) }}</v-list-tile-title>
-                  <v-list-tile-sub-title v-if="desc.description.discount">
-                    <span class="old-value">{{ fn.toMoney(desc.description.value) }}</span> - {{ desc.description.discount }}
-                    <i v-if="desc.description.note">{{ desc.description.note }}</i>
-                  </v-list-tile-sub-title>
-                </v-list-tile-content>
-                <v-list-tile-action>
-                <v-chip outline color="primary" v-if="desc.frequented.length">
-                  {{ desc.frequented.length }}
-                  <span v-if="desc.description.amount" class="ml-1"> - {{ fn.percent(desc.frequented.length, desc.description.amount) }}</span>
-                </v-chip>
-                <!-- <v-chip outline color="primary" v-else-if="desc.date">
-                  {{ fn.parseDate(desc.date, 'ddd DD/MM') }}
-                </v-chip> -->
-              </v-list-tile-action>
-              </v-list-tile>
+              <payment-description :order="order" />
             </template>
           </v-list>
           <h4 class="headline">Pagamento calculado: {{ fn.toMoney(fn.sumBy(paymentDescriptions, 'total')) }}</h4>
@@ -92,12 +75,13 @@ import { get, groupBy, sumBy } from 'lodash'
 import { getTimeRangeQuery, parseDate } from '@/utils/date-helpers'
 import { percent, toMoney } from '@/utils/helpers'
 import dateNavigator from '@/components/date-navigator'
+import paymentDescription from '@/components/payment-description'
 import pageTitle from '@/components/page-title'
 
 export default {
   middleware: 'check-auth',
   watchQuery: ['months'],
-  components: { dateNavigator, pageTitle },
+  components: { dateNavigator, pageTitle, paymentDescription },
   computed: {
     ...mapState('practitioners', ['person']),
     ...mapState('frequency', ['result']),
@@ -149,10 +133,6 @@ export default {
 
   .summary {
     width: 100%;
-  }
-
-  .old-value {
-    text-decoration: line-through;
   }
 }
 </style>
