@@ -47,6 +47,7 @@
 
 <script>
 import api from '@/api'
+import moment from 'moment'
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import { difference, filter, includes, map } from 'lodash'
 import pageCta from '@/components/page-cta'
@@ -144,7 +145,8 @@ export default {
         await this.createFrequency(this.teacher._id, true)
       }
       await this.$store.commit('attendance/cleanStore')
-      this.$router.push('/')
+      const date = moment().format('YYYY-MM-DD')
+      this.$router.push(`/presencas/${this.lesson._id}/${date}`)
     },
   },
   async fetch({ store, params }) {
