@@ -37,6 +37,21 @@ import pageTitle from '@/components/page-title'
 import personListItem from '@/components/person-list-item'
 import practitionersList from '@/components/practitioners-list'
 
+const fetch = (store, params) => {
+  const { id, date } = params
+  return store.dispatch('frequency/find', {
+    query: {
+      classId: id,
+      createdAt: {
+        $gte: `${date} 00:00:00`,
+        $lt: `${date} 23:59:59.999`,
+      },
+      populatePractitioners: true,
+      populateClassroom: true,
+    },
+  })
+}
+
 export default {
   middleware: 'check-auth',
   components: { pageCta, pageTitle, personListItem, practitionersList },
@@ -78,7 +93,7 @@ export default {
     },
     async remove({ _id }) {
       await api.service('frequency').remove(_id)
-      this.refetch()
+      await fetch(this.$store, this.$route.params)
     },
     async selected({ _id }) {
       if (this.chooseList === 'teacher') {
@@ -94,37 +109,15 @@ export default {
           practitionerId: _id,
           teacher: false,
         })
-        this.refetch()
+        await fetch(this.$store, this.$route.params)
       }
     },
     async refetch() {
-      const { date, id } = this.$route.params
-      return this.$store.dispatch('frequency/find', {
-        query: {
-          classId: id,
-          createdAt: {
-            $gte: `${date} 00:00:00`,
-            $lt: `${date} 23:59:59.999`,
-          },
-          populatePractitioners: true,
-          populateClassroom: true,
-        },
-      })
+      await fetch(this.$store, this.$route.params)
     },
   },
   async fetch({ store, params }) {
-    const { id, date } = params
-    await store.dispatch('frequency/find', {
-      query: {
-        classId: id,
-        createdAt: {
-          $gte: `${date} 00:00:00`,
-          $lt: `${date} 23:59:59.999`,
-        },
-        populatePractitioners: true,
-        populateClassroom: true,
-      },
-    })
+    await fetch(store, params)
   },
 };
 </script>
