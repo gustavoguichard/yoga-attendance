@@ -72,7 +72,7 @@
       <v-list two-line subheader>
         <div v-for="(item, i) in result" :key="i">
           <v-divider></v-divider>
-          <v-list-tile ripple :to="`/presencas/${item._id}`">
+          <v-list-tile ripple :to="attendanceLink(item)">
             <v-list-tile-content>
               <v-list-tile-title>{{ fn.parseDate(item.createdAt) }}</v-list-tile-title>
               <v-list-tile-sub-title>
@@ -110,6 +110,9 @@ export default {
     },
   },
   methods: {
+    attendanceLink(item) {
+      return `/presencas/${item.classId}/${parseDate(item.createdAt, 'YYYY-MM-DD')}`
+    },
     getTeacherPicture(item) {
       return get(item, 'classroom.teacher.picture')
     },
