@@ -70,6 +70,7 @@
 </template>
 
 <script>
+import { paramsForServer } from 'feathers-hooks-common'
 import { mapState } from 'vuex'
 import { get, groupBy, sumBy } from 'lodash'
 import { getTimeRangeQuery, parseDate } from '@/utils/date-helpers'
@@ -102,23 +103,21 @@ export default {
     },
   },
   async fetch({ store, params, query }) {
-    await store.dispatch('practitioners/get', { id: params.id,
-      query: { populateEnrollments: true },
-    })
+    await store.dispatch('practitioners/get', { id: params.id })
     await store.dispatch('payments/find', {
       query: {
         createdAt: getTimeRangeQuery('month', query.months),
         practitionerId: params.id,
       },
     })
-    await store.dispatch('frequency/find', {
+    await store.dispatch('frequency/find', paramsForServer({
       query: {
         createdAt: getTimeRangeQuery('month', query.months),
-        populateClassroom: true,
         practitionerId: params.id,
         $limit: 10000,
       },
-    })
+      populateClassroom: true,
+    }))
   },
 };
 </script>

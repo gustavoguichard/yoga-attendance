@@ -22,10 +22,8 @@ export default {
     },
   },
   async fetch({ store, params }) {
-    await store.dispatch('enrollment/find')
-    await store.dispatch('practitioners/get', { id: params.id,
-      query: { populateFamily: true },
-    })
+    await store.dispatch('enrollment/find', { populateClassroom: true })
+    await store.dispatch('practitioners/get', { id: params.id, populateFamily: true })
   },
 };
 </script>

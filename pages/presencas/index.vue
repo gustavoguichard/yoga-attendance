@@ -39,6 +39,7 @@
 </template>
 
 <script>
+import { paramsForServer } from 'feathers-hooks-common'
 import { mapState } from 'vuex'
 import { reduce } from 'lodash'
 import { getTimeRangeQuery, parseDate } from '@/utils/date-helpers'
@@ -72,15 +73,15 @@ export default {
   },
   async fetch({ store, query }) {
     const { weeks, classId } = query
-    await store.dispatch('frequency/find', {
+    await store.dispatch('frequency/find', paramsForServer({
       query: {
         classId,
         createdAt: getTimeRangeQuery('week', weeks),
-        populateClassroom: true,
-        populatePractitioners: true,
         $limit: 10000,
       },
-    })
+      populateClassroom: true,
+      populatePractitioners: true,
+    }))
   },
 };
 </script>

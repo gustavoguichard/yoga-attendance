@@ -1,4 +1,5 @@
 import api from '@/api'
+import { paramsForServer } from 'feathers-hooks-common'
 import { filter, sortBy } from 'lodash'
 
 export const state = () => ({
@@ -16,12 +17,12 @@ export const mutations = {
 
 export const actions = {
   async find(context, params) {
-    const response = await api.service('practitioners').find(params)
+    const response = await api.service('practitioners').find(paramsForServer(params))
     context.commit('update', response.data)
   },
 
-  async get(context, { id, query }) {
-    const response = await api.service('practitioners').get(id, { query })
+  async get(context, { id, query, ...params }) {
+    const response = await api.service('practitioners').get(id, paramsForServer({ query, ...params }))
     context.commit('updatePerson', response)
   },
 }

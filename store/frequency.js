@@ -1,4 +1,5 @@
 import api from '@/api'
+import { paramsForServer } from 'feathers-hooks-common'
 
 const PAGE_LIMIT = 20
 
@@ -31,8 +32,8 @@ export const actions = {
     context.commit('update', response.data)
   },
 
-  async get(context, { id, query }) {
-    const response = await api.service('frequency').get(id, { query })
+  async get(context, { id, query, ...params }) {
+    const response = await api.service('frequency').get(id, paramsForServer({ query, ...params }))
     context.commit('updatePeopleList', response)
   },
 }

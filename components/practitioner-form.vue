@@ -95,7 +95,7 @@
 <script>
 /* global FileReader */
 import { mapState } from 'vuex'
-import { map, filter, find } from 'lodash'
+import { get, map, filter, find } from 'lodash'
 import decorate from '@/utils/decorateEnrollment'
 import pageCta from '@/components/page-cta'
 import personListItem from '@/components/person-list-item'
@@ -156,7 +156,7 @@ export default {
     },
     enrollmentPricing({ enrollmentId }) {
       const option = find(this.enrollmentOptions, opt => enrollmentId === opt._id)
-      return option.pricing
+      return get(option, 'pricing')
     },
     removeRelative({ _id }) {
       this.editing.family = filter(this.editing.family, p => p._id !== _id)

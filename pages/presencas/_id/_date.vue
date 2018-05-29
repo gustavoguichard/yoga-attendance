@@ -50,6 +50,7 @@
 
 <script>
 import api from '@/api'
+import { paramsForServer } from 'feathers-hooks-common'
 import { mapState } from 'vuex'
 import { filter, find, get, includes, map } from 'lodash'
 import { parseDate, unparseDate } from '@/utils/date-helpers'
@@ -60,17 +61,17 @@ import practitionersList from '@/components/practitioners-list'
 
 const fetch = (store, params) => {
   const { id, date } = params
-  return store.dispatch('frequency/find', {
+  return store.dispatch('frequency/find', paramsForServer({
     query: {
       classId: id,
       createdAt: {
         $gte: `${date} 00:00:00`,
         $lt: `${date} 23:59:59.999`,
       },
-      populatePractitioners: true,
-      populateClassroom: true,
     },
-  })
+    populatePractitioners: true,
+    populateClassroom: true,
+  }))
 }
 
 export default {

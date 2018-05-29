@@ -27,7 +27,7 @@ export default {
     },
   },
   async fetch({ store, params }) {
-    await store.dispatch('enrollment/get', { id: params.id })
+    await store.dispatch('enrollment/get', { id: params.id, populateClassroom: true })
     await store.dispatch('classrooms/find', { query: { regularClass: { $ne: true } } })
   },
 };
