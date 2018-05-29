@@ -70,7 +70,6 @@
 </template>
 
 <script>
-import { paramsForServer } from 'feathers-hooks-common'
 import { mapState } from 'vuex'
 import { get, groupBy, sumBy } from 'lodash'
 import { getTimeRangeQuery, parseDate } from '@/utils/date-helpers'
@@ -110,14 +109,14 @@ export default {
         practitionerId: params.id,
       },
     })
-    await store.dispatch('frequency/find', paramsForServer({
+    await store.dispatch('frequency/find', {
       query: {
         createdAt: getTimeRangeQuery('month', query.months),
         practitionerId: params.id,
         $limit: 10000,
       },
       populateClassroom: true,
-    }))
+    })
   },
 };
 </script>

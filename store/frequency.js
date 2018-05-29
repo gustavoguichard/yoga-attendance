@@ -17,18 +17,19 @@ export const mutations = {
 }
 
 export const actions = {
-  async find(context, { page, query }) {
+  async find(context, { page, query, ...params }) {
     const pagination = page ? {
       $limit: PAGE_LIMIT,
       $skip: PAGE_LIMIT * (page || 0),
     } : {}
-    const response = await api.service('frequency').find({
+    const response = await api.service('frequency').find(paramsForServer({
+      ...params,
       query: {
         $sort: { createdAt: -1 },
         ...pagination,
         ...query,
       },
-    })
+    }))
     context.commit('update', response.data)
   },
 
