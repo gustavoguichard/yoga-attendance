@@ -51,11 +51,11 @@ export default {
     },
     async remove(enrollment) {
       await api.service('enrollment').remove(enrollment._id)
-      await this.$store.dispatch('enrollment/find', { populateClassroom: true })
+      await this.$store.dispatch('enrollment/find')
     },
   },
   async fetch({ store }) {
-    await store.dispatch('enrollment/find', { populateClassroom: true })
+    await store.dispatch('enrollment/find')
   },
 };
 </script>

@@ -138,7 +138,6 @@ export default {
   async fetch({ store, params }) {
     await store.dispatch('payments/get', {
       id: params.id,
-      populatePractitioners: true,
     })
   },
   mounted() {

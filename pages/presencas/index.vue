@@ -78,8 +78,6 @@ export default {
         createdAt: getTimeRangeQuery('week', weeks),
         $limit: 10000,
       },
-      populateClassroom: true,
-      populatePractitioners: true,
     })
   },
 };

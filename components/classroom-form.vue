@@ -87,7 +87,7 @@ export default {
     notPractitioners() {
       return filter(this.list, person =>
         !includes(this.editing.practitioners, person._id)
-        && (!this.editing.teacher || (person._id !== this.editing.teacher._id))
+        && (!this.editing.teacherData || (person._id !== this.editing.teacherData._id))
       )
     },
   },

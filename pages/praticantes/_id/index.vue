@@ -98,7 +98,7 @@ export default {
       return `/presencas/${item.classId}/${parseDate(item.createdAt, 'YYYY-MM-DD')}`
     },
     getTeacherPicture(item) {
-      return get(item, 'classroom.teacher.picture')
+      return get(item, 'classroom.teacherData.picture')
     },
   },
   async fetch({ store, params, query }) {
@@ -115,7 +115,6 @@ export default {
         practitionerId: params.id,
         $limit: 10000,
       },
-      populateClassroom: true,
     })
   },
 };

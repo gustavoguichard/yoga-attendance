@@ -2,8 +2,8 @@
   <v-layout align-content-center align-center column>
     <page-title icon="person"
       :title="lesson.title"
-      :subtitle="lesson.teacher && lesson.teacher.displayName"
-      :picture="lesson.teacher && lesson.teacher.picture"
+      :subtitle="lesson.teacherData && lesson.teacherData.displayName"
+      :picture="lesson.teacherData && lesson.teacherData.picture"
     />
     <classroom-form title="Editando aula" :lesson="lesson" @submit="submit"></classroom-form>
   </v-layout>

@@ -1,5 +1,4 @@
 import api from '@/api'
-import { paramsForServer } from 'feathers-hooks-common'
 
 const PAGE_LIMIT = 20
 
@@ -17,24 +16,23 @@ export const mutations = {
 }
 
 export const actions = {
-  async find(context, { page, query, ...params }) {
+  async find(context, { page, query }) {
     const pagination = page ? {
       $limit: PAGE_LIMIT,
       $skip: PAGE_LIMIT * (page || 0),
     } : {}
-    const response = await api.service('frequency').find(paramsForServer({
-      ...params,
+    const response = await api.service('frequency').find({
       query: {
         $sort: { createdAt: -1 },
         ...pagination,
         ...query,
       },
-    }))
+    })
     context.commit('update', response.data)
   },
 
-  async get(context, { id, query, ...params }) {
-    const response = await api.service('frequency').get(id, paramsForServer({ query, ...params }))
+  async get(context, { id, query }) {
+    const response = await api.service('frequency').get(id, { query })
     context.commit('updatePeopleList', response)
   },
 }

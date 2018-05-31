@@ -87,7 +87,7 @@ export default {
       )
     },
     teacher() {
-      return this.currentTeacher || this.lesson.teacher || { _id: null }
+      return this.currentTeacher || this.lesson.teacherData || { _id: null }
     },
   },
   methods: {

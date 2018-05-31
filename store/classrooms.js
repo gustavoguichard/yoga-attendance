@@ -1,6 +1,5 @@
 import api from '@/api'
-import { paramsForServer } from 'feathers-hooks-common'
-import { filter, flatten, groupBy, map, reduce } from 'lodash'
+import { filter, flatten, get, groupBy, map, reduce } from 'lodash'
 
 export const state = () => ({
   classes: [],
@@ -17,20 +16,20 @@ export const mutations = {
 
 export const actions = {
   async find(context, params) {
-    const response = await api.service('classrooms').find(paramsForServer(params))
+    const response = await api.service('classrooms').find(params)
     context.commit('update', response.data)
   },
-  async get(context, { id, query, ...params }) {
-    const response = await api.service('classrooms').get(id, paramsForServer({ query, ...params }))
+  async get(context, { id, query }) {
+    const response = await api.service('classrooms').get(id, { query })
     context.commit('updateLesson', response)
   },
 }
 
 const groupedByTeacher = rooms => {
-  const grouped = groupBy(rooms, 'teacher.fullName')
+  const grouped = groupBy(rooms, 'teacherData.fullName')
   return reduce(grouped, (result, cr, name) => [...result, {
     name,
-    picture: cr[0].teacher && cr[0].teacher.picture,
+    picture: get(cr, '[0].teacherData.picture'),
     classes: cr,
   }], [])
 }

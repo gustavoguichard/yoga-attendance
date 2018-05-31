@@ -36,7 +36,7 @@
             <v-icon class="mr-1">home</v-icon>
             Familiares:
           </v-subheader>
-          <person-list-item v-for="person in editing.family" :key="person._id" :avatar="true" avatarSize="28" :person="person" :to="`/praticantes/${person._id}/edit`">
+          <person-list-item v-for="person in editing.familyData" :key="person._id" :avatar="true" avatarSize="28" :person="person" :to="`/praticantes/${person._id}/edit`">
             <confirmation-dialog slot="right" @click.stop="removeRelative(person)">
               <v-btn icon ripple>
                 <v-icon color="orange">delete</v-icon>
@@ -141,7 +141,10 @@ export default {
   },
   methods: {
     addFamily(person) {
-      this.editing.family = [...this.editing.family, person]
+      this.editing.familyData = this.editing.familyData
+        ? [...this.editing.familyData, person]
+        : [person]
+      this.editing.family = [...this.editing.family, person._id]
     },
     addEnrollment() {
       this.editing.enrollments = [...this.editing.enrollments, blankEnrollment()]
@@ -159,7 +162,8 @@ export default {
       return get(option, 'pricing')
     },
     removeRelative({ _id }) {
-      this.editing.family = filter(this.editing.family, p => p._id !== _id)
+      this.editing.family = filter(this.editing.family, _id)
+      this.editing.familyData = filter(this.editing.familyData, p => p._id !== _id)
     },
     onFileChange(ev) {
       ev.preventDefault()
@@ -177,8 +181,7 @@ export default {
     },
     submit() {
       const enrollments = filter(this.editing.enrollments, e => !!e.enrollmentId)
-      const family = map(this.editing.family, '_id')
-      const practitioner = { ...this.editing, enrollments, family }
+      const practitioner = { ...this.editing, enrollments }
       this.$emit('submit', practitioner)
     },
   },

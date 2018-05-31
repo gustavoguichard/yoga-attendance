@@ -1,5 +1,4 @@
 import api from '@/api'
-import { paramsForServer } from 'feathers-hooks-common'
 
 export const state = () => ({
   options: [],
@@ -15,12 +14,12 @@ export const mutations = {
 }
 
 export const actions = {
-  async find(context, params) {
-    const response = await api.service('enrollment').find(paramsForServer(params))
+  async find(context) {
+    const response = await api.service('enrollment').find()
     context.commit('update', response.data)
   },
-  async get(context, { id, query, ...params }) {
-    const response = await api.service('enrollment').get(id, paramsForServer({ query, ...params }))
+  async get(context, { id, query }) {
+    const response = await api.service('enrollment').get(id, { query })
     context.commit('updateEnrollment', response)
   },
 }

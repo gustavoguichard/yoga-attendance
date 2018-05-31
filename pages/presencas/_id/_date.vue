@@ -5,7 +5,7 @@
   </v-layout>
   <v-layout align-content-center align-center column v-else>
     <page-title icon="person"
-      :title="classroom.title"
+      :title="lesson.title"
       :subtitle="isSubstitution && `Professor: ${teacher.displayName}`"
       :picture="teacher && teacher.picture"
     />
@@ -58,8 +58,9 @@ import pageTitle from '@/components/page-title'
 import personListItem from '@/components/person-list-item'
 import practitionersList from '@/components/practitioners-list'
 
-const fetch = (store, params) => {
+const fetch = async (store, params) => {
   const { id, date } = params
+  await store.dispatch('classrooms/get', { id })
   return store.dispatch('frequency/find', {
     query: {
       classId: id,
@@ -68,8 +69,6 @@ const fetch = (store, params) => {
         $lt: `${date} 23:59:59.999`,
       },
     },
-    populatePractitioners: true,
-    populateClassroom: true,
   })
 }
 
@@ -85,12 +84,10 @@ export default {
     classDate: route.params.date,
   }),
   computed: {
+    ...mapState('classrooms', ['lesson']),
     ...mapState('frequency', ['result']),
     chooseList() {
       return this.$route.query.add
-    },
-    classroom() {
-      return get(this, 'result[0].classroom') || {}
     },
     date() {
       return parseDate(this.classDate, 'DD/MM/YYYY')
@@ -103,11 +100,11 @@ export default {
       return get(temporary, 'practitioner')
     },
     teacher() {
-      return this.taughtBy || { _id: this.classroom.teacher }
+      return this.taughtBy || this.lesson.teacherData
     },
     isSubstitution() {
-      const { teacher } = this.classroom
-      return teacher && (this.teacher._id !== teacher._id)
+      const { teacher } = this.lesson
+      return teacher && (this.teacher._id !== teacher)
     },
     chooseQuery() {
       const peopleIds = map(this.result, 'practitioner._id')

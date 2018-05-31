@@ -18,7 +18,7 @@ export default {
     },
   },
   async fetch({ store }) {
-    await store.dispatch('enrollment/find', { populateClassroom: true })
+    await store.dispatch('enrollment/find')
   },
 };
 </script>
