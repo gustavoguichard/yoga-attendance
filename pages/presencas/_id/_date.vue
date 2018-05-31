@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import api from '@/api'
+import { service } from '@/api'
 import { mapState } from 'vuex'
 import { filter, find, get, includes, map } from 'lodash'
 import { parseDate, unparseDate } from '@/utils/date-helpers'
@@ -123,23 +123,23 @@ export default {
       this.datePicker = false
       const createdAt = unparseDate(this.classDate)
       await Promise.all(this.result.map(async f =>
-        api.service('frequency').patch(f._id, { createdAt })
+        service(this.$store, 'frequency/patch', f._id, { createdAt })
       ))
       this.$router.push(`/presencas/${this.$route.params.id}/${this.classDate}`)
     },
     async remove({ _id }) {
-      await api.service('frequency').remove(_id)
+      await service(this.$store, 'frequency/remove', _id)
       await fetch(this.$store, this.$route.params)
     },
     async selected({ _id }) {
       if (this.chooseList === 'teacher') {
         await Promise.all(this.result.map(async f =>
-          api.service('frequency').patch(f._id, { teacher: f.practitionerId === _id })
+          service(this.$store, 'frequency/patch', f._id, { teacher: f.practitionerId === _id })
         ))
         this.toggleChooseList()
       } else {
         const sample = this.result[0]
-        await api.service('frequency').create({
+        await service(this.$store, 'frequency/create', {
           classId: sample.classId,
           createdAt: sample.createdAt,
           practitionerId: _id,

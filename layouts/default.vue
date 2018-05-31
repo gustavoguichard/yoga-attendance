@@ -12,7 +12,8 @@
       </v-btn>
     </v-toolbar>
     <v-content>
-      <v-container fluid fill-height>
+      <v-container class="app-container" fluid fill-height>
+        <loading :contextual="true" :active="active" />
         <nuxt />
       </v-container>
     </v-content>
@@ -28,14 +29,19 @@
 
 <script>
 import mainMenu from '@/components/main-menu'
-import { mapState } from 'vuex'
+import loading from '@/components/loading'
+import { mapGetters, mapState } from 'vuex'
 
 export default {
   name: 'default-layout',
-  components: { mainMenu },
+  components: { loading, mainMenu },
   data: () => ({ drawer: true }),
   computed: {
     ...mapState('auth', ['userData']),
+    ...mapGetters('loading', ['active']),
+  },
+  mounted() {
+    this.$store.dispatch('loading/stop')
   },
 };
 </script>
@@ -47,5 +53,8 @@ body {
 main {
   box-sizing: border-box;
   padding: 1rem 2rem;
+}
+.app-container {
+  position: relative;
 }
 </style>

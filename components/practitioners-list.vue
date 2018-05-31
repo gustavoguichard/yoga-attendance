@@ -39,6 +39,10 @@ import { mapState } from 'vuex'
 import { isString } from 'lodash'
 import { searchInFields } from '@/utils/helpers'
 
+const fetch = async (store, query) => {
+  await store.dispatch('practitioners/find', { query })
+}
+
 export default {
   props: {
     chooseList: { type: Boolean },
@@ -82,12 +86,12 @@ export default {
   },
   watch: {
     async query(newQuery) {
-      await this.$store.dispatch('practitioners/find', { query: newQuery })
+      await fetch(this.$store, newQuery)
     },
   },
   async mounted() {
     if (!this.practitioners) {
-      await this.$store.dispatch('practitioners/find', { query: this.query })
+      await fetch(this.$store, this.query)
     }
   },
 }

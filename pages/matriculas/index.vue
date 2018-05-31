@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import api from '@/api'
+import { service } from '@/api'
 import { mapState } from 'vuex'
 import { map } from 'lodash'
 import pageCta from '@/components/page-cta'
@@ -50,7 +50,7 @@ export default {
       this.$router.push(`/matriculas/${_id}/edit`)
     },
     async remove(enrollment) {
-      await api.service('enrollment').remove(enrollment._id)
+      await service(this.$store, 'enrollment/remove', enrollment._id)
       await this.$store.dispatch('enrollment/find')
     },
   },

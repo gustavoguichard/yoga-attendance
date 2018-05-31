@@ -46,7 +46,7 @@
 </template>
 
 <script>
-import api from '@/api'
+import { service } from '@/api'
 import moment from 'moment'
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import { difference, filter, includes, map } from 'lodash'
@@ -129,7 +129,7 @@ export default {
       return includes(map(this.restitution, '_id'), _id)
     },
     async createFrequency(id, teacher = false) {
-      return api.service('frequency').create({
+      return service(this.$store, 'frequency/create', {
         teacher,
         practitionerId: id,
         classId: this.lesson._id,
@@ -138,7 +138,7 @@ export default {
     async submit() {
       const newSubscribers = filter(this.restitution, p => !p.restituting)
       if (newSubscribers.length) {
-        await api.service('classrooms').patch(this.lesson._id, { practitioners: [...this.lesson.practitioners, ...newSubscribers] })
+        await service(this.$store, 'classrooms/patch', this.lesson._id, { practitioners: [...this.lesson.practitioners, ...newSubscribers] })
       }
       await Promise.all(this.everyAttendant.map(async person => this.createFrequency(person)))
       if (this.teacher._id) {

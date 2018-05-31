@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import api from '@/api'
+import { service } from '@/api'
 import { mapState } from 'vuex'
 import enrollmentForm from '@/components/enrollment-form'
 
@@ -17,7 +17,7 @@ export default {
   },
   methods: {
     async submit(enrollment) {
-      await api.service('enrollment').create(enrollment)
+      await service(this.$store, 'enrollment/create', enrollment)
       this.$router.push('/matriculas')
     },
   },

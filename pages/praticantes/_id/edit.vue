@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import api from '@/api'
+import { service } from '@/api'
 import practitionerForm from '@/components/practitioner-form'
 import { mapState } from 'vuex'
 
@@ -17,7 +17,7 @@ export default {
   },
   methods: {
     async submit({ _id, ...data }) {
-      await api.service('practitioners').patch(_id, data)
+      await service(this.$store, 'practitioners/patch', _id, data)
       this.$router.push('/praticantes')
     },
   },

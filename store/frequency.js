@@ -17,6 +17,7 @@ export const mutations = {
 
 export const actions = {
   async find(context, { page, query }) {
+    this.dispatch('loading/start')
     const pagination = page ? {
       $limit: PAGE_LIMIT,
       $skip: PAGE_LIMIT * (page || 0),
@@ -29,10 +30,13 @@ export const actions = {
       },
     })
     context.commit('update', response.data)
+    this.dispatch('loading/stop')
   },
 
   async get(context, { id, query }) {
+    this.dispatch('loading/start')
     const response = await api.service('frequency').get(id, { query })
     context.commit('updatePeopleList', response)
+    this.dispatch('loading/stop')
   },
 }

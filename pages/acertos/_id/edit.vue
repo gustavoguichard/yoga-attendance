@@ -79,7 +79,7 @@
 </template>
 
 <script>
-import api from '@/api'
+import { service } from '@/api'
 import moment from 'moment'
 import { includes } from 'lodash'
 import { mapState } from 'vuex'
@@ -129,7 +129,7 @@ export default {
     async submit() {
       const { paidAt } = this
       const { status, totalPaid, note } = this.editing
-      await api.service('payments').patch(this.$route.params.id, {
+      await service(this.$store, 'payments/patch', this.$route.params.id, {
         paidAt, status, totalPaid, note,
       })
       this.$router.push(`/praticantes/${this.person._id}`)

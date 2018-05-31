@@ -9,4 +9,9 @@ const api = feathers()
   .configure(restClient.axios(axios))
   .configure(auth({ storage }))
 
+export async function service(store, method, ...options) {
+  const [serv, type] = method.split('/')
+  await api.service(serv)[type](...options)
+}
+
 export default api
