@@ -2,6 +2,9 @@ const nodeExternals = require('webpack-node-externals')
 const resolve = (dir) => require('path').join(__dirname, dir)
 
 module.exports = {
+  env: {
+    baseUrl: process.env.REST_API || 'http://localhost:3030',
+  },
   /*
   ** Headers of the page
   */

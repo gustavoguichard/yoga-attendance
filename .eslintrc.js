@@ -6,6 +6,10 @@ module.exports = {
     node: true,
     mocha: true
   },
+  globals: {
+    document: true,
+    window: true
+  },
   extends: 'airbnb/base',
   plugins: ['html'],
   settings: {

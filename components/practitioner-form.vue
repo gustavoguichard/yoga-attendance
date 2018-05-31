@@ -177,7 +177,8 @@ export default {
     },
     submit() {
       const enrollments = filter(this.editing.enrollments, e => !!e.enrollmentId)
-      const practitioner = { ...this.editing, enrollments }
+      const family = map(this.editing.family, '_id')
+      const practitioner = { ...this.editing, enrollments, family }
       this.$emit('submit', practitioner)
     },
   },

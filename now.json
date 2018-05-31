@@ -1,0 +1,8 @@
+{
+  "name": "yoga-attendance",
+  "alias": "yoga-attendance",
+  "public": true,
+  "env": {
+    "REST_API": "@rest-api-url"
+  }
+}

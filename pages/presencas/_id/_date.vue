@@ -4,9 +4,14 @@
     <page-cta icon="arrow_back" @click.stop="toggleChooseList" />
   </v-layout>
   <v-layout align-content-center align-center column v-else>
-    <page-title icon="person"
+    <!-- <page-title icon="person"
       :title="classroom.title"
       :subtitle="isSubstitution && `Professor: ${teacher.displayName} (substituindo: ${classroom.teacher.displayName})`"
+      :picture="teacher && teacher.picture"
+    /> -->
+    <page-title icon="person"
+      :title="classroom.title"
+      :subtitle="isSubstitution && `Professor: ${teacher.displayName}`"
       :picture="teacher && teacher.picture"
     />
     <v-btn @click.stop="toggleChooseList('teacher')" color="primary" depressed>Trocar professor</v-btn>
