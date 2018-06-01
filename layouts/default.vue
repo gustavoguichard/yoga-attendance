@@ -13,7 +13,7 @@
     </v-toolbar>
     <v-snackbar v-if="notify" :color="notify.type" :value="true" :top="true" :right="true" :timeout="0">
       {{ notify.text }}
-       <v-btn flat @click="close">Close</v-btn>
+       <v-btn flat @click="close">Ok</v-btn>
     </v-snackbar>
     <v-content>
       <v-container class="app-container" fluid fill-height>
