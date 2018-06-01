@@ -44,7 +44,7 @@ export default {
         await this.authenticate({ email, password });
         this.$router.replace('/');
       } catch (e) {
-        this.$store.dispatch('notification/notify', e.message)
+        this.$store.dispatch('notification/error', e.message)
       }
     },
   },

@@ -16,7 +16,7 @@ export const service = async (store, method, ...options) => {
   try {
     result = await api.service(serv)[type](...options)
   } catch (error) {
-    store.dispatch('notification/notify', error.message)
+    store.dispatch('notification/error', error.message)
   }
   store.dispatch('loading/stop')
   return result

@@ -1,5 +1,11 @@
 import Vue from 'vue'
 
+const notification = options => ({
+  type: 'info',
+  persist: false,
+  ...options,
+})
+
 export const state = () => ({ notify: undefined })
 
 export const mutations = {
@@ -12,8 +18,17 @@ export const mutations = {
 }
 
 export const actions = {
-  notify({ commit }, text) {
-    commit('update', { text })
+  notify({ commit }, options) {
+    commit('update', notification(options))
+  },
+  info({ commit }, text) {
+    commit('update', notification({ text }))
+  },
+  error({ commit }, text) {
+    commit('update', notification({ text, type: 'error' }))
+  },
+  success({ commit }, text) {
+    commit('update', notification({ text, type: 'success' }))
   },
   clear({ commit }) {
     commit('update')
