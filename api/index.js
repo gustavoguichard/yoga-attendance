@@ -9,9 +9,12 @@ const api = feathers()
   .configure(restClient.axios(axios))
   .configure(auth({ storage }))
 
-export async function service(store, method, ...options) {
+export const service = async (store, method, ...options) => {
   const [serv, type] = method.split('/')
-  await api.service(serv)[type](...options)
+  store.dispatch('loading/start')
+  const result = await api.service(serv)[type](...options)
+  store.dispatch('loading/stop')
+  return result
 }
 
 export default api

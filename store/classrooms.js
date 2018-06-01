@@ -1,4 +1,4 @@
-import api from '@/api'
+import { service } from '@/api'
 import { filter, flatten, get, groupBy, map, reduce } from 'lodash'
 
 export const state = () => ({
@@ -16,16 +16,12 @@ export const mutations = {
 
 export const actions = {
   async find(context, params) {
-    this.dispatch('loading/start')
-    const response = await api.service('classrooms').find(params)
+    const response = await service(this, 'classrooms/find', params)
     context.commit('update', response.data)
-    this.dispatch('loading/stop')
   },
   async get(context, { id, query }) {
-    this.dispatch('loading/start')
-    const response = await api.service('classrooms').get(id, { query })
+    const response = await service(this, 'classrooms/get', id, { query })
     context.commit('updateLesson', response)
-    this.dispatch('loading/stop')
   },
 }
 

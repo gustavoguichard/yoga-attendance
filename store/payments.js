@@ -1,4 +1,4 @@
-import api from '@/api'
+import { service } from '@/api'
 
 export const state = () => ({
   paymentDescriptions: [],
@@ -15,16 +15,12 @@ export const mutations = {
 
 export const actions = {
   async find(context, params) {
-    this.dispatch('loading/start')
-    const response = await api.service('payments').find(params)
+    const response = await service(this, 'payments/find', params)
     context.commit('update', response.data)
-    this.dispatch('loading/stop')
   },
 
   async get(context, { id, query }) {
-    this.dispatch('loading/start')
-    const response = await api.service('payments').get(id, { query })
+    const response = await service(this, 'payments/get', id, { query })
     context.commit('updateLesson', response)
-    this.dispatch('loading/stop')
   },
 }
