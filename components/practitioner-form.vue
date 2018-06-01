@@ -95,6 +95,7 @@
 <script>
 /* global FileReader */
 import { mapState } from 'vuex'
+import moment from 'moment'
 import { get, map, filter, find } from 'lodash'
 import decorate from '@/utils/decorateEnrollment'
 import pageCta from '@/components/page-cta'
@@ -186,9 +187,11 @@ export default {
     },
   },
   mounted() {
+    const date = moment(this.person.birthdate)
     this.editing = {
       ...this.editing,
       ...this.person,
+      birthdate: date.format('DDMMYYYY'),
     }
   },
 };
