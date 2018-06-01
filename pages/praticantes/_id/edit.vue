@@ -17,8 +17,8 @@ export default {
   },
   methods: {
     async submit({ _id, ...data }) {
-      await service(this.$store, 'practitioners/patch', _id, data)
-      this.$router.push('/praticantes')
+      const result = await service(this.$store, 'practitioners/patch', _id, data)
+      if (result) this.$router.push('/praticantes')
     },
   },
   async fetch({ store, params }) {

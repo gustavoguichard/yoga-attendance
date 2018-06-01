@@ -11,6 +11,10 @@
         <v-icon>exit_to_app</v-icon>
       </v-btn>
     </v-toolbar>
+    <v-snackbar v-if="notify" :value="true" :top="true" :right="true" :timeout="0">
+      {{ notify.text }}
+       <v-btn flat @click="close">Close</v-btn>
+    </v-snackbar>
     <v-content>
       <v-container class="app-container" fluid fill-height>
         <loading :contextual="true" :active="active" />
@@ -38,7 +42,13 @@ export default {
   data: () => ({ drawer: true }),
   computed: {
     ...mapState('auth', ['userData']),
+    ...mapState('notification', ['notify']),
     ...mapGetters('loading', ['active']),
+  },
+  methods: {
+    close() {
+      this.$store.dispatch('notification/clear')
+    },
   },
   mounted() {
     this.$store.dispatch('loading/stop')

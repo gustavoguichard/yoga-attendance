@@ -12,7 +12,12 @@ const api = feathers()
 export const service = async (store, method, ...options) => {
   const [serv, type] = method.split('/')
   store.dispatch('loading/start')
-  const result = await api.service(serv)[type](...options)
+  let result
+  try {
+    result = await api.service(serv)[type](...options)
+  } catch (error) {
+    store.dispatch('notification/notify', error.message)
+  }
   store.dispatch('loading/stop')
   return result
 }

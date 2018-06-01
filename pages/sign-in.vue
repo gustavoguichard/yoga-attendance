@@ -1,6 +1,5 @@
 <template>
 <v-layout justify-center class="page-container sign-in">
-  <p v-if="error" class="error">{{ error }}</p>
   <v-card class="mt-3 py-4 px-2">
     <v-layout wrap>
       <v-flex column>
@@ -30,13 +29,10 @@ import pageCta from '@/components/page-cta'
 
 export default {
   components: { pageCta },
-  data() {
-    return {
-      email: '',
-      password: '',
-      error: '',
-    };
-  },
+  data: () => ({
+    email: '',
+    password: '',
+  }),
   middleware: 'not-authenticated',
   methods: {
     ...mapActions({
@@ -48,17 +44,7 @@ export default {
         await this.authenticate({ email, password });
         this.$router.replace('/');
       } catch (e) {
-        this.error = e.message;
-        throw e;
-      }
-    },
-  },
-  watch: {
-    error() {
-      if (this.error) {
-        setTimeout(() => {
-          this.error = '';
-        }, 3000);
+        this.$store.dispatch('notification/notify', e.message)
       }
     },
   },
