@@ -5,10 +5,7 @@
   &.sign-in .app-container {
     background-image: url('/bg.jpg');
     background-position: top
-    background-size: contain
-    @media only screen and (max-width: 599px) {
-      background-size: cover
-    }
+    background-size: cover
   }
 
   .layout, .container {
@@ -26,54 +23,53 @@
     background-color: #a48453
     color: white
   }
-}
-
-@media only screen and (min-width: 600px) {
-  .main-card {
-    margin: 1em
-    min-width: 400px
-    width: 60%
-  }
-  .card.half {
-    width: 48%;
-  }
-}
-
-@media only screen and (max-width: 599px) {
-  .card.half {
-    margin: 0 0 1em;
-    width: 100%;
-  }
-
-  .main-card {
-    width: 100%
-  }
-
-  .app-container {
-    padding: 24px 14px 35px !important
-  }
-
-  .summary {
-    .subheader {
-      padding: 0 16px !important;
+  @media only screen and (min-width: 600px) {
+    .main-card {
+      margin: 1em
+      min-width: 400px
+      width: 60%
+    }
+    .card.half {
+      width: 48%;
     }
   }
 
-  .summary__frequency {
-    .list__tile {
-      padding: 0
+  @media only screen and (max-width: 599px) {
+    .card.half {
+      margin: 0 0 1em;
+      width: 100%;
     }
 
-    .chip__content {
-      background: white
-      padding: 0 6px
-      position: relative
+    .main-card {
+      width: 100%
     }
-  }
 
-  .order-tile {
-    .list__tile {
-      padding-right: 0
+    .app-container {
+      padding: 24px 14px 35px !important
+    }
+
+    .summary {
+      .subheader {
+        padding: 0 16px !important;
+      }
+    }
+
+    .summary__frequency {
+      .list__tile {
+        padding: 0
+      }
+
+      .chip__content {
+        background: white
+        padding: 0 6px
+        position: relative
+      }
+    }
+
+    .order-tile {
+      .list__tile {
+        padding-right: 0
+      }
     }
   }
 }
