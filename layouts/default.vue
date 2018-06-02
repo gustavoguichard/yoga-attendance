@@ -1,5 +1,5 @@
 <template>
-  <v-app id="inspire" :class="$route.name">
+  <v-app id="ciyf-app" :class="$route.name">
     <v-navigation-drawer fixed clipped v-model="drawer" app>
       <main-menu />
     </v-navigation-drawer>

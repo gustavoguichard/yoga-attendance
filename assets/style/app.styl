@@ -1,27 +1,28 @@
 // Import Vuetify styling
 @require '~vuetify/src/stylus/app.styl'
 
-.sign-in .app-container {
-  background-image: url('/bg.jpg');
-  background-position: top;
-  background-size: contain;
-}
+#ciyf-app {
+  .sign-in .app-container {
+    background-image: url('/bg.jpg');
+    background-position: top;
+    background-size: contain;
+  }
 
-.layout, .container {
-  transition: all .5s cubic-bezier(.55,0,.1,1)
-}
+  .layout, .container {
+    transition: all .5s cubic-bezier(.55,0,.1,1)
+  }
 
-.page-enter-active, .page-leave-active {
-  transition: all .5s
-}
-.page-enter, .page-leave-active {
-  transform: translateY(-10px)
-  opacity: 0
-}
-
-.card .toolbar {
-  background-color: #a48453
-  color: white
+  .page-enter-active, .page-leave-active {
+    transition: all .5s
+  }
+  .page-enter, .page-leave-active {
+    transform: translateY(-10px)
+    opacity: 0
+  }
+  .card .toolbar {
+    background-color: #a48453
+    color: white
+  }
 }
 
 @media only screen and (min-width: 600px) {
