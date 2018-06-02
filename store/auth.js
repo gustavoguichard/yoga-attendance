@@ -1,12 +1,13 @@
 import api from '@/api'
+import Vue from 'vue'
 import { get, includes } from 'lodash'
 
 export const mutations = {
   update(state, data) {
-    state.user = data
+    Vue.set(state, 'user', data)
   },
   logout(state) {
-    state.user = null
+    Vue.set(state, 'user', null)
   },
 }
 

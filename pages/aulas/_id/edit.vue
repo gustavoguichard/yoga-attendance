@@ -16,7 +16,7 @@ import classroomForm from '@/components/classroom-form'
 import { mapState } from 'vuex'
 
 export default {
-  middleware: 'check-auth',
+  middleware: ['check-auth', 'check-admin'],
   components: { classroomForm, pageTitle },
   computed: {
     ...mapState('classrooms', ['lesson']),

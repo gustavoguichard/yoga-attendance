@@ -10,9 +10,7 @@ export default {
     this.exit()
   },
   methods: {
-    ...mapActions({
-      signOut: 'auth/clear',
-    }),
+    ...mapActions({ signOut: 'auth/clear' }),
     async exit() {
       await this.signOut()
       this.$router.replace('/')

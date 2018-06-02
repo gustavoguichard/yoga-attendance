@@ -9,7 +9,7 @@ import { service } from '@/api'
 import classroomForm from '@/components/classroom-form'
 
 export default {
-  middleware: 'check-auth',
+  middleware: ['check-auth', 'check-admin'],
   components: { classroomForm },
   methods: {
     async submit(lesson) {
