@@ -186,11 +186,13 @@ export default {
     },
   },
   mounted() {
-    const date = moment(this.person.birthdate)
+    const birthdate = this.person
+      ? moment(this.person.birthdate).format('DDMMYYYY')
+      : undefined
     this.editing = {
       ...this.editing,
       ...this.person,
-      birthdate: date.format('DDMMYYYY'),
+      birthdate,
     }
   },
 };
