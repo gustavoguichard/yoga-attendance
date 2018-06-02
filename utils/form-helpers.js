@@ -1,6 +1,6 @@
 import { filter, pick } from 'lodash'
 
-const classroomFields = ['_id', 'title', 'tuition', 'teacher', 'practitioners']
+const classroomFields = ['_id', 'title', 'tuition', 'teacher', 'practitioners', 'regularClass']
 const enrollmentFields = ['_id', 'type', 'classId', 'pricing']
 const practitionerFields = ['_id', 'fullName', 'nickName', 'email', 'phone', 'birthdate', 'picture', 'family', 'enrollments', 'teacher']
 
