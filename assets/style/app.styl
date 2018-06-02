@@ -1,9 +1,6 @@
 // Import Vuetify styling
 @require '~vuetify/src/stylus/app.styl'
 
-// .page
-//   @extend .fade-transition
-
 .layout, .container {
   transition: all .5s cubic-bezier(.55,0,.1,1)
 }
@@ -14,4 +11,12 @@
 .page-enter, .page-leave-active {
   transform: translateY(-10px)
   opacity: 0
+}
+
+@media (min-width: 800px) {
+  .main-card {
+    margin: 1em
+    min-width: 400px
+    width: 60%
+  }
 }

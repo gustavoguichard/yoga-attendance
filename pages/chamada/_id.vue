@@ -5,7 +5,7 @@
     </practitioners-list>
   </v-layout>
   <v-layout v-else justify-center wrap>
-    <v-card class="half">
+    <v-card class="main-card half">
       <v-toolbar color="blue-grey lighten-1" dark>
         <v-btn icon @click="selectAll">
           <v-icon v-if="allSelected" color="blue darken-4">check_circle</v-icon>
@@ -26,7 +26,7 @@
         </v-btn>
       </v-card-actions>
     </v-card>
-    <v-card class="half">
+    <v-card class="main-card half">
       <v-toolbar color="blue-grey lighten-1" dark>
         <v-toolbar-title>Professor</v-toolbar-title>
       </v-toolbar>
@@ -158,11 +158,6 @@ export default {
 
 <style scoped>
 @media (min-width: 800px) {
-  .card {
-    margin: 1em;
-    min-width: 400px;
-    width: 60%;
-  }
   .card.half {
     width: auto;
   }

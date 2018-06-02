@@ -1,5 +1,5 @@
 <template>
-  <v-card>
+  <v-card class="main-card">
     <v-toolbar color="blue-grey lighten-1" dark>
       <v-toolbar-title>{{ title }}</v-toolbar-title>
     </v-toolbar>

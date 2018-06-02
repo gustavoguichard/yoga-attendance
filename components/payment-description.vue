@@ -47,7 +47,6 @@ export default {
 .order-tile {
   border-left: 6px solid lightslategrey;
 }
-.is-open {}
 .is-paid {
   border-left-color: lightskyblue;
 }
@@ -57,5 +56,4 @@ export default {
 .is-confirmed {
   border-left-color: forestgreen;
 }
-
 </style>

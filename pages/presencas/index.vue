@@ -1,6 +1,6 @@
 <template>
   <v-layout align-content-center align-center column>
-    <v-card>
+    <v-card class="main-card">
       <v-toolbar color="blue-grey lighten-1" dark>
         <v-toolbar-title>Selecione a lista pelo dia:</v-toolbar-title>
       </v-toolbar>
@@ -82,13 +82,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-@media (min-width: 800px) {
-  .card {
-    margin: 1em;
-    min-width: 400px;
-    width: 60%;
-  }
-}
-</style>

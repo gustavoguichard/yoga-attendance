@@ -5,7 +5,7 @@
       :subtitle="person.displayName !== person.fullName ? person.fullName : null"
       :picture="person.picture"
     />
-    <v-card>
+    <v-card class="main-card">
       <v-toolbar color="blue-grey lighten-1" dark>
         <v-toolbar-title>Lista de presenças</v-toolbar-title>
       </v-toolbar>
@@ -121,15 +121,7 @@ export default {
 </script>
 
 <style scoped>
-@media (min-width: 800px) {
-  .card {
-    margin: 1em;
-    min-width: 400px;
-    width: 60%;
-  }
-
-  .summary {
-    width: 100%;
-  }
+.summary {
+  width: 100%;
 }
 </style>

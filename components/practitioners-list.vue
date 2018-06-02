@@ -1,5 +1,5 @@
 <template>
-  <v-card>
+  <v-card class="main-card">
     <v-toolbar @click.stop="openSearch" color="blue-grey lighten-1" dark>
       <v-text-field ref="search" v-model="filter" @blur="search = false" v-if="search" class="mx-4" label="Buscar" hide-details single-line></v-text-field>
       <template v-else>
@@ -96,13 +96,3 @@ export default {
   },
 }
 </script>
-
-<style scoped>
-@media (min-width: 800px) {
-  .card {
-    margin: 1em;
-    min-width: 400px;
-    width: 60%;
-  }
-}
-</style>

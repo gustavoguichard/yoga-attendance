@@ -14,7 +14,7 @@ export default { props: ['icon', 'picture', 'title', 'subtitle'] }
 </script>
 
 <style scoped>
-  .icon {
-    font-size: 100px !important;
-  }
+.icon {
+  font-size: 100px !important;
+}
 </style>

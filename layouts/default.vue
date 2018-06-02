@@ -57,13 +57,6 @@ export default {
 </script>
 
 <style>
-body {
-  font-family: sans-serif;
-}
-main {
-  box-sizing: border-box;
-  padding: 1rem 2rem;
-}
 .app-container {
   position: relative;
 }

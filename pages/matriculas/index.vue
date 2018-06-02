@@ -1,6 +1,6 @@
 <template>
   <v-layout justify-center wrap>
-    <v-card>
+    <v-card class="main-card">
       <v-toolbar color="blue-grey lighten-1" dark>
         <v-toolbar-title>Selecione uma regra</v-toolbar-title>
       </v-toolbar>
@@ -59,13 +59,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-@media (min-width: 800px) {
-  .card {
-    margin: 1em;
-    min-width: 400px;
-    width: 60%;
-  }
-}
-</style>

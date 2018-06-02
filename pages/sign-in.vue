@@ -1,6 +1,6 @@
 <template>
 <v-layout justify-center class="page-container sign-in">
-  <v-card class="mt-3 py-4 px-2">
+  <v-card class="main-card mt-3 py-4 px-2">
     <v-layout wrap>
       <v-flex column>
         <h3 class="text-xs-center">Olá professor :)</h3>
@@ -52,14 +52,7 @@ export default {
 </script>
 
 <style scoped>
-  .page-container {
-    height: auto !important;
-  }
-
-@media (min-width: 800px) {
-  .card {
-    min-width: 400px;
-    width: 60%;
-  }
+.page-container {
+  height: auto !important;
 }
 </style>

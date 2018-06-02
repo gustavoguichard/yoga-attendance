@@ -32,13 +32,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-@media (min-width: 800px) {
-  .card {
-    margin: 1em;
-    min-width: 400px;
-    width: 60%;
-  }
-}
-</style>

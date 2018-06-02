@@ -53,7 +53,4 @@ export default {
   position: absolute;
   z-index: 2;
 }
-
-.loader {
-}
 </style>

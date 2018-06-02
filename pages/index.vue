@@ -72,7 +72,6 @@ export default {
 @media (min-width: 800px) {
   .card {
     margin: 1em;
-    min-width: 400px;
   }
 }
 </style>

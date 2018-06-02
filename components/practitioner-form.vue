@@ -1,6 +1,6 @@
 <template>
   <practitioners-list v-if="chooseList" :query="possibleFamilyQuery" title="Escolha o familiar" @selected="addFamily" :chooseList="true" :twoLine="true" />
-  <v-card v-else>
+  <v-card class="main-card" v-else>
     <v-toolbar color="blue-grey lighten-1" dark>
       <v-toolbar-title>{{ title }}</v-toolbar-title>
     </v-toolbar>
