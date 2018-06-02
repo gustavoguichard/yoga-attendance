@@ -3,17 +3,17 @@ export const state = () => ({
 })
 
 export const mutations = {
-  change(st, count) {
+  updateRequests(st, count) {
     st.requests = count
   },
 }
 
 export const actions = {
   load({ commit, state: st }) {
-    commit('change', st.requests + 1)
+    commit('updateRequests', st.requests + 1)
   },
   done({ commit, state: st }) {
-    commit('change', Math.max(0, st.requests - 1))
+    commit('updateRequests', Math.max(0, st.requests - 1))
   },
 }
 

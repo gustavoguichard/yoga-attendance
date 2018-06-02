@@ -1,5 +1,5 @@
 <template>
-  <div v-if="loading" class="loading-container">
+  <div v-if="active" class="loading-container">
     <v-progress-circular
       :size="100"
       :width="15"
@@ -10,22 +10,7 @@
 </template>
 
 <script>
-export default {
-  props: ['active'],
-  data() {
-    return {
-      loading: false,
-    }
-  },
-  methods: {
-    start() {
-      this.loading = true
-    },
-    finish() {
-      this.loading = false
-    },
-  },
-}
+export default { props: ['active'] }
 </script>
 
 <style scoped>
