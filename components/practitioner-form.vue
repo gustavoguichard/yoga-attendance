@@ -182,9 +182,7 @@ export default {
       this.$refs.fileInput.click()
     },
     submit() {
-      const enrollments = filter(this.editing.enrollments, e => !!e.enrollmentId)
-      const practitioner = { ...this.editing, enrollments }
-      this.$emit('submit', practitioner)
+      this.$emit('submit', parsePractitioner(this.editing))
     },
   },
   mounted() {

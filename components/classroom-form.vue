@@ -55,6 +55,7 @@
 <script>
 import { mapGetters, mapState } from 'vuex'
 import { filter, includes, uniq, without } from 'lodash'
+import { parseClassroom } from '@/utils/form-helpers'
 import pageCta from '@/components/page-cta'
 import practitionersList from '@/components/practitioners-list'
 import personListItem from '@/components/person-list-item'
@@ -99,7 +100,7 @@ export default {
       this.editing.practitioners = without(this.editing.practitioners, _id)
     },
     submit() {
-      this.$emit('submit', this.editing)
+      this.$emit('submit', parseClassroom(this.editing))
     },
   },
   mounted() {

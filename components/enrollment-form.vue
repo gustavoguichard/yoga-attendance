@@ -20,7 +20,7 @@
         <v-flex xs12>
           <v-select
             :items="classesOptions"
-            v-model="editing.classroom"
+            v-model="editing.classId"
             item-text="title"
             item-value="_id"
             prepend-icon="event"
@@ -55,7 +55,8 @@
 
 <script>
 import { mapState } from 'vuex'
-import { map, filter } from 'lodash'
+import { map } from 'lodash'
+import { parseEnrollment } from '@/utils/form-helpers'
 import pageCta from '@/components/page-cta'
 
 const blankPricing = () => ({
@@ -70,7 +71,7 @@ export default {
   data: () => ({
     editing: {
       type: '',
-      classroom: undefined,
+      classId: undefined,
       pricing: [blankPricing()],
     },
   }),
@@ -99,8 +100,7 @@ export default {
       })
     },
     submit() {
-      const enrollment = { ...this.editing, pricing: filter(this.editing.pricing, p => p.desc !== '') }
-      this.$emit('submit', enrollment)
+      this.$emit('submit', parseEnrollment(this.editing))
     },
   },
   mounted() {
