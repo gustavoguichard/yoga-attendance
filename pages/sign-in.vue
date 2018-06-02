@@ -39,6 +39,7 @@ export default {
       const { email, password } = this;
       try {
         await this.authenticate({ email, password });
+        this.$store.dispatch('notification/success', 'Bem vindo(a)!')
         this.$router.replace('/');
       } catch (e) {
         this.$store.dispatch('notification/error', e.message)

@@ -36,4 +36,7 @@ export const actions = {
   403({ commit }) {
     commit('update', notification({ text: 'Você não está autorizado a acessar esta página', type: 'error' }))
   },
+  401({ commit }) {
+    commit('update', notification({ text: 'Você deve fazer login primeiro' }))
+  },
 }

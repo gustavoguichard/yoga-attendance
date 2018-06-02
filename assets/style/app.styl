@@ -27,13 +27,18 @@
     .main-card {
       margin: 1em
       min-width: 400px
-      width: 60%
+      width: 70%
     }
     .card.half {
-      width: 48%;
+      width: 48%
     }
   }
 
+  @media only screen and (min-width: 600px) and (max-width: 950px) {
+    .main-card {
+      width: 100%
+    }
+  }
   @media only screen and (max-width: 599px) {
     .card.half {
       margin: 0 0 1em;

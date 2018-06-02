@@ -13,7 +13,8 @@ export default {
     ...mapActions({ signOut: 'auth/clear' }),
     async exit() {
       await this.signOut()
-      this.$router.replace('/')
+      this.$store.dispatch('notification/info', 'Até logo!')
+      this.$router.replace('/sign-in')
     },
   },
 };
