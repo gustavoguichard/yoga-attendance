@@ -19,7 +19,7 @@
         <v-icon>exit_to_app</v-icon>
       </v-btn>
     </v-toolbar>
-    <v-snackbar v-if="notify" :color="notify.type" :value="true" :top="true" :right="true" :timeout="0">
+    <v-snackbar v-if="notify" :color="notify.type" :value="true" :top="!isMobile" :right="true" :timeout="0">
       {{ notify.text }}
        <v-btn flat @click="close">Ok</v-btn>
     </v-snackbar>
@@ -46,6 +46,9 @@ export default {
     ...mapGetters('loading', ['active']),
     ...mapState('auth', ['user']),
     ...mapState('notification', ['notify']),
+    isMobile() {
+      return window.innerWidth < 950
+    },
     isSignIn() {
       return this.$route.name === 'sign-in'
     },
@@ -56,7 +59,7 @@ export default {
     },
   },
   mounted() {
-    this.drawer = window.innerWidth > 949
+    this.drawer = !this.isMobile
     this.$store.dispatch('loading/stop')
   },
 };
