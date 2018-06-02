@@ -1,10 +1,10 @@
 <template>
-  <v-list-tile v-if="person" ripple :avatar="!!avatar" :style="disabled && 'pointer-events: none;'" @click.stop="clicked">
+  <v-list-tile class="tile" v-if="person" ripple :avatar="!!avatar" :style="disabled && 'pointer-events: none;'" @click.stop="clicked">
     <v-list-tile-avatar :size="avatarSize" v-if="!!avatar && avatar !== 'right'">
       <img v-if="person.picture" :src="person.picture" />
       <v-icon v-else>person</v-icon>
     </v-list-tile-avatar>
-    <v-list-tile-action v-if="$slots['left']">
+    <v-list-tile-action class="tile__action" v-if="$slots['left']">
       <slot name="left"></slot>
     </v-list-tile-action>
     <v-list-tile-content>
@@ -51,3 +51,15 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+@media only screen and (max-width: 599px) {
+  .tile > a {
+    padding: 0 8px;
+  }
+
+  .tile__action {
+    min-width: 40px;
+  }
+}
+</style>

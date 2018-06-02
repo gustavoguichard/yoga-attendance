@@ -1,6 +1,6 @@
 <template>
   <v-layout justify-center wrap>
-    <v-card>
+    <v-card class="half">
       <v-toolbar color="blue-grey lighten-1" dark>
         <v-toolbar-title>Selecione a turma pelo professor</v-toolbar-title>
       </v-toolbar>
@@ -20,7 +20,7 @@
         </template>
       </v-list>
     </v-card>
-    <v-card>
+    <v-card class="half">
       <v-toolbar color="blue-grey lighten-1" dark>
         <v-toolbar-title>Outras turmas</v-toolbar-title>
       </v-toolbar>
@@ -67,11 +67,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-@media (min-width: 800px) {
-  .card {
-    margin: 1em;
-  }
-}
-</style>

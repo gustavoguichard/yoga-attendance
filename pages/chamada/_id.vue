@@ -34,9 +34,7 @@
         <div v-for="(teacher, i) in teachers" :key="teacher._id">
           <v-divider v-if="i > 0"></v-divider>
           <person-list-item :person="teacher" property="displayName" @click="updateTeacher(teacher)" avatar="right">
-            <v-list-tile-action slot="left">
-              <v-icon v-if="isTeacher(teacher)" color="yellow darken-2">star</v-icon>
-            </v-list-tile-action>
+            <v-icon slot="left" v-if="isTeacher(teacher)" color="yellow darken-2">star</v-icon>
           </person-list-item>
         </div>
       </v-list>
@@ -155,15 +153,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.card.half {
-  margin-bottom: 1em;
-}
-
-@media (min-width: 800px) {
-  .card.half {
-    width: auto;
-  }
-}
-</style>
