@@ -1,19 +1,19 @@
 <template>
   <v-app id="ciyf-app" :class="$route.name">
-    <v-navigation-drawer fixed clipped v-model="drawer" app>
+    <v-navigation-drawer v-if="!isSignIn" fixed clipped v-model="drawer" app>
       <main-menu />
     </v-navigation-drawer>
     <v-toolbar color="grey darken-3" dark fixed app clipped-left>
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       <v-toolbar-title>Centro Iyengar Yoga Florianópolis</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn icon v-if="user && user.practitioner" :to="`/praticantes/${user.practitioner._id}`">
-        <v-avatar v-if="user.practitioner.picture" size="24px">
-          <img :src="user.practitioner.picture" />
+      <v-btn icon v-if="currentPractitioner._id" :to="`/praticantes/${currentPractitioner._id}`">
+        <v-avatar v-if="currentPractitioner.picture" size="24px">
+          <img :src="currentPractitioner.picture" />
         </v-avatar>
       </v-btn>
       <span class="user-email" v-if="user">
-        {{ user.practitioner ? user.practitioner.displayName : user.email }}
+        {{ currentPractitioner.displayName || user.email }}
       </span>
       <v-btn icon to="/sign-out" v-if="user">
         <v-icon>exit_to_app</v-icon>
@@ -42,9 +42,13 @@ export default {
   components: { loading, mainMenu },
   data: () => ({ drawer: false }),
   computed: {
+    ...mapGetters('auth', ['currentPractitioner']),
+    ...mapGetters('loading', ['active']),
     ...mapState('auth', ['user']),
     ...mapState('notification', ['notify']),
-    ...mapGetters('loading', ['active']),
+    isSignIn() {
+      return this.$route.name === 'sign-in'
+    },
   },
   methods: {
     close() {

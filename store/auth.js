@@ -1,5 +1,5 @@
 import api from '@/api'
-import { includes } from 'lodash'
+import { get, includes } from 'lodash'
 
 export const mutations = {
   update(state, data) {
@@ -29,5 +29,8 @@ export const actions = {
 export const getters = {
   isAdmin({ user }) {
     return includes(user && user.permissions, 'admin')
+  },
+  currentPractitioner({ user }) {
+    return get(user, 'practitioner') || {}
   },
 }

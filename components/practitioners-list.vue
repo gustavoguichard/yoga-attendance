@@ -17,7 +17,7 @@
       <template v-for="(person, i) in people">
         <v-divider v-if="i > 0" />
         <person-list-item :avatar="true" :showMail="twoLine" avatarSize="28" :person="person" @click="clicked(person)">
-          <v-btn icon v-if="editLink" ripple slot="right" @click.stop="$router.push(`/praticantes/${person._id}/edit`)">
+          <v-btn icon v-if="editLink && (isAdmin || person._id === currentPractitioner._id)" ripple slot="right" @click.stop="$router.push(`/praticantes/${person._id}/edit`)">
             <v-icon color="grey">edit</v-icon>
           </v-btn>
         </person-list-item>
@@ -34,10 +34,10 @@
 </template>
 
 <script>
-import personListItem from '@/components/person-list-item'
-import { mapState } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 import { isString } from 'lodash'
 import { searchInFields } from '@/utils/helpers'
+import personListItem from '@/components/person-list-item'
 
 const fetch = async (store, query) => {
   await store.dispatch('practitioners/find', { query })
@@ -60,6 +60,7 @@ export default {
     filter: '',
   }),
   computed: {
+    ...mapGetters('auth', ['isAdmin', 'currentPractitioner']),
     ...mapState('practitioners', ['list']),
     people() {
       const list = this.practitioners || this.list

@@ -66,7 +66,7 @@
               <v-btn flat color="primary" value="paid">
                 Pago
               </v-btn>
-              <v-btn flat color="success" value="confirmed">
+              <v-btn v-if="isAdmin" flat color="success" value="confirmed">
                 Confirmado
               </v-btn>
             </v-btn-toggle>
@@ -82,7 +82,7 @@
 import { service } from '@/api'
 import moment from 'moment'
 import { includes } from 'lodash'
-import { mapState } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 import pageCta from '@/components/page-cta'
 import pageTitle from '@/components/page-title'
 import paymentDescription from '@/components/payment-description'
@@ -90,7 +90,7 @@ import { parseDate } from '@/utils/date-helpers'
 import { toMoney } from '@/utils/helpers'
 
 export default {
-  middleware: 'check-auth',
+  middleware: ['check-auth'],
   components: { pageCta, pageTitle, paymentDescription },
   data: () => ({
     datePicker: false,
@@ -102,6 +102,7 @@ export default {
     },
   }),
   computed: {
+    ...mapGetters('auth', ['isAdmin']),
     ...mapState('payments', ['currentPayment']),
     prettyDate() {
       return parseDate(this.paidAt, 'DD/MM/YYYY')
