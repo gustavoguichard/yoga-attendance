@@ -31,7 +31,7 @@
       </v-date-picker>
     </v-dialog>
     <v-card class="main-card">
-      <v-toolbar color="blue-grey lighten-1" dark>
+      <v-toolbar>
         <v-toolbar-title>Alunos presentes:</v-toolbar-title>
       </v-toolbar>
       <v-list two-line subheader>

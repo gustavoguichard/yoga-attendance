@@ -1,7 +1,7 @@
 <template>
   <v-layout justify-center wrap>
     <v-card class="half">
-      <v-toolbar color="blue-grey lighten-1" dark>
+      <v-toolbar>
         <v-toolbar-title>Selecione a turma pelo professor</v-toolbar-title>
       </v-toolbar>
       <v-list two-line>
@@ -21,7 +21,7 @@
       </v-list>
     </v-card>
     <v-card class="half">
-      <v-toolbar color="blue-grey lighten-1" dark>
+      <v-toolbar>
         <v-toolbar-title>Outras turmas</v-toolbar-title>
       </v-toolbar>
       <v-list two-line>

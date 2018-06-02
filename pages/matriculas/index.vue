@@ -1,7 +1,7 @@
 <template>
   <v-layout justify-center wrap>
     <v-card class="main-card">
-      <v-toolbar color="blue-grey lighten-1" dark>
+      <v-toolbar>
         <v-toolbar-title>Selecione uma regra</v-toolbar-title>
       </v-toolbar>
       <v-list two-line>

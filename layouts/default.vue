@@ -1,9 +1,9 @@
 <template>
-  <v-app id="inspire">
+  <v-app id="inspire" :class="$route.name">
     <v-navigation-drawer fixed clipped v-model="drawer" app>
       <main-menu />
     </v-navigation-drawer>
-    <v-toolbar color="blue-grey" dark fixed app clipped-left>
+    <v-toolbar color="grey darken-3" dark fixed app clipped-left>
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       <v-toolbar-title>Centro Iyengar Yoga Florianópolis</v-toolbar-title>
       <v-spacer></v-spacer>
@@ -21,13 +21,6 @@
         <nuxt />
       </v-container>
     </v-content>
-    <v-footer color="blue-grey" class="white--text" app>
-      <v-layout row wrap justify-center>
-        <v-flex xs12 py-3 text-xs-center white--text>
-          <span>&copy; 2018</span>
-        </v-flex>
-      </v-layout>
-    </v-footer>
   </v-app>
 </template>
 

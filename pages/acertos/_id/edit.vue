@@ -6,7 +6,7 @@
       :picture="person.picture"
     />
     <v-card class="main-card">
-      <v-toolbar color="blue-grey lighten-1" dark>
+      <v-toolbar>
         <v-toolbar-title>
           {{ currentPayment.description.title }}
         </v-toolbar-title>

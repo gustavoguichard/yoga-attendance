@@ -1,6 +1,12 @@
 // Import Vuetify styling
 @require '~vuetify/src/stylus/app.styl'
 
+.sign-in .app-container {
+  background-image: url('/bg.jpg');
+  background-position: top;
+  background-size: contain;
+}
+
 .layout, .container {
   transition: all .5s cubic-bezier(.55,0,.1,1)
 }
@@ -13,7 +19,12 @@
   opacity: 0
 }
 
-@media only screen and (min-width: 800px) {
+.card .toolbar {
+  background-color: #a48453
+  color: white
+}
+
+@media only screen and (min-width: 600px) {
   .main-card {
     margin: 1em
     min-width: 400px
@@ -29,6 +40,9 @@
 }
 
 @media only screen and (max-width: 599px) {
+  .app-container {
+    background-size: cover;
+  }
   .card.half {
     margin: 0 0 1em;
   }

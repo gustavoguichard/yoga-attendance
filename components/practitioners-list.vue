@@ -1,12 +1,12 @@
 <template>
   <v-card class="main-card">
-    <v-toolbar @click.stop="openSearch" color="blue-grey lighten-1" dark>
+    <v-toolbar @click.stop="openSearch">
       <v-text-field ref="search" v-model="filter" @blur="search = false" v-if="search" class="mx-4" label="Buscar" hide-details single-line></v-text-field>
       <template v-else>
         <v-toolbar-title>{{ title }}</v-toolbar-title>
         <v-spacer></v-spacer>
       </template>
-      <v-btn icon>
+      <v-btn icon dark>
         <v-icon>search</v-icon>
       </v-btn>
     </v-toolbar>

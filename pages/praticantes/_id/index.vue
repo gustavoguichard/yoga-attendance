@@ -6,7 +6,7 @@
       :picture="person.picture"
     />
     <v-card class="main-card">
-      <v-toolbar color="blue-grey lighten-1" dark>
+      <v-toolbar>
         <v-toolbar-title>Lista de presenças</v-toolbar-title>
       </v-toolbar>
       <v-card-title>

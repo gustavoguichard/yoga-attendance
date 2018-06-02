@@ -1,7 +1,7 @@
 <template>
   <v-layout align-content-center align-center column>
     <v-card class="main-card">
-      <v-toolbar color="blue-grey lighten-1" dark>
+      <v-toolbar>
         <v-toolbar-title>Selecione a lista pelo dia:</v-toolbar-title>
       </v-toolbar>
       <v-card-title>

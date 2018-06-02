@@ -3,9 +3,8 @@
   <v-card class="main-card mt-3 py-4 px-2">
     <v-layout wrap>
       <v-flex column>
-        <h3 class="text-xs-center">Olá professor :)</h3>
         <p class="text-xs-center">
-          <img src="/logo.png" alt="Iyengar Brasil" class="mb-1" />
+          <img src="/logo.png" alt="Iyengar Brasil" width="200" class="mb-1" />
         </p>
       </v-flex>
       <v-card-text>
