@@ -1,11 +1,12 @@
 import api from '@/api'
+import { includes } from 'lodash'
 
 export const mutations = {
   update(state, data) {
-    state.userData = data
+    state.user = data
   },
   logout(state) {
-    state.userData = null
+    state.user = null
   },
 }
 
@@ -22,5 +23,11 @@ export const actions = {
   async clear(context) {
     api.logout()
     context.commit('logout')
+  },
+}
+
+export const getters = {
+  isAdmin({ user }) {
+    return includes(user && user.permissions, 'admin')
   },
 }

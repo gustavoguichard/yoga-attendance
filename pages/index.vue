@@ -5,7 +5,7 @@
         <v-toolbar-title>Selecione a turma pelo professor</v-toolbar-title>
       </v-toolbar>
       <v-list two-line>
-        <template v-for="(teacher, i) in classByTeacher">
+        <template v-for="(teacher, i) in withTeacher">
           <v-divider v-if="i !== 0"></v-divider>
           <person-list-item :avatar="true" :person="teacher" property="name" :disabled="true" />
           <v-divider></v-divider>
@@ -15,7 +15,7 @@
             :lesson="lesson"
             :callback="openLesson"
             :viewFrequency="viewFrequency"
-            :editClass="editClass"
+            :editClass="isAdmin && editClass"
           ></class-tile>
         </template>
       </v-list>
@@ -26,12 +26,12 @@
       </v-toolbar>
       <v-list two-line>
         <class-tile
-          v-for="lesson in classWithoutTeacher"
+          v-for="lesson in withoutTeacher"
           :key="lesson.title"
           :lesson="lesson"
           :callback="openLesson"
           :viewFrequency="viewFrequency"
-          :editClass="editClass"
+          :editClass="isAdmin && editClass"
         ></class-tile>
       </v-list>
     </v-card>
@@ -48,9 +48,11 @@ import pageCta from '@/components/page-cta'
 export default {
   middleware: 'check-auth',
   components: { classTile, pageCta, personListItem },
-  computed: {
-    ...mapGetters('classrooms', ['classByTeacher', 'classWithoutTeacher']),
-  },
+  computed: mapGetters({
+    isAdmin: 'auth/isAdmin',
+    withTeacher: 'classrooms/classByTeacher',
+    withoutTeacher: 'classrooms/classWithoutTeacher',
+  }),
   methods: {
     openLesson({ _id }) {
       this.$router.push(`/chamada/${_id}`)

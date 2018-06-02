@@ -7,7 +7,15 @@
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       <v-toolbar-title>Centro Iyengar Yoga Florianópolis</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn icon to="/sign-out" v-if="userData">
+      <v-btn icon v-if="user && user.practitioner" :to="`/praticantes/${user.practitioner._id}`">
+        <v-avatar v-if="user.practitioner.picture" size="24px">
+          <img :src="user.practitioner.picture" />
+        </v-avatar>
+      </v-btn>
+      <span class="user-email" v-if="user">
+        {{ user.practitioner ? user.practitioner.displayName : user.email }}
+      </span>
+      <v-btn icon to="/sign-out" v-if="user">
         <v-icon>exit_to_app</v-icon>
       </v-btn>
     </v-toolbar>
@@ -34,7 +42,7 @@ export default {
   components: { loading, mainMenu },
   data: () => ({ drawer: false }),
   computed: {
-    ...mapState('auth', ['userData']),
+    ...mapState('auth', ['user']),
     ...mapState('notification', ['notify']),
     ...mapGetters('loading', ['active']),
   },
@@ -53,5 +61,11 @@ export default {
 <style>
 .app-container {
   position: relative;
+}
+
+@media only screen and (max-width: 599px) {
+  .user-email {
+    display: none;
+  }
 }
 </style>
