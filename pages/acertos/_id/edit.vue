@@ -149,3 +149,11 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+@media only screen and (max-width: 599px) {
+  .btn-toggle {
+    display: inline-block;
+  }
+}
+</style>

@@ -39,7 +39,7 @@ import { mapGetters, mapState } from 'vuex'
 export default {
   name: 'default-layout',
   components: { loading, mainMenu },
-  data: () => ({ drawer: true }),
+  data: () => ({ drawer: false }),
   computed: {
     ...mapState('auth', ['userData']),
     ...mapState('notification', ['notify']),
@@ -51,6 +51,7 @@ export default {
     },
   },
   mounted() {
+    this.drawer = window.innerWidth > 599
     this.$store.dispatch('loading/stop')
   },
 };

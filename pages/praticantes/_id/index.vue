@@ -20,25 +20,27 @@
       <v-subheader>Resumo:</v-subheader>
       <v-card-title class="pt-0" primary-title>
         <div class="summary">
-          <h3 class="headline">Aulas: {{ result.length }}</h3>
-          <v-list>
-            <v-list-tile v-for="(items, title) in byClassRoom" :key="title">
-              <v-list-tile-avatar>
-                <img v-if="getTeacherPicture(items[0])" :src="getTeacherPicture(items[0])">
-                <v-icon v-else>person</v-icon>
-              </v-list-tile-avatar>
-              <v-list-tile-content>
-                <v-list-tile-title>
-                  {{ title }}
-                </v-list-tile-title>
-              </v-list-tile-content>
-              <v-list-tile-action>
-                <v-chip outline color="primary">
-                  {{ items.length }} ({{ fn.percent(items.length, result.length) }})
-                </v-chip>
-              </v-list-tile-action>
-            </v-list-tile>
-          </v-list>
+          <div class="summary__frequency">
+            <h3 class="headline">Aulas: {{ result.length }}</h3>
+            <v-list>
+              <v-list-tile v-for="(items, title) in byClassRoom" :key="title">
+                <v-list-tile-avatar class="avatar">
+                  <img v-if="getTeacherPicture(items[0])" :src="getTeacherPicture(items[0])">
+                  <v-icon v-else>person</v-icon>
+                </v-list-tile-avatar>
+                <v-list-tile-content>
+                  <v-list-tile-title>
+                    {{ title }}
+                  </v-list-tile-title>
+                </v-list-tile-content>
+                <v-list-tile-action>
+                  <v-chip class="frequency" outline color="primary">
+                    {{ items.length }} ({{ fn.percent(items.length, result.length) }})
+                  </v-chip>
+                </v-list-tile-action>
+              </v-list-tile>
+            </v-list>
+          </div>
           <v-divider class="my-3 pt-2"></v-divider>
           <v-subheader class="pl-0">Pagamento:</v-subheader>
           <v-list dense two-line>
@@ -47,7 +49,7 @@
               <payment-description :order="order" />
             </template>
           </v-list>
-          <h4 class="headline">Pagamento calculado: {{ fn.toMoney(fn.sumBy(paymentDescriptions, 'total')) }}</h4>
+          <h4 class="headline calculated-payment">Pagamento calculado: <span>{{ fn.toMoney(fn.sumBy(paymentDescriptions, 'total')) }}</span></h4>
           <v-divider class="my-3 pt-2"></v-divider>
         </div>
       </v-card-title>
@@ -123,5 +125,31 @@ export default {
 <style scoped>
 .summary {
   width: 100%;
+}
+
+.calculated-payment span {
+  font-weight: bold;
+}
+
+@media only screen and (max-width: 599px) {
+  .card__title {
+    padding: 16px 2px;
+  }
+
+  .summary__frequency .headline {
+    padding: 5px 16px;
+  }
+
+  .avatar {
+    min-width: auto;
+  }
+
+  .calculated-payment {
+    padding: 10px;
+    text-align: center;
+  }
+  .calculated-payment span {
+    display: block;
+  }
 }
 </style>

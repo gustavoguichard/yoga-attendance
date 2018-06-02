@@ -157,6 +157,10 @@ export default {
 </script>
 
 <style scoped>
+.card.half {
+  margin-bottom: 1em;
+}
+
 @media (min-width: 800px) {
   .card.half {
     width: auto;

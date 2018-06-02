@@ -13,10 +13,38 @@
   opacity: 0
 }
 
-@media (min-width: 800px) {
+@media only screen and (min-width: 800px) {
   .main-card {
     margin: 1em
     min-width: 400px
     width: 60%
+  }
+}
+
+@media only screen and (max-width: 599px) {
+  .main-card {
+    width: 100%
+  }
+
+  .container {
+    padding: 24px 14px 35px
+  }
+
+  .summary__frequency {
+    .list__tile {
+      padding: 0
+    }
+
+    .chip__content {
+      background: white
+      padding: 0 6px
+      position: relative
+    }
+  }
+
+  .order-tile {
+    .list__tile {
+      padding-right: 0
+    }
   }
 }
