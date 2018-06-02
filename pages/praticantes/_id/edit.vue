@@ -6,14 +6,16 @@
 
 <script>
 import { service } from '@/api'
+import { isAnotherTeacher } from '@/utils/helpers'
 import practitionerForm from '@/components/practitioner-form'
-import { mapState } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 
 export default {
-  middleware: 'check-auth',
+  middleware: ['check-auth'],
   components: { practitionerForm },
   computed: {
-    ...mapState('practitioners', ['person', 'editingPerson']),
+    ...mapGetters({ isAdmin: 'auth/isAdmin', practitioner: 'auth/currentPractitioner' }),
+    ...mapState('practitioners', ['person']),
   },
   methods: {
     async submit({ _id, ...data }) {
@@ -24,6 +26,13 @@ export default {
   async fetch({ store, params }) {
     await store.dispatch('enrollment/find')
     await store.dispatch('practitioners/get', { id: params.id })
+  },
+  mounted() {
+    const allowed = this.isAdmin || !isAnotherTeacher(this.person, this.practitioner)
+    if (!allowed) {
+      this.$router.go(-1)
+      this.$store.dispatch('notification/403')
+    }
   },
 };
 </script>

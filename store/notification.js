@@ -33,4 +33,7 @@ export const actions = {
   clear({ commit }) {
     commit('update')
   },
+  403({ commit }) {
+    commit('update', notification({ text: 'Você não está autorizado a acessar esta página', type: 'error' }))
+  },
 }

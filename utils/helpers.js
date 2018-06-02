@@ -11,3 +11,8 @@ export const searchInFields = (items, fields, text) => {
 
 export const toMoney = amount => `R${numeral(amount).format('$ 0.00')}`
 export const percent = (amount, total = 100) => numeral(amount / total).format('0%')
+
+export const isAnotherTeacher = (person, current) => {
+  const { teacher, _id } = person
+  return teacher && current._id !== _id
+}

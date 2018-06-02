@@ -12,7 +12,7 @@ import pageCta from '@/components/page-cta'
 import practitionersList from '@/components/practitioners-list'
 
 export default {
-  middleware: 'check-auth',
+  middleware: ['check-auth', 'check-admin'],
   watchQuery: ['add'],
   components: { pageCta, practitionersList },
   computed: {
