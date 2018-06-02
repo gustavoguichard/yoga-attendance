@@ -7,7 +7,7 @@
 <script>
 import { service } from '@/api'
 import { mapState } from 'vuex'
-import decorate from '@/utils/decorateEnrollment'
+import decorate from '@/utils/decorate-enrollment'
 import enrollmentForm from '@/components/enrollment-form'
 
 export default {

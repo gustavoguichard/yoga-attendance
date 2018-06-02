@@ -34,7 +34,7 @@ import { mapState } from 'vuex'
 import { map } from 'lodash'
 import pageCta from '@/components/page-cta'
 import confirmationDialog from '@/components/confirmation-dialog'
-import decorate from '@/utils/decorateEnrollment'
+import decorate from '@/utils/decorate-enrollment'
 
 export default {
   middleware: 'check-auth',
