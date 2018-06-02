@@ -4,8 +4,8 @@
       <v-switch slot="footer" :label="`Reposição${restituting ? '' : '?'}`" v-model="restituting"></v-switch>
     </practitioners-list>
   </v-layout>
-  <v-layout v-else justify-center wrap>
-    <v-card :class="{ half: isAdmin, 'main-card': true }">
+  <v-layout v-else justify-center justify-space-around wrap>
+    <v-card :class="{ half: isAdmin, 'main-card': !isAdmin }">
       <v-toolbar>
         <v-btn icon dark @click="selectAll">
           <v-icon v-if="allSelected" color="blue darken-4">check_circle</v-icon>
@@ -26,7 +26,7 @@
         </v-btn>
       </v-card-actions>
     </v-card>
-    <v-card class="main-card half" v-if="isAdmin">
+    <v-card class="half" v-if="isAdmin">
       <v-toolbar>
         <v-toolbar-title>Professor</v-toolbar-title>
       </v-toolbar>

@@ -4,8 +4,11 @@
 #ciyf-app {
   &.sign-in .app-container {
     background-image: url('/bg.jpg');
-    background-position: top;
-    background-size: contain;
+    background-position: top
+    background-size: contain
+    @media only screen and (max-width: 599px) {
+      background-size: cover
+    }
   }
 
   .layout, .container {
@@ -25,10 +28,6 @@
   }
 }
 
-.card.half {
-  margin: 0 1em;
-}
-
 @media only screen and (min-width: 600px) {
   .main-card {
     margin: 1em
@@ -36,16 +35,14 @@
     width: 60%
   }
   .card.half {
-    width: 47%;
+    width: 48%;
   }
 }
 
 @media only screen and (max-width: 599px) {
-  .app-container {
-    background-size: cover;
-  }
   .card.half {
     margin: 0 0 1em;
+    width: 100%;
   }
 
   .main-card {

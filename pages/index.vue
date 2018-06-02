@@ -1,5 +1,5 @@
 <template>
-  <v-layout justify-center wrap>
+  <v-layout justify-center justify-space-around wrap>
     <v-card class="half">
       <v-toolbar>
         <v-toolbar-title>Selecione a turma pelo professor</v-toolbar-title>
