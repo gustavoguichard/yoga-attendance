@@ -12,7 +12,9 @@ export const mutations = {
 export const actions = {
   async authenticate(context, options) {
     const data = await api.authenticate({ strategy: 'local', ...options })
-    context.commit('update', data)
+    const { userId } = await api.passport.verifyJWT(data.accessToken)
+    const user = await api.service('users').get(userId)
+    context.commit('update', { ...data, ...user })
   },
   updateUserData(context, data) {
     context.commit('update', data)

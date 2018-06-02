@@ -34,9 +34,7 @@ export default {
   }),
   middleware: 'not-authenticated',
   methods: {
-    ...mapActions({
-      authenticate: 'auth/authenticate',
-    }),
+    ...mapActions('auth', ['authenticate']),
     async submit() {
       const { email, password } = this;
       try {

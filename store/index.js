@@ -10,7 +10,9 @@ export const actions = {
       if (accessToken) {
         try {
           const data = await api.authenticate({ strategy: 'jwt', accessToken })
-          dispatch('auth/updateUserData', data)
+          const { userId } = await api.passport.verifyJWT(data.accessToken)
+          const user = await api.service('users').get(userId)
+          dispatch('auth/updateUserData', { ...data, ...user })
         } catch (error) { return error }
       }
     }
