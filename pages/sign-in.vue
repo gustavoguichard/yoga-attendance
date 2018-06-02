@@ -53,4 +53,8 @@ export default {
 .page-container {
   height: auto !important;
 }
+
+.main-card {
+  max-width: 500px;
+}
 </style>

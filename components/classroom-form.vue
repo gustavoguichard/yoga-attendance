@@ -24,7 +24,7 @@
           ></v-select>
         </v-flex>
         <v-flex xs12>
-          <v-switch slot="footer" :label="`É aula regular${editing.regularClass ? '' : '?'}`" v-model="editing.regularClass"></v-switch>
+          <v-switch color="cyan darken-3" slot="footer" :label="`É aula regular${editing.regularClass ? '' : '?'}`" v-model="editing.regularClass"></v-switch>
         </v-flex>
         <v-flex xs12>
           <v-divider class="my-3"></v-divider>
@@ -41,7 +41,7 @@
           </v-list>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn @click.stop="$router.push('?add=practitioner')" icon depressed color="primary">
+            <v-btn @click.stop="$router.push('?add=practitioner')" icon depressed dark color="cyan darken-3">
               <v-icon>person_add</v-icon>
             </v-btn>
           </v-card-actions>

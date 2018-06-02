@@ -6,7 +6,7 @@
       <v-card-text>Ao deletar esse dado, você pode acabar gerando inconsistências no programa.</v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color="blue darken-1" flat @click.native="open = false">Cancelar</v-btn>
+        <v-btn color="cyan darken-2" flat @click.native="open = false">Cancelar</v-btn>
         <v-btn color="red darken-1" flat @click.native="clicked">Tenho certeza</v-btn>
       </v-card-actions>
     </v-card>

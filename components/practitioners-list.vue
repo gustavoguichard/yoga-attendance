@@ -26,7 +26,7 @@
     <v-card-actions v-if="$slots['footer'] || chooseList">
       <slot name="footer"></slot>
       <v-spacer></v-spacer>
-      <v-btn v-if="chooseList" @click="$router.push({ query: null })" flat color="primary">
+      <v-btn v-if="chooseList" @click="$router.push({ query: null })" flat dark color="cyan darken-3">
         Voltar
       </v-btn>
     </v-card-actions>

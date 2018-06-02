@@ -56,7 +56,7 @@ export default {
     },
   },
   mounted() {
-    this.drawer = window.innerWidth > 599
+    this.drawer = window.innerWidth > 949
     this.$store.dispatch('loading/stop')
   },
 };

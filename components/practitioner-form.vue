@@ -23,7 +23,7 @@
           <input style="display: none" type="file" accept="image/*" ref="fileInput" @change="onFileChange">
         </v-flex>
         <v-flex xs12>
-          <v-checkbox color="blue" v-model="editing.teacher" name="teacher" label="Professor"></v-checkbox>
+          <v-checkbox color="cyan darken-2" v-model="editing.teacher" name="teacher" label="Professor"></v-checkbox>
         </v-flex>
         <v-flex xs12>
           <v-text-field @keyup.enter="submit" mask="(##) #####-####" v-model="editing.phone" name="phone" label="Telefone" prepend-icon="phone" required></v-text-field>
@@ -43,7 +43,7 @@
               </v-btn>
             </confirmation-dialog>
           </person-list-item>
-          <v-btn color="blue" icon flat @click.stop="$router.push({ query: { add: 'relative' } })">
+          <v-btn color="cyan darken-2" icon flat @click.stop="$router.push({ query: { add: 'relative' } })">
             <v-icon>group_add</v-icon>
           </v-btn>
         </v-flex>
@@ -81,7 +81,7 @@
           </template>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn @click.stop="addEnrollment" icon depressed color="primary">
+            <v-btn @click.stop="addEnrollment" icon depressed dark color="cyan darken-3">
               <v-icon>add</v-icon>
             </v-btn>
           </v-card-actions>

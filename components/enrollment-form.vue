@@ -42,7 +42,7 @@
           </template>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn @click.stop="addPricing" icon depressed color="primary">
+            <v-btn @click.stop="addPricing" icon depressed dark color="cyan darken-3">
               <v-icon>add</v-icon>
             </v-btn>
           </v-card-actions>

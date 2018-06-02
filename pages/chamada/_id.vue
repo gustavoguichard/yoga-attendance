@@ -1,7 +1,7 @@
 <template>
   <v-layout v-if="chooseList" justify-center wrap>
     <practitioners-list :practitioners="otherPractitioners" title="Escolha o praticante" @selected="addToLesson" :chooseList="true">
-      <v-switch slot="footer" :label="`Reposição${restituting ? '' : '?'}`" v-model="restituting"></v-switch>
+      <v-switch color="cyan darken-3" slot="footer" :label="`Reposição${restituting ? '' : '?'}`" v-model="restituting"></v-switch>
     </practitioners-list>
   </v-layout>
   <v-layout v-else justify-center justify-space-around wrap>
@@ -21,7 +21,7 @@
         </div>
       </v-list>
       <v-card-actions>
-        <v-btn @click.stop="$router.push('?add=practitioner')" icon depressed color="primary">
+        <v-btn @click.stop="$router.push('?add=practitioner')" icon depressed dark color="cyan darken-3">
           <v-icon>person_add</v-icon>
         </v-btn>
       </v-card-actions>
@@ -112,7 +112,7 @@ export default {
           : { color: 'green darken-2', name: 'check_circle' }
       }
       return this.isSelected(person)
-        ? { color: 'blue darken-2', name: 'check_circle' }
+        ? { color: 'cyan darken-3', name: 'check_circle' }
         : { color: 'grey lighten-1', name: 'check' }
     },
     selectAll() {

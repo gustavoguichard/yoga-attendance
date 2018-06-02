@@ -1,5 +1,5 @@
 <template>
-  <v-btn color="blue" dark fab :fixed="!absolute" :absolute="absolute" bottom right @click.stop="clicked">
+  <v-btn color="cyan darken-2" dark fab :fixed="!absolute" :absolute="absolute" bottom right @click.stop="clicked">
     <v-icon>{{ icon }}</v-icon>
   </v-btn>
 </template>
