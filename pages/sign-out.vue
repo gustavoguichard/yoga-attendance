@@ -14,7 +14,7 @@ export default {
     async exit() {
       await this.signOut()
       this.$store.dispatch('notification/info', 'Até logo!')
-      this.$router.replace('/sign-in')
+      this.$router.push('/sign-in')
     },
   },
 };

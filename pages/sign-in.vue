@@ -1,5 +1,5 @@
 <template>
-<v-layout justify-center class="page-container sign-in">
+<v-layout justify-center class="page-container">
   <v-card class="main-card mt-3 py-4 px-2">
     <v-layout wrap>
       <v-flex column>
@@ -17,7 +17,6 @@
       </v-card-text>
     </v-layout>
     <page-cta :absolute="true" @click="submit" icon="check" />
-    </v-btn>
   </v-card>
 </v-layout>
 </template>
@@ -48,13 +47,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.page-container {
-  height: auto !important;
-}
-
-.main-card {
-  max-width: 500px;
-}
-</style>

@@ -1,4 +1,6 @@
-export const state = () => ({ requests: 1 })
+export const state = () => ({
+  requests: 1,
+})
 
 export const mutations = {
   change(st, count) {
@@ -7,16 +9,16 @@ export const mutations = {
 }
 
 export const actions = {
-  start({ commit, state: st }) {
+  load({ commit, state: st }) {
     commit('change', st.requests + 1)
   },
-  stop({ commit, state: st }) {
+  done({ commit, state: st }) {
     commit('change', Math.max(0, st.requests - 1))
   },
 }
 
 export const getters = {
-  active({ requests }) {
+  loading({ requests }) {
     return requests > 0
   },
 }

@@ -2,10 +2,19 @@
 @require '~vuetify/src/stylus/app.styl'
 
 #ciyf-app {
-  &.sign-in .app-container {
-    background-image: url('/bg.jpg');
-    background-position: top
-    background-size: cover
+  &.sign-in, &.is-404 {
+    .app-container {
+      background-image: url('/bg.jpg')
+      background-position: top
+      background-size: cover
+    }
+    .page-container {
+      height: auto !important;
+    }
+
+    .main-card {
+      max-width: 500px;
+    }
   }
 
   .layout, .container {
@@ -41,8 +50,8 @@
   }
   @media only screen and (max-width: 599px) {
     .card.half {
-      margin: 0 0 1em;
-      width: 100%;
+      margin: 0 0 1em
+      width: 100%
     }
 
     .main-card {
@@ -55,7 +64,7 @@
 
     .summary {
       .subheader {
-        padding: 0 16px !important;
+        padding: 0 16px !important
       }
     }
 

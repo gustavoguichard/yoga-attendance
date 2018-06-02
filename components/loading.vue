@@ -1,5 +1,5 @@
 <template>
-  <div v-if="activeCtx || loading" :class="{'loading-container': true, 'contextual': contextual}">
+  <div v-if="loading" class="loading-container">
     <v-progress-circular
       :size="100"
       :width="15"
@@ -10,19 +10,12 @@
 </template>
 
 <script>
-import { get } from 'lodash'
-
 export default {
-  props: ['contextual', 'active'],
+  props: ['active'],
   data() {
     return {
       loading: false,
     }
-  },
-  computed: {
-    activeCtx() {
-      return !get(this.$nuxt, '$loading.loading') && this.active
-    },
   },
   methods: {
     start() {
@@ -43,14 +36,9 @@ export default {
   display: flex;
   justify-content: center;
   left: 0;
-  position: fixed;
+  position: absolute;
   right: 0;
   top: 0;
-  z-index: 99999;
-}
-
-.contextual {
-  position: absolute;
   z-index: 2;
 }
 </style>
