@@ -9,15 +9,19 @@ module.exports = {
   ** Headers of the page
   */
   head: {
-    title: 'Yoga Attendance',
+    title: 'CIYF - Admin',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: 'Attendance management for a Yoga school - CIYF' }
+      { name: 'apple-mobile-web-app-title', content: 'Carregando...' },
+      { name: 'apple-mobile-web-app-capable', content: 'yes' },
+      { name: 'apple-mobile-web-app-status-bar-style', content: '#424242' },
+      { hid: 'description', name: 'description', content: 'Gerenciamento de presenças e pagamentos para uma escola de Yoga - CIYF' }
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-      { rel: 'apple-touch-icon', sizes: '128x128', href: '/touch.png' },
+      { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' },
+      { rel: 'apple-touch-startup-image', href: '/bg.jpg' },
       { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' },
     ]
   },
