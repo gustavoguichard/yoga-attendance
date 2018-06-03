@@ -30,7 +30,7 @@ export default {
         : { title: 'Erro interno', desc: 'Ocorreu algum problema no sistema. Por favor, tente atualizar a página e se o problema persistir, contate o responsável' }
     },
   },
-};
+}
 </script>
 
 <style>

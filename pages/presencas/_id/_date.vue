@@ -9,10 +9,9 @@
       :subtitle="isSubstitution && `Professor(a): ${teacher.displayName}`"
       :picture="teacher && teacher.picture"
     />
-    <v-btn v-if="isAdmin" @click.stop="toggleChooseList('teacher')" color="primary" depressed>Trocar professor</v-btn>
+    <v-btn @click.stop="toggleChooseList('teacher')" color="primary" depressed>Trocar professor</v-btn>
     <v-dialog
       ref="dialog"
-      v-if="canEdit"
       v-model="datePicker"
       lazy
       full-width
@@ -40,18 +39,18 @@
           <v-divider></v-divider>
           <person-list-item :to="`/praticantes/${freq.practitionerId}`" :avatar="true" :person="freq.practitioner" property="displayName">
             <v-icon v-if="!isSubscribed(freq)" slot="right" color="orange darken-4">compare_arrows</v-icon>
-            <v-btn v-if="canEdit" slot="right" @click.stop="remove(freq)" flat icon><v-icon color="red darken-4">delete</v-icon></v-btn>
+            <v-btn slot="right" @click.stop="remove(freq)" flat icon><v-icon color="red darken-4">delete</v-icon></v-btn>
           </person-list-item>
         </div>
       </v-list>
     </v-card>
-    <page-cta v-if="canEdit" icon="person_add" @click.stop="toggleChooseList('practitioner')" />
+    <page-cta icon="person_add" @click.stop="toggleChooseList('practitioner')" />
   </v-layout>
 </template>
 
 <script>
 import { service } from '@/api'
-import { mapGetters, mapState } from 'vuex'
+import { mapState } from 'vuex'
 import { filter, find, get, includes, map } from 'lodash'
 import { parseDate, unparseDate } from '@/utils/date-helpers'
 import pageCta from '@/components/page-cta'
@@ -85,13 +84,8 @@ export default {
     classDate: route.params.date,
   }),
   computed: {
-    ...mapGetters('auth', ['isAdmin', 'currentPractitioner']),
     ...mapState('classrooms', ['lesson']),
     ...mapState('frequency', ['result']),
-    canEdit() {
-      return this.isAdmin
-        || get(this.currentPractitioner, '_id') === this.teacher._id
-    },
     chooseList() {
       return this.$route.query.add
     },

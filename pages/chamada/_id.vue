@@ -5,7 +5,7 @@
     </practitioners-list>
   </v-layout>
   <v-layout v-else justify-center justify-space-around wrap>
-    <v-card :class="{ half: isAdmin, 'main-card': !isAdmin }">
+    <v-card class="half">
       <v-toolbar>
         <v-btn icon dark @click="selectAll">
           <v-icon v-if="allSelected" color="blue darken-4">check_circle</v-icon>
@@ -26,7 +26,7 @@
         </v-btn>
       </v-card-actions>
     </v-card>
-    <v-card class="half" v-if="isAdmin">
+    <v-card class="half">
       <v-toolbar>
         <v-toolbar-title>Professor</v-toolbar-title>
       </v-toolbar>
@@ -58,7 +58,6 @@ export default {
   components: { pageCta, personListItem, practitionersList },
   data: () => ({ restituting: true }),
   computed: {
-    ...mapGetters('auth', ['isAdmin']),
     ...mapGetters('practitioners', ['teachers']),
     ...mapGetters('attendance', ['everyAttendant']),
     ...mapState('auth', ['user']),
