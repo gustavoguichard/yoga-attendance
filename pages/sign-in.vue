@@ -36,6 +36,7 @@ export default {
     ...mapActions('auth', ['authenticate']),
     async submit() {
       const { email, password } = this;
+      this.$store.dispatch('ui/load')
       try {
         await this.authenticate({ email, password });
         this.$store.dispatch('notification/success', 'Bem vindo(a)!')
@@ -43,6 +44,7 @@ export default {
       } catch (e) {
         this.$store.dispatch('notification/error', e.message)
       }
+      this.$store.dispatch('ui/done')
     },
   },
 };
