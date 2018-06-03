@@ -29,7 +29,7 @@
           <v-text-field @keyup.enter="submit" mask="(##) #####-####" v-model="editing.phone" name="phone" label="Telefone" prepend-icon="phone" required></v-text-field>
         </v-flex>
         <v-flex xs12>
-          <v-text-field @keyup.enter="submit" mask="##/##/####" v-model="editing.birthdate" name="birthdate" label="Data de Nascimento" prepend-icon="cake" required></v-text-field>
+          <v-text-field @keyup.enter="submit" mask="##/##/####" :return-masked-value="true" v-model="editing.birthdate" name="birthdate" label="Data de Nascimento" prepend-icon="cake" required></v-text-field>
         </v-flex>
         <v-flex xs12>
           <v-subheader class="pl-0">

@@ -13,8 +13,8 @@ export default {
   components: { practitionerForm },
   methods: {
     async submit(person) {
-      await service(this.$store, 'practitioners/create', person)
-      this.$router.push('/praticantes')
+      const result = await service(this.$store, 'practitioners/create', person)
+      if (result) this.$router.push('/praticantes')
     },
   },
   async fetch({ store }) {
