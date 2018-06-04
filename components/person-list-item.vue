@@ -11,11 +11,10 @@
         {{ person[property] }}
       </v-list-tile-title>
       <v-list-tile-title v-else="person">
-        <span v-if="person.nickName">
-          {{ person.nickName }}
-          <em class="grey--text"> - {{ person.fullName }}</em>
+        <span>
+          {{ person.displayName }}
+          <em class="grey--text"> - {{ person.surname }}</em>
         </span>
-        <span v-else>{{ person.fullName }}</span>
       </v-list-tile-title>
       <v-list-tile-sub-title v-if="showMail">{{ person.email }}</v-list-tile-sub-title>
     </v-list-tile-content>
