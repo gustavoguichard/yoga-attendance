@@ -1,8 +1,0 @@
-{
-  "name": "yoga-attendance",
-  "alias": "ciyf",
-  "public": true,
-  "env": {
-    "REST_API": "@rest-api-url"
-  }
-}
