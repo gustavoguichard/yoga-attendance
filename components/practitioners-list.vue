@@ -39,7 +39,8 @@ import { isString } from 'lodash'
 import { isAnotherTeacher, searchInFields } from '@/utils/helpers'
 import personListItem from '@/components/person-list-item'
 
-const fetch = async (store, query) => {
+const fetch = async (store, providedQuery) => {
+  const query = providedQuery || { $select: ['avatar', 'nickName', 'fullName', 'email'] }
   await store.dispatch('practitioners/find', { query })
 }
 
