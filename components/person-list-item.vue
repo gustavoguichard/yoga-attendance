@@ -1,8 +1,7 @@
 <template>
   <v-list-tile class="tile" v-if="person" ripple :avatar="!!avatar" :style="disabled && 'pointer-events: none;'" @click.stop="clicked">
     <v-list-tile-avatar :size="avatarSize" v-if="!!avatar && avatar !== 'right'">
-      <img v-if="person.picture" :src="person.picture" />
-      <v-icon v-else>person</v-icon>
+      <img :src="person.avatar" />
     </v-list-tile-avatar>
     <v-list-tile-action class="tile__action" v-if="$slots['left']">
       <slot name="left"></slot>
@@ -21,8 +20,7 @@
       <v-list-tile-sub-title v-if="showMail">{{ person.email }}</v-list-tile-sub-title>
     </v-list-tile-content>
     <v-list-tile-avatar :size="avatarSize" v-if="!!avatar && avatar === 'right'">
-      <img v-if="person.picture" :src="person.picture" />
-      <v-icon v-else>person</v-icon>
+      <img :src="person.avatar" />
     </v-list-tile-avatar>
     <v-list-tile-action v-if="$slots['right']">
       <slot name="right"></slot>

@@ -19,8 +19,8 @@
       <v-toolbar-title>Centro Iyengar Yoga Florianópolis</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn icon v-if="currentPractitioner._id" :to="`/praticantes/${currentPractitioner._id}`">
-        <v-avatar v-if="currentPractitioner.picture" size="24px">
-          <img :src="currentPractitioner.picture" />
+        <v-avatar v-if="currentPractitioner.avatar" size="24px">
+          <img :src="currentPractitioner.avatar" />
         </v-avatar>
       </v-btn>
       <span class="user-email" v-if="user">

@@ -3,7 +3,7 @@
     <page-title icon="person"
       :title="lesson.title"
       :subtitle="lesson.teacherData && lesson.teacherData.displayName"
-      :picture="lesson.teacherData && lesson.teacherData.picture"
+      :avatar="lesson.teacherData && lesson.teacherData.avatar"
     />
     <classroom-form title="Editando aula" :lesson="lesson" @submit="submit"></classroom-form>
   </v-layout>

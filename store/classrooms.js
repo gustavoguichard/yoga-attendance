@@ -29,7 +29,7 @@ const groupedByTeacher = rooms => {
   const grouped = groupBy(rooms, 'teacherData.fullName')
   return reduce(grouped, (result, cr, name) => [...result, {
     name,
-    picture: get(cr, '[0].teacherData.picture'),
+    avatar: get(cr, '[0].teacherData.avatar'),
     classes: cr,
   }], [])
 }

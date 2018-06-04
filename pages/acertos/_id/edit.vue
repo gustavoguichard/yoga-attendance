@@ -3,7 +3,7 @@
     <page-title icon="person"
       :title="person.displayName"
       :subtitle="person.displayName !== person.fullName ? person.fullName : null"
-      :picture="person.picture"
+      :avatar="person.avatar"
     />
     <v-card class="main-card">
       <v-toolbar>

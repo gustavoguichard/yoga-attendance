@@ -7,7 +7,7 @@
     <page-title icon="person"
       :title="lesson.title"
       :subtitle="isSubstitution && `Professor(a): ${teacher.displayName}`"
-      :picture="teacher && teacher.picture"
+      :avatar="teacher && teacher.avatar"
     />
     <v-btn @click.stop="toggleChooseList('teacher')" color="primary" depressed>Trocar professor</v-btn>
     <v-dialog

@@ -3,7 +3,7 @@
     <page-title icon="person"
       :title="person.displayName"
       :subtitle="person.displayName !== person.fullName ? person.fullName : null"
-      :picture="person.picture"
+      :avatar="person.avatar"
     />
     <v-card class="main-card">
       <v-toolbar>
@@ -100,7 +100,7 @@ export default {
       return `/presencas/${item.classId}/${parseDate(item.createdAt, 'YYYY-MM-DD')}`
     },
     getTeacherPicture(item) {
-      return get(item, 'classroom.teacherData.picture')
+      return get(item, 'classroom.teacherData.avatar')
     },
   },
   async fetch({ store, params, query }) {

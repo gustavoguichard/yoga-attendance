@@ -1,7 +1,7 @@
 <template>
   <div class="text-xs-center grey--text text--darken-2 mb-4 mt-2">
-    <v-avatar v-if="icon || picture" class="mb-2" size="100">
-      <img v-if="picture" :src="picture" alt="Professor" />
+    <v-avatar v-if="icon || avatar" class="mb-2" size="100">
+      <img v-if="avatar" :src="avatar" alt="Professor" />
       <v-icon x-large v-else>{{ icon }}</v-icon>
     </v-avatar>
     <h2 class="headline">{{ title }}</h2>
@@ -10,7 +10,7 @@
 </template>
 
 <script>
-export default { props: ['icon', 'picture', 'title', 'subtitle'] }
+export default { props: ['icon', 'avatar', 'title', 'subtitle'] }
 </script>
 
 <style scoped>
