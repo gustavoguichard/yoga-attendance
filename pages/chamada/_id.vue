@@ -48,6 +48,7 @@ import { service } from '@/api'
 import moment from 'moment'
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import { difference, filter, includes, map } from 'lodash'
+import { sPractitioner as $select } from '@/utils/selects'
 import pageCta from '@/components/page-cta'
 import personListItem from '@/components/person-list-item'
 import practitionersList from '@/components/practitioners-list'
@@ -87,7 +88,7 @@ export default {
     },
     teacher() {
       return this.currentTeacher
-        || this.user.practitioner
+        || (this.user.practitioner.teacher && this.user.practitioner)
         || this.lesson.teacherData
         || { _id: null }
     },
@@ -153,7 +154,7 @@ export default {
   },
   async fetch({ store, params }) {
     await store.dispatch('classrooms/get', { id: params.id })
-    await store.dispatch('practitioners/find')
+    await store.dispatch('practitioners/find', { query: { $select } })
   },
 };
 </script>

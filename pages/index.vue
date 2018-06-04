@@ -65,7 +65,7 @@ export default {
     },
   },
   async fetch({ store }) {
-    await store.dispatch('classrooms/find')
+    await store.dispatch('classrooms/find', { query: { $select: ['teacher', 'title'] } })
   },
 };
 </script>

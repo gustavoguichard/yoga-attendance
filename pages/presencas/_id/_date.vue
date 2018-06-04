@@ -53,6 +53,7 @@ import { service } from '@/api'
 import { mapState } from 'vuex'
 import { filter, find, get, includes, map } from 'lodash'
 import { parseDate, unparseDate } from '@/utils/date-helpers'
+import { sPractitioner as $select } from '@/utils/selects'
 import pageCta from '@/components/page-cta'
 import pageTitle from '@/components/page-title'
 import personListItem from '@/components/person-list-item'
@@ -108,7 +109,9 @@ export default {
     },
     chooseQuery() {
       const peopleIds = map(this.result, 'practitioner._id')
-      return this.chooseList === 'teacher' ? { _id: peopleIds } : { _id: { $nin: peopleIds } }
+      const teachers = { $select, teacher: true, _id: { $ne: this.teacher._id, $in: peopleIds } }
+      const practitioners = { $select, _id: { $nin: peopleIds } }
+      return this.chooseList === 'teacher' ? teachers : practitioners
     },
   },
   methods: {

@@ -37,10 +37,11 @@
 import { mapGetters, mapState } from 'vuex'
 import { isString } from 'lodash'
 import { isAnotherTeacher, searchInFields } from '@/utils/helpers'
+import { sPractitioner as $select } from '@/utils/selects'
 import personListItem from '@/components/person-list-item'
 
 const fetch = async (store, providedQuery) => {
-  const query = providedQuery || { $select: ['avatar', 'nickName', 'fullName', 'email'] }
+  const query = providedQuery || { $select }
   await store.dispatch('practitioners/find', { query })
 }
 
