@@ -147,6 +147,7 @@ export default {
         ? [...this.editing.familyData, person]
         : [person]
       this.editing.family = [...this.editing.family, person._id]
+      this.$router.push({ query: null })
     },
     addEnrollment() {
       this.editing.enrollments = [...this.editing.enrollments, blankEnrollment()]
