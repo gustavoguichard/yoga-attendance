@@ -72,8 +72,9 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 import { get, groupBy, sumBy } from 'lodash'
+import { fetchPractitioners } from '@/api/fetch'
 import { getTimeRangeQuery, parseDate } from '@/utils/date-helpers'
 import { percent, toMoney } from '@/utils/helpers'
 import dateNavigator from '@/components/date-navigator'
@@ -84,7 +85,7 @@ export default {
   watchQuery: ['months'],
   components: { dateNavigator, pageTitle, paymentDescription },
   computed: {
-    ...mapState('practitioners-service', ['person']),
+    ...mapGetters('practitioners', ['get']),
     ...mapState('frequency', ['result']),
     ...mapState('payments', ['paymentDescriptions']),
     byClassRoom() {
@@ -92,6 +93,9 @@ export default {
     },
     fn() {
       return { parseDate, percent, sumBy, toMoney }
+    },
+    person() {
+      return this.get(this.$route.params.id)
     },
   },
   methods: {
@@ -103,7 +107,7 @@ export default {
     },
   },
   async fetch({ store, params, query }) {
-    await store.dispatch('practitioners-service/get', { id: params.id })
+    await fetchPractitioners(store)
     await store.dispatch('payments/find', {
       query: {
         createdAt: getTimeRangeQuery('month', query.months),

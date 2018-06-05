@@ -11,7 +11,6 @@ import { service } from '@/api'
 import pageCta from '@/components/page-cta'
 import practitionersList from '@/components/practitioners-list'
 import { fetchPractitioners } from '@/api/fetch'
-import { sPractitioner as $select } from '@/utils/selects'
 
 export default {
   middleware: ['check-admin'],
@@ -28,7 +27,7 @@ export default {
       this.$router.push({ query })
     },
     async selected({ _id }) {
-      await service(this.$store, 'practitioners/patch', _id, { teacher: true, $select })
+      await service(this.$store, 'practitioners/patch', _id, { teacher: true })
       this.$router.push({ query: null })
     },
   },

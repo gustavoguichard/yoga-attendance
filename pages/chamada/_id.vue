@@ -47,8 +47,8 @@
 import { service } from '@/api'
 import moment from 'moment'
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
-import { difference, filter, includes, map } from 'lodash'
-import { sPractitioner as $select } from '@/utils/selects'
+import { filter, includes, map } from 'lodash'
+import { fetchPractitioners } from '@/api/fetch'
 import pageCta from '@/components/page-cta'
 import personListItem from '@/components/person-list-item'
 import practitionersList from '@/components/practitioners-list'
@@ -58,11 +58,13 @@ export default {
   components: { pageCta, personListItem, practitionersList },
   data: () => ({ restituting: true }),
   computed: {
-    ...mapGetters('practitioners-service', ['teachers']),
+    ...mapGetters({
+      teachers: 'practitioners/teachers',
+      findPractitioners: 'practitioners/sortedFind',
+    }),
     ...mapGetters('attendance', ['everyAttendant']),
     ...mapState('auth', ['user']),
     ...mapState('attendance', ['selected', 'restitution', 'currentTeacher']),
-    ...mapState('practitioners-service', ['list']),
     ...mapState('classrooms', ['lesson']),
     allSelected() {
       return this.subscribedList.length === this.selected.length
@@ -71,19 +73,17 @@ export default {
       return !!this.$route.query.add
     },
     subscribedList() {
-      const isSubscribed = person => includes(this.lesson.practitioners, person._id)
-      return filter(this.list, person =>
-        isSubscribed(person) && this.isntTeaching(person)
-      )
+      const query = { _id: { $in: this.lesson.practitioners, $ne: this.teacher.id } }
+      return this.findPractitioners({ query })
     },
     listedPeople() {
       return [...this.subscribedList, ...this.restitution]
     },
     otherPractitioners() {
-      const notSubscribed = difference(this.list, this.subscribedList)
-      return filter(notSubscribed, p =>
-        !includes(map(this.restitution, '_id'), p._id) && this.isntTeaching(p)
-      )
+      const usedIds = [...this.subscribedList, ...this.restitution, this.teacher]
+      const $nin = map(usedIds, '_id')
+      const query = { _id: { $nin } }
+      return this.findPractitioners({ query })
     },
     teacher() {
       return this.currentTeacher
@@ -153,7 +153,7 @@ export default {
   },
   async fetch({ store, params }) {
     await store.dispatch('classrooms/get', { id: params.id })
-    await store.dispatch('practitioners-service/find', { query: { $select } })
+    await fetchPractitioners(store)
   },
 };
 </script>

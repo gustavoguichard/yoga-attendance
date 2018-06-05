@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters, mapState } from 'vuex'
+import { mapGetters } from 'vuex'
 import { isString } from 'lodash'
 import { isAnotherTeacher, searchInFields } from '@/utils/helpers'
 import { fetchPractitioners } from '@/api/fetch'
@@ -52,7 +52,8 @@ export default {
     twoLine: { type: Boolean },
   },
   components: { personListItem },
-  data: () => ({ search: false,
+  data: () => ({
+    search: false,
     filter: '',
   }),
   computed: {
@@ -61,7 +62,6 @@ export default {
       practitioner: 'auth/currentPractitioner',
       findPractitioners: 'practitioners/sortedFind',
     }),
-    ...mapState('practitioners-service', ['list']),
     people() {
       const list = this.practitioners
         || this.findPractitioners({ query: this.query })
@@ -71,7 +71,6 @@ export default {
     },
   },
   methods: {
-    ...mapActions('practitioners', ['find']),
     clicked(person) {
       if (this.to) {
         const path = isString(this.to)
