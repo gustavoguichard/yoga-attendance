@@ -9,8 +9,9 @@ const { service } = feathersVuex(api, { idField: '_id' })
 const services = require.context('./services', false, /.js$/)
 const servicePlugins = function () {
   return services.keys().map(path => {
-    const { servicePath, serviceStore } = services(path)
-    return service(servicePath, serviceStore)
+    const { name, hooks, store } = services(path)
+    api.service(name).hooks(hooks)
+    return service(name, store)
   })
 }
 
