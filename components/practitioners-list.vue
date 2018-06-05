@@ -1,7 +1,7 @@
 <template>
   <v-card class="main-card">
     <v-toolbar @click.stop="openSearch">
-      <v-text-field ref="search" v-model="filter" @blur="search = false" v-if="search" class="mx-4" label="Buscar" hide-details single-line></v-text-field>
+      <v-text-field ref="search" v-model="filter" @blur="closeSearch" v-if="search" class="mx-4" label="Buscar" hide-details single-line></v-text-field>
       <template v-else>
         <v-toolbar-title>{{ title }}</v-toolbar-title>
         <v-spacer></v-spacer>
@@ -84,6 +84,10 @@ export default {
     canEdit(person) {
       const allowed = this.isAdmin || !isAnotherTeacher(person, this.practitioner)
       return this.editLink && allowed
+    },
+    closeSearch() {
+      this.search = false
+      this.filter = ''
     },
     async openSearch() {
       this.search = true
