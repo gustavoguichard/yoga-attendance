@@ -30,6 +30,7 @@
         Voltar
       </v-btn>
     </v-card-actions>
+    <h1 v-for="user in users">{{ user.email }}</h1>
   </v-card>
 </template>
 
@@ -62,13 +63,16 @@ export default {
     filter: '',
   }),
   computed: {
-    ...mapGetters({ isAdmin: 'auth/isAdmin', practitioner: 'auth/currentPractitioner' }),
+    ...mapGetters({ isAdmin: 'auth/isAdmin', practitioner: 'auth/currentPractitioner', findUsers: 'users/find' }),
     ...mapState('practitioners', ['list']),
     people() {
       const list = this.practitioners || this.list
       const optFields = this.twoLine ? ['email'] : []
       const filtered = searchInFields(list, ['displayName', 'fullName', ...optFields], this.filter)
       return filtered
+    },
+    users() {
+      return this.findUsers().data
     },
   },
   methods: {
@@ -104,6 +108,7 @@ export default {
     if (!this.practitioners) {
       await fetch(this.$store, this.query)
     }
+    await this.$store.dispatch('users/find', { query: {} })
   },
 }
 </script>
