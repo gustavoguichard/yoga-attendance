@@ -46,7 +46,6 @@ import dateNavigator from '@/components/date-navigator'
 import pageCta from '@/components/page-cta'
 
 export default {
-  middleware: 'check-auth',
   watchQuery: ['weeks'],
   components: { dateNavigator, pageCta },
   computed: {

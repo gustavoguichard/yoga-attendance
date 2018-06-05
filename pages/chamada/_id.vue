@@ -54,16 +54,15 @@ import personListItem from '@/components/person-list-item'
 import practitionersList from '@/components/practitioners-list'
 
 export default {
-  middleware: 'check-auth',
   watchQuery: ['add'],
   components: { pageCta, personListItem, practitionersList },
   data: () => ({ restituting: true }),
   computed: {
-    ...mapGetters('practitioners', ['teachers']),
+    ...mapGetters('practitioners-service', ['teachers']),
     ...mapGetters('attendance', ['everyAttendant']),
     ...mapState('auth', ['user']),
     ...mapState('attendance', ['selected', 'restitution', 'currentTeacher']),
-    ...mapState('practitioners', ['list']),
+    ...mapState('practitioners-service', ['list']),
     ...mapState('classrooms', ['lesson']),
     allSelected() {
       return this.subscribedList.length === this.selected.length
@@ -154,7 +153,7 @@ export default {
   },
   async fetch({ store, params }) {
     await store.dispatch('classrooms/get', { id: params.id })
-    await store.dispatch('practitioners/find', { query: { $select } })
+    await store.dispatch('practitioners-service/find', { query: { $select } })
   },
 };
 </script>

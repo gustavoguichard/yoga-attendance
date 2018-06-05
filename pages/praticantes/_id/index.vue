@@ -81,11 +81,10 @@ import paymentDescription from '@/components/payment-description'
 import pageTitle from '@/components/page-title'
 
 export default {
-  middleware: 'check-auth',
   watchQuery: ['months'],
   components: { dateNavigator, pageTitle, paymentDescription },
   computed: {
-    ...mapState('practitioners', ['person']),
+    ...mapState('practitioners-service', ['person']),
     ...mapState('frequency', ['result']),
     ...mapState('payments', ['paymentDescriptions']),
     byClassRoom() {
@@ -104,7 +103,7 @@ export default {
     },
   },
   async fetch({ store, params, query }) {
-    await store.dispatch('practitioners/get', { id: params.id })
+    await store.dispatch('practitioners-service/get', { id: params.id })
     await store.dispatch('payments/find', {
       query: {
         createdAt: getTimeRangeQuery('month', query.months),

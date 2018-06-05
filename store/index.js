@@ -1,25 +1,7 @@
 import Vuex from 'vuex'
-import feathersVuex from 'feathers-vuex'
 import cookieparser from 'cookieparser'
 import api from '@/api'
-import { reduce } from 'lodash'
-
-const { service } = feathersVuex(api, { idField: '_id' })
-
-const services = require.context('./services', false, /.js$/)
-const servicePlugins = function () {
-  return services.keys().map(path => {
-    const { name, hooks, store } = services(path)
-    api.service(name).hooks(hooks)
-    return service(name, store)
-  })
-}
-
-const modulesFiles = require.context('./modules', false, /.js$/)
-const modules = reduce(modulesFiles.keys(), (curr, path) => {
-  curr[path.replace(/^.*[\\/]/, '').split('.')[0]] = { namespaced: true, ...modulesFiles(path).default }
-  return curr
-}, {})
+import { servicePlugins, modules } from '@/store/dynamic-modules'
 
 export default function () {
   return new Vuex.Store({

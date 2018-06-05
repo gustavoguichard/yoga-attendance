@@ -9,7 +9,6 @@ import { service } from '@/api'
 import practitionerForm from '@/components/practitioner-form'
 
 export default {
-  middleware: 'check-auth',
   components: { practitionerForm },
   methods: {
     async submit(person) {

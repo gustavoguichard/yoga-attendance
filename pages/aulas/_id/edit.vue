@@ -16,7 +16,7 @@ import classroomForm from '@/components/classroom-form'
 import { mapState } from 'vuex'
 
 export default {
-  middleware: ['check-auth', 'check-admin'],
+  middleware: ['check-admin'],
   components: { classroomForm, pageTitle },
   computed: {
     ...mapState('classrooms', ['lesson']),
@@ -29,7 +29,6 @@ export default {
   },
   async fetch({ store, params }) {
     await store.dispatch('classrooms/get', { id: params.id })
-    await store.dispatch('practitioners/find')
   },
 };
 </script>

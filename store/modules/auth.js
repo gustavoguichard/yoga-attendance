@@ -4,9 +4,8 @@ import { get, includes } from 'lodash'
 
 export default {
   state: () => ({
-    selected: [],
-    restitution: [],
-    currentTeacher: undefined,
+    user: null,
+    publicPages: ['sign-in'],
   }),
 
   mutations: {

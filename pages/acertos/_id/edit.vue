@@ -90,7 +90,6 @@ import { parseDate } from '@/utils/date-helpers'
 import { toMoney } from '@/utils/helpers'
 
 export default {
-  middleware: ['check-auth'],
   components: { pageCta, pageTitle, paymentDescription },
   data: () => ({
     datePicker: false,

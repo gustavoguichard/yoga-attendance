@@ -53,8 +53,8 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from 'vuex'
-import { filter, includes, uniq, without } from 'lodash'
+import { mapGetters } from 'vuex'
+import { uniq, without } from 'lodash'
 import { parseClassroom } from '@/utils/form-helpers'
 import pageCta from '@/components/page-cta'
 import practitionersList from '@/components/practitioners-list'
@@ -74,22 +74,23 @@ export default {
     },
   }),
   computed: {
-    ...mapGetters('practitioners', ['teachers']),
-    ...mapState('practitioners', ['list']),
+    ...mapGetters({
+      teachers: 'practitioners/teachers',
+      findPractitioners: 'practitioners/sortedFind',
+    }),
     chooseList() {
       return !!this.$route.query.add
     },
     practitionersList() {
-      return filter(this.list, person => includes(this.editing.practitioners, person._id))
+      const query = { _id: { $in: this.editing.practitioners } }
+      return this.findPractitioners({ query })
     },
     teacherSelection() {
       return [{ _id: null, displayName: 'Sem professor definido' }, ...this.teachers]
     },
     notPractitioners() {
-      return filter(this.list, person =>
-        !includes(this.editing.practitioners, person._id)
-        && (!this.editing.teacherData || (person._id !== this.editing.teacherData._id))
-      )
+      const query = { _id: { $nin: this.editing.practitioners } }
+      return this.findPractitioners({ query })
     },
   },
   methods: {

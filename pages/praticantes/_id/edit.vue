@@ -11,11 +11,10 @@ import practitionerForm from '@/components/practitioner-form'
 import { mapGetters, mapState } from 'vuex'
 
 export default {
-  middleware: ['check-auth'],
   components: { practitionerForm },
   computed: {
     ...mapGetters({ isAdmin: 'auth/isAdmin', practitioner: 'auth/currentPractitioner' }),
-    ...mapState('practitioners', ['person']),
+    ...mapState('practitioners-service', ['person']),
   },
   methods: {
     async submit({ _id, ...data }) {
@@ -25,7 +24,7 @@ export default {
   },
   async fetch({ store, params }) {
     await store.dispatch('enrollment/find')
-    await store.dispatch('practitioners/get', { id: params.id })
+    await store.dispatch('practitioners-service/get', { id: params.id })
   },
   mounted() {
     const allowed = this.isAdmin || !isAnotherTeacher(this.person, this.practitioner)

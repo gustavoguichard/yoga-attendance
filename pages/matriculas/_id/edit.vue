@@ -11,7 +11,7 @@ import decorate from '@/utils/decorate-enrollment'
 import enrollmentForm from '@/components/enrollment-form'
 
 export default {
-  middleware: ['check-auth', 'check-admin'],
+  middleware: ['check-admin'],
   components: { enrollmentForm },
   computed: {
     ...mapState('enrollment', ['currentEnrollment']),

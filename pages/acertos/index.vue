@@ -34,7 +34,7 @@ import classTile from '@/components/class-tile'
 import personListItem from '@/components/person-list-item'
 
 export default {
-  middleware: ['check-auth', 'check-admin'],
+  middleware: ['check-admin'],
   components: { classTile, personListItem },
   computed: {
     ...mapGetters('classrooms', ['classByTeacher', 'classWithoutTeacher']),

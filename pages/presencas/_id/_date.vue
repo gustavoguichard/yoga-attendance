@@ -74,7 +74,6 @@ const fetch = async (store, params) => {
 }
 
 export default {
-  middleware: 'check-auth',
   components: { pageCta, pageTitle, personListItem, practitionersList },
   watchQuery: ['add'],
   data: () => ({

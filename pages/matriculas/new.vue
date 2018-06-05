@@ -10,7 +10,7 @@ import { mapState } from 'vuex'
 import enrollmentForm from '@/components/enrollment-form'
 
 export default {
-  middleware: ['check-auth', 'check-admin'],
+  middleware: ['check-admin'],
   components: { enrollmentForm },
   computed: {
     ...mapState('classrooms', ['classes']),
