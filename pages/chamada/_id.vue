@@ -3,6 +3,7 @@
     <practitioners-list :practitioners="otherPractitioners" title="Escolha o praticante" @selected="addToLesson" :chooseList="true">
       <v-switch color="cyan darken-3" slot="footer" :label="`Reposição${restituting ? '' : '?'}`" v-model="restituting"></v-switch>
     </practitioners-list>
+    <page-cta icon="arrow_back" @click.stop="toggleChooseList" />
   </v-layout>
   <v-layout v-else justify-center justify-space-around wrap>
     <v-card class="half">
@@ -21,7 +22,7 @@
         </div>
       </v-list>
       <v-card-actions>
-        <v-btn @click.stop="$router.push('?add=practitioner')" icon depressed dark color="cyan darken-3">
+        <v-btn @click.stop="toggleChooseList" icon depressed dark color="cyan darken-3">
           <v-icon>person_add</v-icon>
         </v-btn>
       </v-card-actions>
@@ -104,6 +105,10 @@ export default {
         this.toggleRestituting(person)
         event.stopPropagation()
       }
+    },
+    toggleChooseList(add = 'practitioner') {
+      const query = this.chooseList ? null : { add }
+      this.$router.push({ query })
     },
     icon(person) {
       if (this.isRestituting(person)) {
