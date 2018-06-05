@@ -6,16 +6,18 @@
 
 <script>
 import { service } from '@/api'
+import { fetchPractitioners } from '@/api/fetch'
 import { isAnotherTeacher } from '@/utils/helpers'
 import practitionerForm from '@/components/practitioner-form'
-import { mapGetters, mapState } from 'vuex'
+import { mapGetters } from 'vuex'
 
 export default {
-  middleware: ['check-auth'],
   components: { practitionerForm },
   computed: {
-    ...mapGetters({ isAdmin: 'auth/isAdmin', practitioner: 'auth/currentPractitioner' }),
-    ...mapState('practitioners', ['person']),
+    ...mapGetters({ isAdmin: 'auth/isAdmin', practitioner: 'auth/currentPractitioner', get: 'practitioners/get' }),
+    person() {
+      return this.get(this.$route.params.id)
+    },
   },
   methods: {
     async submit({ _id, ...data }) {
@@ -23,9 +25,9 @@ export default {
       if (result) this.$router.push('/praticantes')
     },
   },
-  async fetch({ store, params }) {
+  async fetch({ store }) {
+    await fetchPractitioners(store)
     await store.dispatch('enrollment/find')
-    await store.dispatch('practitioners/get', { id: params.id })
   },
   mounted() {
     const allowed = this.isAdmin || !isAnotherTeacher(this.person, this.practitioner)

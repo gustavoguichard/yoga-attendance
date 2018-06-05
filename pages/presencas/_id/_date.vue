@@ -53,7 +53,6 @@ import { service } from '@/api'
 import { mapState } from 'vuex'
 import { filter, find, get, includes, map } from 'lodash'
 import { parseDate, unparseDate } from '@/utils/date-helpers'
-import { sPractitioner as $select } from '@/utils/selects'
 import pageCta from '@/components/page-cta'
 import pageTitle from '@/components/page-title'
 import personListItem from '@/components/person-list-item'
@@ -74,7 +73,6 @@ const fetch = async (store, params) => {
 }
 
 export default {
-  middleware: 'check-auth',
   components: { pageCta, pageTitle, personListItem, practitionersList },
   watchQuery: ['add'],
   data: () => ({
@@ -109,8 +107,8 @@ export default {
     },
     chooseQuery() {
       const peopleIds = map(this.result, 'practitioner._id')
-      const teachers = { $select, teacher: true, _id: { $ne: this.teacher._id, $in: peopleIds } }
-      const practitioners = { $select, _id: { $nin: peopleIds } }
+      const teachers = { teacher: true, _id: { $ne: this.teacher._id, $in: peopleIds } }
+      const practitioners = { _id: { $nin: peopleIds } }
       return this.chooseList === 'teacher' ? teachers : practitioners
     },
   },

@@ -10,10 +10,10 @@
 import { service } from '@/api'
 import pageCta from '@/components/page-cta'
 import practitionersList from '@/components/practitioners-list'
-import { sPractitioner as $select } from '@/utils/selects'
+import { fetchPractitioners } from '@/api/fetch'
 
 export default {
-  middleware: ['check-auth', 'check-admin'],
+  middleware: ['check-admin'],
   watchQuery: ['add'],
   components: { pageCta, practitionersList },
   computed: {
@@ -27,9 +27,12 @@ export default {
       this.$router.push({ query })
     },
     async selected({ _id }) {
-      await service(this.$store, 'practitioners/patch', _id, { teacher: true, $select })
+      await service(this.$store, 'practitioners/patch', _id, { teacher: true })
       this.$router.push({ query: null })
     },
+  },
+  async fetch({ store }) {
+    await fetchPractitioners(store)
   },
 };
 </script>

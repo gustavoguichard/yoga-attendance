@@ -1,7 +1,9 @@
 <template>
   <v-app id="ciyf-app" :class="$route.name">
     <application-controls />
-    <notification-center />
+    <no-ssr>
+      <notification-center />
+    </no-ssr>
     <v-content>
       <v-container class="app-container" fluid fill-height>
         <loading :active="loading" />

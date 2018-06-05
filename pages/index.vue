@@ -46,7 +46,6 @@ import personListItem from '@/components/person-list-item'
 import pageCta from '@/components/page-cta'
 
 export default {
-  middleware: 'check-auth',
   components: { classTile, pageCta, personListItem },
   computed: mapGetters({
     isAdmin: 'auth/isAdmin',

@@ -34,16 +34,11 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from 'vuex'
+import { mapGetters } from 'vuex'
 import { isString } from 'lodash'
 import { isAnotherTeacher, searchInFields } from '@/utils/helpers'
-import { sPractitioner as $select } from '@/utils/selects'
+import { fetchPractitioners } from '@/api/fetch'
 import personListItem from '@/components/person-list-item'
-
-const fetch = async (store, providedQuery) => {
-  const query = providedQuery || { $select }
-  await store.dispatch('practitioners/find', { query })
-}
 
 export default {
   props: {
@@ -62,10 +57,14 @@ export default {
     filter: '',
   }),
   computed: {
-    ...mapGetters({ isAdmin: 'auth/isAdmin', practitioner: 'auth/currentPractitioner' }),
-    ...mapState('practitioners', ['list']),
+    ...mapGetters({
+      isAdmin: 'auth/isAdmin',
+      practitioner: 'auth/currentPractitioner',
+      findPractitioners: 'practitioners/sortedFind',
+    }),
     people() {
-      const list = this.practitioners || this.list
+      const list = this.practitioners
+        || this.findPractitioners({ query: this.query })
       const optFields = this.twoLine ? ['email'] : []
       const filtered = searchInFields(list, ['displayName', 'fullName', ...optFields], this.filter)
       return filtered
@@ -95,15 +94,8 @@ export default {
       this.$refs.search.focus()
     },
   },
-  watch: {
-    async query(newQuery) {
-      await fetch(this.$store, newQuery)
-    },
-  },
   async mounted() {
-    if (!this.practitioners) {
-      await fetch(this.$store, this.query)
-    }
+    await (this.practitioners || fetchPractitioners(this.$store))
   },
 }
 </script>

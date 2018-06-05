@@ -37,7 +37,7 @@ import confirmationDialog from '@/components/confirmation-dialog'
 import decorate from '@/utils/decorate-enrollment'
 
 export default {
-  middleware: ['check-auth', 'check-admin'],
+  middleware: ['check-admin'],
   components: { pageCta, confirmationDialog },
   computed: {
     ...mapState('enrollment', ['options']),

@@ -5,6 +5,9 @@ module.exports = {
   env: {
     baseUrl: process.env.REST_API || 'http://localhost:3030',
   },
+  router: {
+    middleware: ['auth'],
+  },
   /*
   ** Headers of the page
   */
