@@ -11,15 +11,19 @@
 
 <script>
 import { service } from '@/api'
+import { fetchClassrooms, fetchPractitioners } from '@/api/fetch'
 import pageTitle from '@/components/page-title'
 import classroomForm from '@/components/classroom-form'
-import { mapState } from 'vuex'
+import { mapGetters } from 'vuex'
 
 export default {
   middleware: ['check-admin'],
   components: { classroomForm, pageTitle },
   computed: {
-    ...mapState('classrooms', ['lesson']),
+    ...mapGetters('classrooms', ['get']),
+    lesson() {
+      return this.get(this.$route.params.id)
+    },
   },
   methods: {
     async submit({ _id, ...data }) {
@@ -27,8 +31,9 @@ export default {
       this.$router.push('/')
     },
   },
-  async fetch({ store, params }) {
-    await store.dispatch('classrooms/get', { id: params.id })
+  async fetch({ store }) {
+    await fetchClassrooms(store)
+    await fetchPractitioners(store)
   },
 };
 </script>

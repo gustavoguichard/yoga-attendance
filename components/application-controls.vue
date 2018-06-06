@@ -44,7 +44,7 @@ export default {
       { name: 'Praticantes', to: '/praticantes', icon: 'group' },
       { name: 'Professores', to: '/professores', icon: 'record_voice_over', admin: true },
       { name: 'Presenças', to: '/presencas', icon: 'playlist_add_check' },
-      { name: 'Acertos', to: '/acertos', icon: 'account_balance_wallet', admin: true },
+      // { name: 'Acertos', to: '/acertos', icon: 'account_balance_wallet', admin: true },
       { name: 'Regras de pagamento', to: '/matriculas', icon: 'settings', admin: true },
     ],
   }),

@@ -6,6 +6,7 @@
 
 <script>
 import { service } from '@/api'
+import { fetchClassrooms } from '@/api/fetch'
 import { mapState } from 'vuex'
 import decorate from '@/utils/decorate-enrollment'
 import enrollmentForm from '@/components/enrollment-form'
@@ -15,7 +16,6 @@ export default {
   components: { enrollmentForm },
   computed: {
     ...mapState('enrollment', ['currentEnrollment']),
-    ...mapState('classrooms', ['classes']),
     enrollment() {
       return decorate(this.currentEnrollment)
     },
@@ -27,8 +27,8 @@ export default {
     },
   },
   async fetch({ store, params }) {
+    await fetchClassrooms(store)
     await store.dispatch('enrollment/get', { id: params.id })
-    await store.dispatch('classrooms/find', { query: { regularClass: { $ne: true } } })
   },
 };
 </script>

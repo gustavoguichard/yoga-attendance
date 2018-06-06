@@ -6,6 +6,7 @@
 
 <script>
 import { service } from '@/api'
+import { fetchPractitioners } from '@/api/fetch'
 import classroomForm from '@/components/classroom-form'
 
 export default {
@@ -16,6 +17,9 @@ export default {
       await service(this.$store, 'classrooms/create', lesson)
       this.$router.push('/')
     },
+  },
+  async fetch({ store }) {
+    await fetchPractitioners(store)
   },
 };
 </script>

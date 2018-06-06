@@ -54,7 +54,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapGetters } from 'vuex'
 import { map } from 'lodash'
 import { parseEnrollment } from '@/utils/form-helpers'
 import pageCta from '@/components/page-cta'
@@ -76,7 +76,7 @@ export default {
     },
   }),
   computed: {
-    ...mapState('classrooms', ['classes']),
+    ...mapGetters('classrooms', ['eventClasses']),
     typeOptions() {
       return [
         { text: 'Mensal', value: 'monthly' },
@@ -84,7 +84,7 @@ export default {
       ]
     },
     classesOptions() {
-      return [{ _id: null, title: 'Aulas Regulares' }, ...this.classes]
+      return [{ _id: null, title: 'Aulas Regulares' }, ...this.eventClasses]
     },
   },
   methods: {

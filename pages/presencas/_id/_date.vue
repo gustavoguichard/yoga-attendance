@@ -50,8 +50,9 @@
 
 <script>
 import { service } from '@/api'
-import { mapState } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 import { filter, find, get, includes, map } from 'lodash'
+import { fetchClassrooms } from '@/api/fetch'
 import { parseDate, unparseDate } from '@/utils/date-helpers'
 import pageCta from '@/components/page-cta'
 import pageTitle from '@/components/page-title'
@@ -60,7 +61,7 @@ import practitionersList from '@/components/practitioners-list'
 
 const fetch = async (store, params) => {
   const { id, date } = params
-  await store.dispatch('classrooms/get', { id })
+  await fetchClassrooms(store)
   return store.dispatch('frequency/find', {
     query: {
       classId: id,
@@ -83,13 +84,16 @@ export default {
     classDate: route.params.date,
   }),
   computed: {
-    ...mapState('classrooms', ['lesson']),
+    ...mapGetters('classrooms', ['get']),
     ...mapState('frequency', ['result']),
     chooseList() {
       return this.$route.query.add
     },
     date() {
       return parseDate(this.classDate, 'DD/MM/YYYY')
+    },
+    lesson() {
+      return this.get(this.$route.params.id)
     },
     practitionersFreq() {
       return filter(this.result, f => f.practitionerId !== this.teacher._id)

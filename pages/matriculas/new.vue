@@ -6,15 +6,12 @@
 
 <script>
 import { service } from '@/api'
-import { mapState } from 'vuex'
+import { fetchClassrooms } from '@/api/fetch'
 import enrollmentForm from '@/components/enrollment-form'
 
 export default {
   middleware: ['check-admin'],
   components: { enrollmentForm },
-  computed: {
-    ...mapState('classrooms', ['classes']),
-  },
   methods: {
     async submit(enrollment) {
       await service(this.$store, 'enrollment/create', enrollment)
@@ -22,7 +19,7 @@ export default {
     },
   },
   async fetch({ store }) {
-    await store.dispatch('classrooms/find', { query: { regularClass: { $ne: true } } })
+    await fetchClassrooms(store)
   },
 };
 </script>

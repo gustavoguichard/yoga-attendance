@@ -49,7 +49,7 @@ import { service } from '@/api'
 import moment from 'moment'
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import { filter, includes, map } from 'lodash'
-import { fetchPractitioners } from '@/api/fetch'
+import { fetchClassrooms, fetchPractitioners } from '@/api/fetch'
 import pageCta from '@/components/page-cta'
 import personListItem from '@/components/person-list-item'
 import practitionersList from '@/components/practitioners-list'
@@ -64,9 +64,9 @@ export default {
       findPractitioners: 'practitioners/sortedFind',
     }),
     ...mapGetters('attendance', ['everyAttendant']),
+    ...mapGetters('classrooms', ['get']),
     ...mapState('auth', ['user']),
     ...mapState('attendance', ['selected', 'restitution', 'currentTeacher']),
-    ...mapState('classrooms', ['lesson']),
     allSelected() {
       return this.subscribedList.length === this.selected.length
     },
@@ -76,6 +76,9 @@ export default {
     subscribedList() {
       const query = { _id: { $in: this.lesson.practitioners, $ne: this.teacher.id } }
       return this.findPractitioners({ query })
+    },
+    lesson() {
+      return this.get(this.$route.params.id)
     },
     listedPeople() {
       return [...this.subscribedList, ...this.restitution]
@@ -156,8 +159,8 @@ export default {
       this.$router.push(`/presencas/${this.lesson._id}/${date}`)
     },
   },
-  async fetch({ store, params }) {
-    await store.dispatch('classrooms/get', { id: params.id })
+  async fetch({ store }) {
+    await fetchClassrooms(store)
     await fetchPractitioners(store)
   },
 };

@@ -41,6 +41,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { fetchClassrooms } from '@/api/fetch'
 import classTile from '@/components/class-tile'
 import personListItem from '@/components/person-list-item'
 import pageCta from '@/components/page-cta'
@@ -49,8 +50,8 @@ export default {
   components: { classTile, pageCta, personListItem },
   computed: mapGetters({
     isAdmin: 'auth/isAdmin',
-    withTeacher: 'classrooms/classByTeacher',
-    withoutTeacher: 'classrooms/classWithoutTeacher',
+    withTeacher: 'classrooms/withTeacher',
+    withoutTeacher: 'classrooms/withoutTeacher',
   }),
   methods: {
     openLesson({ _id }) {
@@ -64,7 +65,7 @@ export default {
     },
   },
   async fetch({ store }) {
-    await store.dispatch('classrooms/find', { query: { $select: ['teacher', 'title'] } })
+    await fetchClassrooms(store)
   },
 };
 </script>
