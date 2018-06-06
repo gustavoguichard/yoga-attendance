@@ -16,7 +16,7 @@
   </v-navigation-drawer>
     <v-toolbar color="grey darken-3" dark fixed app clipped-left>
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-      <v-toolbar-title>Centro Iyengar Yoga Florianópolis</v-toolbar-title>
+      <v-toolbar-title>CIYF</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn icon v-if="currentPractitioner" :to="`/praticantes/${currentPractitioner._id}`">
         <v-avatar v-if="currentPractitioner.avatar" size="24px">

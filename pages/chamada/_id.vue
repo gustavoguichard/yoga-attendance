@@ -34,7 +34,7 @@
       <v-list>
         <div v-for="(teacher, i) in teachers" :key="teacher._id">
           <v-divider v-if="i > 0"></v-divider>
-          <person-list-item :person="teacher" property="displayName" @click="updateTeacher(teacher)" avatar="right">
+          <person-list-item :person="teacher" @click="updateTeacher(teacher)" avatar="right">
             <v-icon slot="left" v-if="isTeacher(teacher)" color="yellow darken-2">star</v-icon>
           </person-list-item>
         </div>
