@@ -17,7 +17,7 @@ const sort = {
 
 const limit = {}
 
-export default service => ({ state, dispatch }, query = {}, flush) => {
+export default service => async ({ state, dispatch }, query = {}, flush) => {
   const $select = select[service]
   const $sort = sort[service]
   const $limit = limit[service] || 1000
@@ -25,5 +25,7 @@ export default service => ({ state, dispatch }, query = {}, flush) => {
     return true
   }
   flushCache[service] = flush
-  return dispatch(`${service}/find`, { query: { $select, $sort, $limit, ...query } })
+  await dispatch('ui/load')
+  await dispatch(`${service}/find`, { query: { $select, $sort, $limit, ...query } })
+  return dispatch('ui/done')
 }
