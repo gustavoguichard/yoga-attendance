@@ -15,12 +15,15 @@ const sort = {
   enrollment: undefined,
 }
 
+const limit = {}
+
 export default service => ({ state, dispatch }, query = {}, flush) => {
   const $select = select[service]
   const $sort = sort[service]
+  const $limit = limit[service] || 1000
   if (state[service].ids.length && shouldKeep(flush, service)) {
     return true
   }
   flushCache[service] = flush
-  return dispatch(`${service}/find`, { query: { $select, $sort, ...query } })
+  return dispatch(`${service}/find`, { query: { $select, $sort, $limit, ...query } })
 }

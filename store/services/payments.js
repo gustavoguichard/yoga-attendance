@@ -13,7 +13,6 @@ export const store = {
     createdAt: Date,
     updatedAt: Date,
   },
-  paginate: false,
 }
 
 export const hooks = {}

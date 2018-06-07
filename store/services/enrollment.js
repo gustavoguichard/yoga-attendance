@@ -1,4 +1,2 @@
-export const store = {
-  paginate: false,
-}
+export const store = {}
 export const hooks = {}
