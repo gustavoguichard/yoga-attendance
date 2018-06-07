@@ -14,6 +14,7 @@ export const store = {
   instanceDefaults: {},
   replaceItems: true,
   skipRequestIfExists: true,
+  paginate: false,
 }
 
 export const hooks = {}
