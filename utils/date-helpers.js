@@ -25,11 +25,11 @@ export const unitFromQuery = (units, add = 0) => {
 
 export const isInTimeFrame = (date, unit = 'month', unitsAgo = 0) => {
   const range = getTimeRangeQuery(unit, unitsAgo)
-  return moment(date).isBetween(range.$gte, range.$lt)
+  return moment(date).isBetween(range.$gte, range.$lt, null, '[)')
 }
 
 export const filterByTimeAgo = (collecion, field, unit = 'month', unitsAgo = 0) =>
   collecion.filter(item => isInTimeFrame(item[field], unit, unitsAgo))
 
 export const filterByTimeRange = (collecion, field, range) =>
-  collecion.filter(item => moment(item[field]).isBetween(range.$gte, range.$lt))
+  collecion.filter(item => moment(item[field]).isBetween(range.$gte, range.$lt, null, '[)'))
