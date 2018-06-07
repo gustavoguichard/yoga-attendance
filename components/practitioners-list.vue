@@ -1,7 +1,7 @@
 <template>
   <v-card class="main-card">
     <v-toolbar @click.stop="openSearch">
-      <v-text-field ref="search" v-model="filter" @blur="closeSearch" v-if="search" class="mx-4" label="Buscar" hide-details single-line></v-text-field>
+      <v-text-field ref="search" v-model="filter" v-if="search" class="mx-4" label="Buscar" hide-details single-line></v-text-field>
       <template v-else>
         <v-toolbar-title>{{ title }}</v-toolbar-title>
         <v-spacer></v-spacer>
@@ -78,6 +78,7 @@ export default {
           : this.to
         this.$router.push(path)
       }
+      this.closeSearch()
       this.$emit('selected', person)
     },
     canEdit(person) {
