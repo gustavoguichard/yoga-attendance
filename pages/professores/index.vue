@@ -10,7 +10,7 @@
 import { service } from '@/api'
 import pageCta from '@/components/page-cta'
 import practitionersList from '@/components/practitioners-list'
-import { fetchPractitioners } from '@/api/fetch'
+import fetchService from '@/api/fetch'
 
 export default {
   middleware: ['check-admin'],
@@ -32,7 +32,7 @@ export default {
     },
   },
   async fetch({ store }) {
-    await fetchPractitioners(store)
+    await fetchService('practitioners')(store)
   },
 };
 </script>

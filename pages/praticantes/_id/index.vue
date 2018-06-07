@@ -21,7 +21,7 @@
       <v-card-title class="pt-0" primary-title>
         <div class="summary">
           <div class="summary__frequency">
-            <h3 class="headline">Aulas: {{ result.length }}</h3>
+            <h3 class="headline">Aulas: {{ frequency.length }}</h3>
             <v-list>
               <v-list-tile v-for="(items, title) in byClassRoom" :key="title">
                 <v-list-tile-avatar class="avatar">
@@ -35,7 +35,7 @@
                 </v-list-tile-content>
                 <v-list-tile-action>
                   <v-chip class="frequency" outline color="primary">
-                    {{ items.length }} ({{ fn.percent(items.length, result.length) }})
+                    {{ items.length }} ({{ fn.percent(items.length, frequency.length) }})
                   </v-chip>
                 </v-list-tile-action>
               </v-list-tile>
@@ -44,18 +44,18 @@
           <v-divider class="my-3 pt-2"></v-divider>
           <v-subheader class="pl-0">Pagamento:</v-subheader>
           <v-list dense two-line>
-            <template v-for="(order, i) in paymentDescriptions">
+            <template v-for="(order, i) in payments">
               <v-divider v-if="i > 0"></v-divider>
               <payment-description :order="order" />
             </template>
           </v-list>
-          <h4 class="headline calculated-payment">Pagamento calculado: <span>{{ fn.toMoney(fn.sumBy(paymentDescriptions, 'total')) }}</span></h4>
+          <h4 class="headline calculated-payment">Pagamento calculado: <span>{{ fn.toMoney(fn.sumBy(payments, 'total')) }}</span></h4>
           <v-divider class="my-3 pt-2"></v-divider>
         </div>
       </v-card-title>
       <v-subheader>Presenças do mês:</v-subheader>
       <v-list two-line subheader>
-        <div v-for="(item, i) in result" :key="i">
+        <div v-for="(item, i) in frequency" :key="i">
           <v-divider></v-divider>
           <v-list-tile ripple :to="attendanceLink(item)">
             <v-list-tile-content>
@@ -72,9 +72,9 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from 'vuex'
+import { mapGetters } from 'vuex'
 import { get, groupBy, sumBy } from 'lodash'
-import { fetchPractitioners } from '@/api/fetch'
+import fetchService from '@/api/fetch'
 import { getTimeRangeQuery, parseDate } from '@/utils/date-helpers'
 import { percent, toMoney } from '@/utils/helpers'
 import dateNavigator from '@/components/date-navigator'
@@ -85,17 +85,31 @@ export default {
   watchQuery: ['months'],
   components: { dateNavigator, pageTitle, paymentDescription },
   computed: {
-    ...mapGetters('practitioners', ['get']),
-    ...mapState('frequency', ['result']),
-    ...mapState('payments', ['paymentDescriptions']),
+    ...mapGetters({
+      getPractitioner: 'practitioners/get',
+      findPayments: 'payments/findByTimeAgo',
+      findFrequency: 'frequency/findByTimeAgo',
+    }),
     byClassRoom() {
-      return groupBy(this.result, 'classroom.title')
+      return groupBy(this.frequency, 'classroom.title')
     },
     fn() {
       return { parseDate, percent, sumBy, toMoney }
     },
+    frequency() {
+      const { query, params } = this.$route
+      return this.findFrequency({ unitsAgo: query.months, unit: 'month' }, {
+        practitionerId: params.id,
+      })
+    },
+    payments() {
+      const { query, params } = this.$route
+      return this.findPayments({ unitsAgo: query.months, unit: 'month' }, {
+        practitionerId: params.id,
+      })
+    },
     person() {
-      return this.get(this.$route.params.id)
+      return this.getPractitioner(this.$route.params.id)
     },
   },
   methods: {
@@ -106,21 +120,11 @@ export default {
       return get(item, 'classroom.teacherData.avatar')
     },
   },
-  async fetch({ store, params, query }) {
-    await fetchPractitioners(store)
-    await store.dispatch('payments/find', {
-      query: {
-        createdAt: getTimeRangeQuery('month', query.months),
-        practitionerId: params.id,
-      },
-    })
-    await store.dispatch('frequency/find', {
-      query: {
-        createdAt: getTimeRangeQuery('month', query.months),
-        practitionerId: params.id,
-        $limit: 10000,
-      },
-    })
+  async fetch({ store, query }) {
+    const createdAt = getTimeRangeQuery('month', query.months)
+    await fetchService('practitioners')(store)
+    await fetchService('payments')(store, { createdAt }, query.months)
+    await fetchService('frequency')(store, { createdAt }, query.months)
   },
 };
 </script>

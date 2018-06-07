@@ -1,4 +1,3 @@
-export const name = 'users'
 export const store = {
   instanceDefaults: {},
 }

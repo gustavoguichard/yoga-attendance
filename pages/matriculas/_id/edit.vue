@@ -6,8 +6,8 @@
 
 <script>
 import { service } from '@/api'
-import { fetchClassrooms } from '@/api/fetch'
-import { mapState } from 'vuex'
+import fetchService from '@/api/fetch'
+import { mapGetters } from 'vuex'
 import decorate from '@/utils/decorate-enrollment'
 import enrollmentForm from '@/components/enrollment-form'
 
@@ -15,7 +15,10 @@ export default {
   middleware: ['check-admin'],
   components: { enrollmentForm },
   computed: {
-    ...mapState('enrollment', ['currentEnrollment']),
+    ...mapGetters('enrollment', ['get']),
+    currentEnrollment() {
+      return this.get(this.$route.params.id)
+    },
     enrollment() {
       return decorate(this.currentEnrollment)
     },
@@ -26,9 +29,9 @@ export default {
       this.$router.push('/matriculas')
     },
   },
-  async fetch({ store, params }) {
-    await fetchClassrooms(store)
-    await store.dispatch('enrollment/get', { id: params.id })
+  async fetch({ store }) {
+    await fetchService('classrooms')(store)
+    await fetchService('enrollment')(store)
   },
 };
 </script>

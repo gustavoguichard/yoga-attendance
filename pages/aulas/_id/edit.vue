@@ -11,7 +11,7 @@
 
 <script>
 import { service } from '@/api'
-import { fetchClassrooms, fetchPractitioners } from '@/api/fetch'
+import fetchService from '@/api/fetch'
 import pageTitle from '@/components/page-title'
 import classroomForm from '@/components/classroom-form'
 import { mapGetters } from 'vuex'
@@ -32,8 +32,8 @@ export default {
     },
   },
   async fetch({ store }) {
-    await fetchClassrooms(store)
-    await fetchPractitioners(store)
+    await fetchService('classrooms')(store)
+    await fetchService('practitioners')(store)
   },
 };
 </script>

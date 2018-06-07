@@ -6,6 +6,7 @@
 
 <script>
 import { service } from '@/api'
+import fetchService from '@/api/fetch'
 import practitionerForm from '@/components/practitioner-form'
 
 export default {
@@ -17,7 +18,7 @@ export default {
     },
   },
   async fetch({ store }) {
-    await store.dispatch('enrollment/find')
+    await fetchService('enrollment')(store)
   },
 };
 </script>

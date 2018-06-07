@@ -49,7 +49,7 @@ import { service } from '@/api'
 import moment from 'moment'
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import { filter, includes, map } from 'lodash'
-import { fetchClassrooms, fetchPractitioners } from '@/api/fetch'
+import fetchService from '@/api/fetch'
 import pageCta from '@/components/page-cta'
 import personListItem from '@/components/person-list-item'
 import practitionersList from '@/components/practitioners-list'
@@ -160,8 +160,8 @@ export default {
     },
   },
   async fetch({ store }) {
-    await fetchClassrooms(store)
-    await fetchPractitioners(store)
+    await fetchService('classrooms')(store)
+    await fetchService('practitioners')(store)
   },
 };
 </script>

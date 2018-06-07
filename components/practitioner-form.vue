@@ -94,7 +94,7 @@
 
 <script>
 /* global FileReader */
-import { mapState } from 'vuex'
+import { mapGetters } from 'vuex'
 import moment from 'moment'
 import { get, map, filter, find } from 'lodash'
 import decorate from '@/utils/decorate-enrollment'
@@ -129,12 +129,13 @@ export default {
     },
   }),
   computed: {
-    ...mapState('enrollment', ['options']),
+    ...mapGetters('enrollment', ['find']),
     chooseList() {
       return !!this.$route.query.add
     },
     enrollmentOptions() {
-      return map(this.options, decorate)
+      const result = this.find().data
+      return map(result, decorate)
     },
     possibleFamilyQuery() {
       const alreadyMembers = [...this.editing.family, this.editing._id]

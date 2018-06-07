@@ -37,7 +37,7 @@
 import { mapGetters } from 'vuex'
 import { isString } from 'lodash'
 import { isAnotherTeacher, searchInFields } from '@/utils/helpers'
-import { fetchPractitioners } from '@/api/fetch'
+import fetchService from '@/api/fetch'
 import personListItem from '@/components/person-list-item'
 
 export default {
@@ -96,7 +96,7 @@ export default {
     },
   },
   async mounted() {
-    await (this.practitioners || fetchPractitioners(this.$store))
+    await (this.practitioners || fetchService('practitioners')(this.$store))
   },
 }
 </script>

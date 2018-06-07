@@ -50,27 +50,26 @@
 
 <script>
 import { service } from '@/api'
-import { mapGetters, mapState } from 'vuex'
+import { mapGetters } from 'vuex'
 import { filter, find, get, includes, map } from 'lodash'
-import { fetchClassrooms } from '@/api/fetch'
+import fetchService from '@/api/fetch'
 import { parseDate, unparseDate } from '@/utils/date-helpers'
 import pageCta from '@/components/page-cta'
 import pageTitle from '@/components/page-title'
 import personListItem from '@/components/person-list-item'
 import practitionersList from '@/components/practitioners-list'
 
+const getTimeRange = date => ({
+  $gte: `${date} 00:00:00`,
+  $lt: `${date} 23:59:59.999`,
+})
+
 const fetch = async (store, params) => {
-  const { id, date } = params
-  await fetchClassrooms(store)
-  return store.dispatch('frequency/find', {
-    query: {
-      classId: id,
-      createdAt: {
-        $gte: `${date} 00:00:00`,
-        $lt: `${date} 23:59:59.999`,
-      },
-    },
-  })
+  const { date } = params
+  await fetchService('classrooms')(store)
+  await fetchService('frequency')(store, {
+    createdAt: getTimeRange(date),
+  }, date)
 }
 
 export default {
@@ -84,22 +83,28 @@ export default {
     classDate: route.params.date,
   }),
   computed: {
-    ...mapGetters('classrooms', ['get']),
-    ...mapState('frequency', ['result']),
+    ...mapGetters({
+      getClassroom: 'classrooms/get',
+      findFrequency: 'frequency/findByTimeRange',
+    }),
     chooseList() {
       return this.$route.query.add
     },
     date() {
       return parseDate(this.classDate, 'DD/MM/YYYY')
     },
+    frequency() {
+      const { id, date } = this.$route.params
+      return this.findFrequency(getTimeRange(date), { classId: id })
+    },
     lesson() {
-      return this.get(this.$route.params.id)
+      return this.getClassroom(this.$route.params.id)
     },
     practitionersFreq() {
-      return filter(this.result, f => f.practitionerId !== this.teacher._id)
+      return filter(this.frequency, f => f.practitionerId !== this.teacher._id)
     },
     taughtBy() {
-      const temporary = find(this.result, f => f.teacher)
+      const temporary = find(this.frequency, f => f.teacher)
       return get(temporary, 'practitioner')
     },
     teacher() {
@@ -110,7 +115,7 @@ export default {
       return teacher && (this.teacher._id !== teacher)
     },
     chooseQuery() {
-      const peopleIds = map(this.result, 'practitioner._id')
+      const peopleIds = map(this.frequency, 'practitioner._id')
       const teachers = { teacher: true, _id: { $ne: this.teacher._id, $in: peopleIds } }
       const practitioners = { _id: { $nin: peopleIds } }
       return this.chooseList === 'teacher' ? teachers : practitioners
@@ -127,7 +132,7 @@ export default {
     async changeDate() {
       this.datePicker = false
       const createdAt = unparseDate(this.classDate)
-      await Promise.all(this.result.map(async f =>
+      await Promise.all(this.frequency.map(async f =>
         service(this.$store, 'frequency/patch', f._id, { createdAt })
       ))
       this.$router.push(`/presencas/${this.$route.params.id}/${this.classDate}`)
@@ -138,12 +143,12 @@ export default {
     },
     async selected({ _id }) {
       if (this.chooseList === 'teacher') {
-        await Promise.all(this.result.map(async f =>
+        await Promise.all(this.frequency.map(async f =>
           service(this.$store, 'frequency/patch', f._id, { teacher: f.practitionerId === _id })
         ))
         this.toggleChooseList()
       } else {
-        const sample = this.result[0]
+        const sample = this.frequency[0]
         await service(this.$store, 'frequency/create', {
           classId: sample.classId,
           createdAt: sample.createdAt,
@@ -152,9 +157,6 @@ export default {
         })
         await fetch(this.$store, this.$route.params)
       }
-    },
-    async refetch() {
-      await fetch(this.$store, this.$route.params)
     },
   },
   async fetch({ store, params }) {

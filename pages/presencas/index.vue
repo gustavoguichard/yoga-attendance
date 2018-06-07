@@ -39,9 +39,10 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapGetters } from 'vuex'
 import { reduce } from 'lodash'
 import { getTimeRangeQuery, parseDate } from '@/utils/date-helpers'
+import fetchService from '@/api/fetch'
 import dateNavigator from '@/components/date-navigator'
 import pageCta from '@/components/page-cta'
 
@@ -49,9 +50,14 @@ export default {
   watchQuery: ['weeks'],
   components: { dateNavigator, pageCta },
   computed: {
-    ...mapState('frequency', ['result']),
+    ...mapGetters({ findFrequency: 'frequency/findByTimeAgo' }),
+    frequency() {
+      const { query } = this.$route
+      const searchQuery = query.classId ? { classId: query.classId } : undefined
+      return this.findFrequency({ unitsAgo: query.weeks, unit: 'week' }, searchQuery)
+    },
     frequencyByDate() {
-      return reduce(this.result, (res, curr) => {
+      return reduce(this.frequency, (res, curr) => {
         const date = parseDate(curr.createdAt, 'YYYY-MM-DD')
         const prevDate = (res[curr.classId] && res[curr.classId][date]) || {}
         res[curr.classId] = {
@@ -70,14 +76,8 @@ export default {
     },
   },
   async fetch({ store, query }) {
-    const { weeks, classId } = query
-    await store.dispatch('frequency/find', {
-      query: {
-        classId,
-        createdAt: getTimeRangeQuery('week', weeks),
-        $limit: 10000,
-      },
-    })
+    const createdAt = getTimeRangeQuery('week', query.weeks)
+    await fetchService('frequency')(store, { createdAt }, query.weeks)
   },
 };
 </script>

@@ -6,7 +6,7 @@
 
 <script>
 import { service } from '@/api'
-import { fetchPractitioners } from '@/api/fetch'
+import fetchService from '@/api/fetch'
 import { isAnotherTeacher } from '@/utils/helpers'
 import practitionerForm from '@/components/practitioner-form'
 import { mapGetters } from 'vuex'
@@ -26,8 +26,8 @@ export default {
     },
   },
   async fetch({ store }) {
-    await fetchPractitioners(store)
-    await store.dispatch('enrollment/find')
+    await fetchService('practitioners')(store)
+    await fetchService('enrollment')(store)
   },
   mounted() {
     const allowed = this.isAdmin || !isAnotherTeacher(this.person, this.practitioner)

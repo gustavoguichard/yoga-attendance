@@ -30,7 +30,8 @@
 
 <script>
 import { service } from '@/api'
-import { mapState } from 'vuex'
+import fetchService from '@/api/fetch'
+import { mapGetters } from 'vuex'
 import { map } from 'lodash'
 import pageCta from '@/components/page-cta'
 import confirmationDialog from '@/components/confirmation-dialog'
@@ -40,9 +41,10 @@ export default {
   middleware: ['check-admin'],
   components: { pageCta, confirmationDialog },
   computed: {
-    ...mapState('enrollment', ['options']),
+    ...mapGetters('enrollment', ['find']),
     enrollments() {
-      return map(this.options, decorate)
+      const result = this.find().data
+      return map(result, decorate)
     },
   },
   methods: {
@@ -51,11 +53,10 @@ export default {
     },
     async remove(enrollment) {
       await service(this.$store, 'enrollment/remove', enrollment._id)
-      await this.$store.dispatch('enrollment/find')
     },
   },
   async fetch({ store }) {
-    await store.dispatch('enrollment/find')
+    await fetchService('enrollment')(store)
   },
 };
 </script>

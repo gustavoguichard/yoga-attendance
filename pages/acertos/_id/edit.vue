@@ -8,27 +8,27 @@
     <v-card class="main-card">
       <v-toolbar>
         <v-toolbar-title>
-          {{ currentPayment.description.title }}
+          {{ payment.description.title }}
         </v-toolbar-title>
       </v-toolbar>
       <v-card-title>
-        <h2>{{ fn.parseDate(currentPayment.createdAt, 'MMMM, YYYY') }}</h2>
+        <h2>{{ fn.parseDate(payment.createdAt, 'MMMM, YYYY') }}</h2>
       </v-card-title>
       <v-card-text>
         <p>
-          <template v-if="currentPayment.description.discount">
-            Valor: {{ fn.toMoney(currentPayment.description.value) }}
+          <template v-if="payment.description.discount">
+            Valor: {{ fn.toMoney(payment.description.value) }}
             <br>
-            Desconto: {{ currentPayment.description.discount }}
-            <i v-if="currentPayment.description.note"> - {{ currentPayment.description.note }}</i>
+            Desconto: {{ payment.description.discount }}
+            <i v-if="payment.description.note"> - {{ payment.description.note }}</i>
             <br>
-            Valor final: {{ fn.toMoney(currentPayment.description.total) }}
+            Valor final: {{ fn.toMoney(payment.description.total) }}
           </template>
-          <template v-else>Valor: {{ fn.toMoney(currentPayment.description.value) }}</template>
+          <template v-else>Valor: {{ fn.toMoney(payment.description.value) }}</template>
           <br>
-          Quantidade: {{ currentPayment.frequented.length }}
+          Quantidade: {{ payment.frequented.length }}
         </p>
-        <h3>Total: {{ fn.toMoney(currentPayment.total) }}</h3>
+        <h3>Total: {{ fn.toMoney(payment.total) }}</h3>
       </v-card-text>
       <v-card-text>
         <v-layout wrap>
@@ -80,9 +80,10 @@
 
 <script>
 import { service } from '@/api'
+import fetchService from '@/api/fetch'
 import moment from 'moment'
 import { includes } from 'lodash'
-import { mapGetters, mapState } from 'vuex'
+import { mapGetters } from 'vuex'
 import pageCta from '@/components/page-cta'
 import pageTitle from '@/components/page-title'
 import paymentDescription from '@/components/payment-description'
@@ -102,12 +103,15 @@ export default {
   }),
   computed: {
     ...mapGetters('auth', ['isAdmin']),
-    ...mapState('payments', ['currentPayment']),
+    ...mapGetters('payments', ['get']),
+    payment() {
+      return this.get(this.$route.params.id)
+    },
     prettyDate() {
       return parseDate(this.paidAt, 'DD/MM/YYYY')
     },
     person() {
-      return this.currentPayment.practitioner
+      return this.payment.practitioner
     },
     fn() {
       return { parseDate, toMoney }
@@ -135,17 +139,15 @@ export default {
       this.$router.push(`/praticantes/${this.person._id}`)
     },
   },
-  async fetch({ store, params }) {
-    await store.dispatch('payments/get', {
-      id: params.id,
-    })
+  async fetch({ store }) {
+    await fetchService('payments')(store)
   },
   mounted() {
     this.editing = {
       ...this.editing,
-      ...this.currentPayment,
+      ...this.payment,
     }
-    this.changeDate(this.currentPayment.paidAt)
+    this.changeDate(this.payment.paidAt)
   },
 };
 </script>

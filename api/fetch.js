@@ -1,14 +1,26 @@
-export const fetchPractitioners = ({ state, dispatch }) => {
-  const $select = ['picture', 'teacher', 'nickName', 'fullName', 'email']
-  const $sort = { fullName: 1 }
-  const { practitioners } = state
-  return practitioners.ids.length
-    || dispatch('practitioners/find', { query: { $select, $sort } })
+const flushCache = {}
+
+const shouldKeep = (flush, service) =>
+  ((!flush && +flush !== 0) || flush === flushCache[service])
+
+const select = {
+  practitioners: ['picture', 'teacher', 'nickName', 'fullName', 'email'],
 }
 
-export const fetchClassrooms = ({ state, dispatch }) => {
-  const $sort = { title: 1 }
-  const { classrooms } = state
-  return classrooms.ids.length
-    || dispatch('classrooms/find', { query: { $sort } })
+const sort = {
+  practitioners: { fullName: 1 },
+  classrooms: { title: 1 },
+  payments: { status: 1 },
+  frequency: undefined,
+  enrollment: undefined,
+}
+
+export default service => ({ state, dispatch }, query = {}, flush) => {
+  const $select = select[service]
+  const $sort = sort[service]
+  if (state[service].ids.length && shouldKeep(flush, service)) {
+    return true
+  }
+  flushCache[service] = flush
+  return dispatch(`${service}/find`, { query: { $select, $sort, ...query } })
 }

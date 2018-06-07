@@ -41,7 +41,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { fetchClassrooms } from '@/api/fetch'
+import fetchService from '@/api/fetch'
 import classTile from '@/components/class-tile'
 import personListItem from '@/components/person-list-item'
 import pageCta from '@/components/page-cta'
@@ -65,7 +65,7 @@ export default {
     },
   },
   async fetch({ store }) {
-    await fetchClassrooms(store)
+    await fetchService('classrooms')(store)
   },
 };
 </script>

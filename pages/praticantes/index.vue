@@ -6,14 +6,14 @@
 </template>
 
 <script>
-import { fetchPractitioners } from '@/api/fetch'
+import fetchService from '@/api/fetch'
 import pageCta from '@/components/page-cta'
 import practitionersList from '@/components/practitioners-list'
 
 export default {
   components: { pageCta, practitionersList },
   async fetch({ store }) {
-    await fetchPractitioners(store)
+    await fetchService('practitioners')(store)
   },
 };
 </script>
