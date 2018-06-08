@@ -28,6 +28,26 @@ module.exports = {
       { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' },
     ]
   },
+  workbox: {
+    runtimeCaching: [
+      {
+        urlPattern: 'localhost:3000/.*',
+        handler: 'cacheFirst',
+        method: 'GET'
+      },
+      {
+        urlPattern: 'https://fonts.googleapis.com//.*',
+        handler: 'cacheFirst',
+        method: 'GET',
+        strategyOptions: {cacheableResponse: {statuses: [0, 200]}},
+      }, {
+        urlPattern: 'https://fonts.gstatic.com//.*',
+        handler: 'cacheFirst',
+        method: 'GET',
+        strategyOptions: {cacheableResponse: {statuses: [0, 200]}},
+      },
+    ]
+  },
   plugins: ['@/plugins/vuetify.js', { src: '@/plugins/localStorage.js', ssr: false }],
   css: [
     '@/assets/style/app.styl'
