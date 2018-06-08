@@ -1,16 +1,16 @@
-import createPersistedState from 'vuex-persistedstate'
+// import createPersistedState from 'vuex-persistedstate'
 
-export default ({ store }) => {
-  createPersistedState({
-    key: 'ciyf-storage',
-    paths: [
-      'practitioners',
-      'classrooms',
-      'enrollment',
-      'frequency',
-      'payments',
-      'users',
-      'attendance',
-    ],
-  })(store)
-}
+// export default ({ store }) => {
+//   createPersistedState({
+//     key: 'ciyf-storage',
+//     paths: [
+//       'practitioners',
+//       'classrooms',
+//       'enrollment',
+//       'frequency',
+//       'payments',
+//       'users',
+//       'attendance',
+//     ],
+//   })(store)
+// }
