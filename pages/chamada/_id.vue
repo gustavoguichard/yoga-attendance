@@ -146,17 +146,21 @@ export default {
       })
     },
     async submit() {
-      const newSubscribers = filter(this.restitution, p => !p.restituting)
-      if (newSubscribers.length) {
-        await service(this.$store, 'classrooms/patch', this.lesson._id, { practitioners: [...this.lesson.practitioners, ...newSubscribers] })
-      }
-      await Promise.all(this.everyAttendant.map(async person => this.createFrequency(person)))
       if (this.teacher._id) {
-        await this.createFrequency(this.teacher._id, true)
+        const newSubscribers = filter(this.restitution, p => !p.restituting)
+        if (newSubscribers.length) {
+          await service(this.$store, 'classrooms/patch', this.lesson._id, { practitioners: [...this.lesson.practitioners, ...newSubscribers] })
+        }
+        await Promise.all(this.everyAttendant.map(async person => this.createFrequency(person)))
+        if (this.teacher._id) {
+          await this.createFrequency(this.teacher._id, true)
+        }
+        await this.$store.commit('attendance/cleanStore')
+        const date = moment().format('YYYY-MM-DD')
+        this.$router.push(`/presencas/${this.lesson._id}/${date}`)
+      } else {
+        this.$store.dispatch('notification/info', 'É necessário selecionar um professor')
       }
-      await this.$store.commit('attendance/cleanStore')
-      const date = moment().format('YYYY-MM-DD')
-      this.$router.push(`/presencas/${this.lesson._id}/${date}`)
     },
   },
   async fetch({ store }) {
