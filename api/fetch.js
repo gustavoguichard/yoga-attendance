@@ -4,7 +4,7 @@ const shouldKeep = (flush, service) =>
   ((!flush && +flush !== 0) || flush === flushCache[service])
 
 const select = {
-  practitioners: ['picture', 'teacher', 'nickName', 'fullName', 'email'],
+  practitioners: ['picture', 'teacher', 'nickName', 'fullName', 'email', 'birthdate'],
 }
 
 const sort = {
