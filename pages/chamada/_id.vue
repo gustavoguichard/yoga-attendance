@@ -108,8 +108,8 @@ export default {
         event.stopPropagation()
       }
     },
-    toggleChooseList(add = 'practitioner') {
-      const query = this.chooseList ? null : { add }
+    toggleChooseList() {
+      const query = this.chooseList ? null : { add: 'practitioner' }
       this.$router.push({ query })
     },
     icon(person) {
