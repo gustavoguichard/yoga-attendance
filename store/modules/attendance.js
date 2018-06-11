@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { concat, filter, includes, map, uniq, without } from 'lodash'
+import { concat, filter, map, uniq, without } from 'lodash'
 
 export default {
   state: () => ({
@@ -34,7 +34,7 @@ export default {
         const list = filter(st.restitution, ({ _id }) => _id !== person._id)
         commit('updateRestitution', list)
       } else {
-        const fn = includes(st.selected, person._id) ? without : concat
+        const fn = st.selected.includes(person._id) ? without : concat
         const list = fn(st.selected, person._id)
         commit('updateSelected', list)
       }
@@ -51,6 +51,6 @@ export default {
     everyAttendant({ selected, restitution }) {
       return [...selected, ...map(restitution, '_id')]
     },
-    isRestituting: ({ restitution }) => ({ _id }) => includes(map(restitution, '_id'), _id),
+    isRestituting: ({ restitution }) => ({ _id }) => map(restitution, '_id').includes(_id),
   },
 }

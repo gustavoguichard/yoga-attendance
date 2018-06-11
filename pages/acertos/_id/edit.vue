@@ -82,7 +82,6 @@
 import { service } from '@/api'
 import fetchService from '@/api/fetch'
 import moment from 'moment'
-import { includes } from 'lodash'
 import { mapGetters } from 'vuex'
 import pageCta from '@/components/page-cta'
 import pageTitle from '@/components/page-title'
@@ -119,7 +118,7 @@ export default {
   },
   methods: {
     paid() {
-      const isPaid = !includes(['open', 'pending'], this.editing.status)
+      const isPaid = !['open', 'pending'].includes(this.editing.status)
       if (this.editing.totalPaid && !isPaid) {
         this.editing.status = 'paid'
       } else if (!this.editing.totalPaid) {

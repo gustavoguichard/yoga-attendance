@@ -1,12 +1,14 @@
 import numeral from 'numeral'
-import { compact, deburr, filter, includes, get, map, toLower } from 'lodash'
+import { compact, deburr, filter, get, map, toLower } from 'lodash'
 
 export const searchInFields = (items, fields, text) => {
-  const searchText = deburr(toLower(text))
+  const normalize = txt => deburr(toLower(txt))
+  const searchText = normalize(text)
   return filter(items, item =>
-    compact(map(fields, field =>
-      includes(deburr(toLower(get(item, field))), searchText)
-    )).length)
+    compact(map(fields, field => {
+      const fieldValue = get(item, field)
+      return normalize(fieldValue).includes(searchText)
+    })).length)
 }
 
 export const toMoney = amount => `R${numeral(amount).format('$ 0.00')}`

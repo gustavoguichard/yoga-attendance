@@ -51,7 +51,7 @@
 <script>
 import { service } from '@/api'
 import { mapGetters } from 'vuex'
-import { filter, find, get, includes, map } from 'lodash'
+import { filter, find, get, map } from 'lodash'
 import fetchService from '@/api/fetch'
 import { parseDate, unparseDate } from '@/utils/date-helpers'
 import pageCta from '@/components/page-cta'
@@ -123,7 +123,7 @@ export default {
   },
   methods: {
     isSubscribed(freq) {
-      return includes(freq.classroom.practitioners, freq.practitionerId)
+      return freq.classroom.practitioners.includes(freq.practitionerId)
     },
     toggleChooseList(add = 'practitioner') {
       const query = this.chooseList ? null : { add }

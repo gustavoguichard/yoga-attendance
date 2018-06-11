@@ -21,7 +21,6 @@
 </template>
 
 <script>
-import { includes } from 'lodash'
 import { percent, toMoney } from '@/utils/helpers'
 import { parseDate } from '@/utils/date-helpers'
 
@@ -30,7 +29,7 @@ export default {
   computed: {
     isPaid() {
       const { status } = this.order
-      return !includes(['open', 'pending'], status)
+      return !['open', 'pending'].includes(status)
     },
     fn() {
       return { parseDate, percent, toMoney }

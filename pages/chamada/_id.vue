@@ -48,7 +48,7 @@
 import { service } from '@/api'
 import moment from 'moment'
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
-import { filter, includes, map } from 'lodash'
+import { filter, map } from 'lodash'
 import fetchService from '@/api/fetch'
 import pageCta from '@/components/page-cta'
 import personListItem from '@/components/person-list-item'
@@ -133,10 +133,10 @@ export default {
       return this.teacher._id !== _id
     },
     isSelected({ _id }) {
-      return includes(this.selected, _id)
+      return this.selected.includes(_id)
     },
     isRestituting({ _id }) {
-      return includes(map(this.restitution, '_id'), _id)
+      return map(this.restitution, '_id').includes(_id)
     },
     async createFrequency(id, teacher = false) {
       return service(this.$store, 'frequency/create', {

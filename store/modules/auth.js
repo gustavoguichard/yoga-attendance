@@ -1,6 +1,6 @@
 import api from '@/api'
 import Vue from 'vue'
-import { get, includes } from 'lodash'
+import { get } from 'lodash'
 
 export default {
   state: () => ({
@@ -35,7 +35,7 @@ export default {
 
   getters: {
     isAdmin({ user }) {
-      return includes(user && user.permissions, 'admin')
+      return user && user.permissions.includes('admin')
     },
     currentPractitioner({ user }) {
       return get(user, 'practitioner') || {}

@@ -12,6 +12,8 @@ export const store = {
   instanceDefaults: {
     createdAt: Date,
     updatedAt: Date,
+    practitionerId: null,
+    practitioner: 'Practitioner',
   },
 }
 

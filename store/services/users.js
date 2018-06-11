@@ -1,5 +1,2 @@
-export const store = {
-  instanceDefaults: {},
-}
-
+export const store = {}
 export const hooks = {}
