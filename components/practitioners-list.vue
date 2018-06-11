@@ -1,7 +1,7 @@
 <template>
   <v-card class="main-card">
     <v-toolbar @click.stop="openSearch">
-      <v-text-field ref="search" v-model="filter" v-if="search" class="mx-4" label="Buscar" hide-details single-line></v-text-field>
+      <v-text-field ref="search" @keyup.esc="closeSearch" @keydown.native.enter="enterSelected" @keyup.down="moveDown" @keyup.up="moveUp" v-model="filter" v-if="search" class="mx-4" label="Buscar" hide-details single-line></v-text-field>
       <template v-else>
         <v-toolbar-title>{{ title }}</v-toolbar-title>
         <v-spacer></v-spacer>
@@ -14,9 +14,12 @@
       <slot name="header"></slot>
     </v-card-title>
     <v-list :dense="dense" :two-line="twoLine">
+      <!-- <v-btn class="mb-3" v-if="chooseList" @click="$router.push({ name: 'praticantes-new', query: { back_to: $route.path } })" dark color="cyan darken-3">
+        Adicionar novo
+      </v-btn> -->
       <template v-for="(person, i) in people">
         <v-divider v-if="i > 0" />
-        <person-list-item :avatar="true" :showMail="twoLine" avatarSize="28" :person="person" @click="clicked(person)">
+        <person-list-item :active="(i === selectedPosition) && search" :avatar="true" :showMail="twoLine" avatarSize="28" :person="person" @click="clicked(person)">
           <v-btn icon v-if="canEdit(person)" ripple slot="right" @click.stop="$router.push(`/praticantes/${person._id}/edit`)">
             <v-icon color="grey">edit</v-icon>
           </v-btn>
@@ -55,6 +58,7 @@ export default {
   data: () => ({
     search: false,
     filter: '',
+    selectedIndex: 0,
   }),
   computed: {
     ...mapGetters({
@@ -68,6 +72,9 @@ export default {
       const optFields = this.twoLine ? ['email'] : []
       const filtered = searchInFields(list, ['displayName', 'fullName', ...optFields], this.filter)
       return filtered
+    },
+    selectedPosition() {
+      return Math.min(this.people.length - 1, this.selectedIndex)
     },
   },
   methods: {
@@ -88,11 +95,21 @@ export default {
     closeSearch() {
       this.search = false
       this.filter = ''
+      this.selectedIndex = 0
+    },
+    moveDown() {
+      this.selectedIndex = Math.min(this.selectedIndex + 1, this.people.length - 1)
+    },
+    moveUp() {
+      this.selectedIndex = Math.max(this.selectedIndex - 1, 0)
     },
     async openSearch() {
       this.search = true
       await this.$nextTick()
       this.$refs.search.focus()
+    },
+    async enterSelected() {
+      this.clicked(this.people[this.selectedPosition])
     },
   },
   async mounted() {

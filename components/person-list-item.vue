@@ -1,5 +1,5 @@
 <template>
-  <v-list-tile class="tile" v-if="person" ripple :avatar="!!avatar" :style="disabled && 'pointer-events: none;'" @click.stop="clicked">
+  <v-list-tile :class="{ tile: true, active }" v-if="person" ripple :avatar="!!avatar" :style="disabled && 'pointer-events: none;'" @click.stop="clicked">
     <v-list-tile-avatar :size="avatarSize" v-if="!!avatar && avatar !== 'right'">
       <img :src="person.avatar" />
     </v-list-tile-avatar>
@@ -32,7 +32,7 @@
 import { isString } from 'lodash'
 
 export default {
-  props: ['person', 'avatar', 'avatarSize', 'to', 'property', 'disabled', 'showMail'],
+  props: ['person', 'active', 'avatar', 'avatarSize', 'to', 'property', 'disabled', 'showMail'],
   computed: {
     isString() {
       return isString(this.person)
@@ -58,5 +58,9 @@ export default {
   .tile__action {
     min-width: 40px;
   }
+}
+
+.tile.active {
+  background-color: aliceblue;
 }
 </style>
