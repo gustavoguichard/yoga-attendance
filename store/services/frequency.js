@@ -1,5 +1,4 @@
 import { filterByTimeAgo, filterByTimeRange } from '@/utils/date-helpers'
-import rootStore from '@/store'
 
 const $sort = { 'practitioner.fullName': 1 } // Not working
 
@@ -22,19 +21,4 @@ export const store = {
     updatedAt: Date,
   },
 }
-
-const { dispatch } = rootStore()
-export const hooks = {
-  before: {
-    all: [hook => {
-      dispatch('ui/load')
-      return hook
-    }],
-  },
-  after: {
-    all: [hook => {
-      dispatch('ui/done')
-      return hook
-    }],
-  },
-}
+export const hooks = {}

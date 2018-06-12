@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import feathersVuex from 'feathers-vuex'
 import api from '@/api'
-import { map, reduce } from 'lodash'
+import { get, map, reduce } from 'lodash'
 
 const { service, FeathersVuex } = feathersVuex(api, { idField: '_id' })
 
@@ -14,31 +14,24 @@ const modulesFiles = require.context('./modules', false, /.js$/)
 // getNameFromPath('./name.js') -> 'name'
 const getNameFromPath = path => path.replace(/^.*[\\/]/, '').split('.')[0]
 
+const setLoader = (action, { dispatch }) => hook => {
+  dispatch(`ui/${action}`)
+  return hook
+}
+
 export const servicePlugins = () => map(servicesFiles.keys(), path => {
   const name = getNameFromPath(path)
   const { hooks, store } = servicesFiles(path)
-  api.service(name).hooks(hooks)
-  return service(name, store)
+  const fn = (rootStore, ...args) => {
+    api.service(name).hooks({
+      ...hooks,
+      before: { all: [setLoader('load', rootStore)].concat(get(hooks, 'before.all', [])) },
+      after: { all: [setLoader('done', rootStore)].concat(get(hooks, 'after.all', [])) },
+    })
+    return service(name, store)(rootStore, ...args)
+  }
+  return fn
 })
-// .concat(auth({
-//   state: {
-//     publicPages: ['/sign-in'],
-//   },
-//   mutations: {
-//     clear(state) {
-//       Vue.set(state, 'payload', null)
-//       Vue.set(state, 'accessToken', null)
-//       // state.accessToken = null
-//     },
-//   },
-//   actions: {
-//     async logout({ commit, dispatch }) {
-//       await api.logout()
-//       commit('clear')
-//       dispatch('notification/info', 'Até logo!', { root: true })
-//     },
-//   },
-// }))
 
 export const modules = reduce(modulesFiles.keys(), (curr, path) => {
   curr[getNameFromPath(path)] = { namespaced: true, ...modulesFiles(path).default }
