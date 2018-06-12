@@ -36,7 +36,7 @@
             <v-icon class="mr-1">home</v-icon>
             Familiares:
           </v-subheader>
-          <person-list-item v-for="person in editing.familyData" :key="person._id" :avatar="true" avatarSize="28" :person="person" :to="`/praticantes/${person._id}/edit`">
+          <person-list-item v-for="person in this.family" :key="person._id" :avatar="true" avatarSize="28" :person="person" :to="`/praticantes/${person._id}/edit`">
             <confirmation-dialog slot="right" @click.stop="removeRelative(person)">
               <v-btn icon ripple>
                 <v-icon color="orange">delete</v-icon>
@@ -96,7 +96,7 @@
 /* global FileReader */
 import { mapGetters } from 'vuex'
 import moment from 'moment'
-import { get, map, filter, find } from 'lodash'
+import { get, map, find } from 'lodash'
 import decorate from '@/utils/decorate-enrollment'
 import { parsePractitioner } from '@/utils/form-helpers'
 import pageCta from '@/components/page-cta'
@@ -113,7 +113,6 @@ const blankEnrollment = () => ({
 
 export default {
   components: { confirmationDialog, pageCta, personListItem, practitionersList },
-  watchQuery: ['add'],
   props: ['person', 'title'],
   data: () => ({
     editing: {
@@ -130,6 +129,7 @@ export default {
   }),
   computed: {
     ...mapGetters('enrollment', ['find']),
+    ...mapGetters({ findPractitioners: 'practitioners/sortedFind' }),
     chooseList() {
       return !!this.$route.query.add
     },
@@ -138,16 +138,19 @@ export default {
       return map(result, decorate)
     },
     possibleFamilyQuery() {
-      const alreadyMembers = [...this.editing.family, this.editing._id]
+      const alreadyMembers = [this.editing._id].concat(this.editing.family || [])
       return { _id: { $nin: alreadyMembers } }
+    },
+    family() {
+      return this.person && this.person.family
+        ? this.findPractitioners({ query: { _id: { $in: this.person.family } } })
+        : []
     },
   },
   methods: {
     addFamily(person) {
-      this.editing.familyData = this.editing.familyData
-        ? [...this.editing.familyData, person]
-        : [person]
-      this.editing.family = [...this.editing.family, person._id]
+      this.editing.family = [person._id].concat(this.editing.family || [])
+      this.editing.save()
       this.$router.push({ query: null })
     },
     addEnrollment() {
@@ -166,8 +169,8 @@ export default {
       return get(option, 'pricing')
     },
     removeRelative({ _id }) {
-      this.editing.family = filter(this.editing.family, _id)
-      this.editing.familyData = filter(this.editing.familyData, p => p._id !== _id)
+      this.editing.family = this.editing.family.filter(p => p !== _id)
+      this.editing.save()
     },
     onFileChange(ev) {
       ev.preventDefault()
@@ -187,15 +190,12 @@ export default {
       this.$emit('submit', parsePractitioner(this.editing))
     },
   },
-  mounted() {
-    const birthdate = this.person
+  async mounted() {
+    const person = new this.$FeathersVuex.Practitioner(this.person)
+    this.editing = person.clone()
+    this.editing.birthdate = this.person
       ? moment(this.person.birthdate).format('DDMMYYYY')
       : undefined
-    this.editing = {
-      ...this.editing,
-      ...this.person,
-      birthdate,
-    }
   },
 };
 </script>

@@ -5,7 +5,6 @@
 </template>
 
 <script>
-import { service } from '@/api'
 import fetchService from '@/api/fetch'
 import enrollmentForm from '@/components/enrollment-form'
 
@@ -13,9 +12,9 @@ export default {
   middleware: ['check-admin'],
   components: { enrollmentForm },
   methods: {
-    async submit(enrollment) {
-      await service(this.$store, 'enrollment/create', enrollment)
-      this.$router.push('/matriculas')
+    async submit(data) {
+      const result = await new this.$FeathersVuex.Enrollment(data).save()
+      if (result) this.$router.push('/matriculas')
     },
   },
   async fetch({ store }) {

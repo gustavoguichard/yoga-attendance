@@ -14,9 +14,6 @@
       <slot name="header"></slot>
     </v-card-title>
     <v-list :dense="dense" :two-line="twoLine">
-      <!-- <v-btn class="mb-3" v-if="chooseList" @click="$router.push({ name: 'praticantes-new', query: { back_to: $route.path } })" dark color="cyan darken-3">
-        Adicionar novo
-      </v-btn> -->
       <template v-for="(person, i) in people">
         <v-divider v-if="i > 0" />
         <person-list-item :active="(i === selectedPosition) && search" :avatar="true" :showMail="twoLine" avatarSize="28" :person="person" @click="clicked(person)">
@@ -48,6 +45,7 @@ export default {
     chooseList: { type: Boolean },
     dense: { type: Boolean },
     editLink: { type: Boolean },
+    hideSelected: { type: Boolean },
     practitioners: { type: Array },
     query: { type: Object },
     title: { type: String, default: 'Praticantes' },
@@ -85,10 +83,10 @@ export default {
           ? this.to.replace(/:id/g, person._id)
           : this.to
         this.$router.push(path)
-      } else {
+      } else if (this.hideSelected) {
         this.clickedPeople.push(person._id)
-        this.closeSearch()
       }
+      this.closeSearch()
       this.$emit('selected', person)
     },
     canEdit(person) {

@@ -5,7 +5,6 @@
 </template>
 
 <script>
-import { service } from '@/api'
 import fetchService from '@/api/fetch'
 import practitionerForm from '@/components/practitioner-form'
 
@@ -13,7 +12,7 @@ export default {
   components: { practitionerForm },
   methods: {
     async submit(person) {
-      const result = await service(this.$store, 'practitioners/create', person)
+      const result = await new this.$FeathersVuex.Practitioner(person).save()
       if (result) this.$router.push('/praticantes')
     },
   },

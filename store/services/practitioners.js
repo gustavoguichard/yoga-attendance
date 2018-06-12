@@ -4,6 +4,10 @@ export const store = {
       const query = { teacher: true }
       return sortedFind({ query })
     },
+    nonTeachers(state, { sortedFind }) {
+      const query = { teacher: false }
+      return sortedFind({ query })
+    },
     sortedFind: (state, { find }) => params => {
       const query = { $sort: { displayName: 1 }, ...params.query }
       const result = find({ query })

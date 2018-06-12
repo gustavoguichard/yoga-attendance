@@ -1,7 +1,7 @@
 const flushCache = {}
 
 const shouldKeep = (flush, service) =>
-  ((!flush && +flush !== 0) || flush === flushCache[service])
+  ((!flush && +flush !== 0) || (flush !== true && flush === flushCache[service]))
 
 // const select = {
 //   practitioners: [

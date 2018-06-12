@@ -10,7 +10,6 @@
 </template>
 
 <script>
-import { service } from '@/api'
 import fetchService from '@/api/fetch'
 import pageTitle from '@/components/page-title'
 import classroomForm from '@/components/classroom-form'
@@ -26,9 +25,9 @@ export default {
     },
   },
   methods: {
-    async submit({ _id, ...data }) {
-      await service(this.$store, 'classrooms/patch', _id, data)
-      this.$router.push('/')
+    async submit(lesson) {
+      const result = await new this.$FeathersVuex.Classroom(lesson).patch()
+      if (result) this.$router.push('/')
     },
   },
   async fetch({ store }) {

@@ -5,7 +5,6 @@
 </template>
 
 <script>
-import { service } from '@/api'
 import fetchService from '@/api/fetch'
 import { mapGetters } from 'vuex'
 import decorate from '@/utils/decorate-enrollment'
@@ -24,9 +23,9 @@ export default {
     },
   },
   methods: {
-    async submit({ _id, ...data }) {
-      await service(this.$store, 'enrollment/patch', _id, data)
-      this.$router.push('/matriculas')
+    async submit(data) {
+      const result = await new this.$FeathersVuex.Enrollment(data).patch()
+      if (result) this.$router.push('/matriculas')
     },
   },
   async fetch({ store }) {

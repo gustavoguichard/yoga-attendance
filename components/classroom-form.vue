@@ -62,7 +62,6 @@ import personListItem from '@/components/person-list-item'
 
 export default {
   components: { pageCta, personListItem, practitionersList },
-  watchQuery: ['add'],
   props: ['lesson', 'title'],
   data: () => ({
     editing: {

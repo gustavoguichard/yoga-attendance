@@ -1,6 +1,6 @@
 <template>
   <v-layout align-content-center align-center column  v-if="chooseList">
-    <practitioners-list :title="this.chooseList === 'teacher' ? 'Selecionar professor(a)' : 'Adicionar praticante à aula'" :query="chooseQuery" @selected="selected" :chooseList="true" :twoLine="true" />
+    <practitioners-list :title="this.chooseList === 'teacher' ? 'Selecionar professor(a)' : 'Adicionar praticante à aula'" :query="chooseQuery" @selected="selected" :chooseList="true" :twoLine="true" :hideSelected="true" />
     <page-cta icon="arrow_back" @click.stop="toggleChooseList" />
   </v-layout>
   <v-layout align-content-center align-center column v-else>
@@ -50,7 +50,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { filter, find, get, map } from 'lodash'
+import { get, map, sortBy } from 'lodash'
 import fetchService from '@/api/fetch'
 import { parseDate, unparseDate } from '@/utils/date-helpers'
 import pageCta from '@/components/page-cta'
@@ -92,10 +92,11 @@ export default {
       return this.getClassroom(this.$route.params.id)
     },
     practitionersFreq() {
-      return filter(this.frequency, f => f.practitionerId !== this.teacher._id)
+      const result = this.frequency.filter(f => f.practitionerId !== this.teacher._id)
+      return sortBy(result, 'practitioner.displayName')
     },
     taughtBy() {
-      const temporary = find(this.frequency, f => f.teacher)
+      const temporary = this.frequency.find(f => f.teacher)
       return get(temporary, 'practitioner')
     },
     teacher() {

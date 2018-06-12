@@ -40,12 +40,11 @@
         </div>
       </v-list>
     </v-card>
-    <page-cta @click="submit()" icon="done_all" />
+    <page-cta @click="submit" icon="done_all" />
   </v-layout>
 </template>
 
 <script>
-import { service } from '@/api'
 import moment from 'moment'
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import { filter, map } from 'lodash'
@@ -55,7 +54,6 @@ import personListItem from '@/components/person-list-item'
 import practitionersList from '@/components/practitioners-list'
 
 export default {
-  watchQuery: ['add'],
   components: { pageCta, personListItem, practitionersList },
   data: () => ({ restituting: true }),
   computed: {
@@ -139,23 +137,23 @@ export default {
       return map(this.restitution, '_id').includes(_id)
     },
     async createFrequency(id, teacher = false) {
-      return service(this.$store, 'frequency/create', {
+      return new this.$FeathersVuex.Frequency({
         teacher,
         practitionerId: id,
         classId: this.lesson._id,
-      })
+      }).create()
     },
     async submit() {
       if (this.teacher._id) {
-        const newSubscribers = filter(this.restitution, p => !p.restituting)
+        const newSubscribers = map(filter(this.restitution, p => !p.restituting), '_id')
         if (newSubscribers.length) {
-          await service(this.$store, 'classrooms/patch', this.lesson._id, { practitioners: [...this.lesson.practitioners, ...newSubscribers] })
+          const classroom = new this.$FeathersVuex.Classroom(this.lesson)
+          classroom.practitioners = [...this.lesson.practitioners, ...newSubscribers]
+          await classroom.patch()
         }
-        await Promise.all(this.everyAttendant.map(async person => this.createFrequency(person)))
-        if (this.teacher._id) {
-          await this.createFrequency(this.teacher._id, true)
-        }
-        await this.$store.commit('attendance/cleanStore')
+        Promise.all(this.everyAttendant.map(async person => this.createFrequency(person)))
+        this.createFrequency(this.teacher._id, true)
+        this.$store.commit('attendance/cleanStore')
         const date = moment().format('YYYY-MM-DD')
         this.$router.push(`/presencas/${this.lesson._id}/${date}`)
       } else {

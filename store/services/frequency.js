@@ -1,6 +1,6 @@
 import { filterByTimeAgo, filterByTimeRange } from '@/utils/date-helpers'
 
-const $sort = { 'practitioner.fullName': 1 } // Not working
+const $sort = { 'practitioner.displayName': 1 } // Not working
 
 export const store = {
   getters: {
@@ -14,11 +14,6 @@ export const store = {
       const data = [].concat(frequency.data || frequency)
       return filterByTimeRange(data, 'createdAt', range)
     },
-  },
-
-  instanceDefaults: {
-    createdAt: Date,
-    updatedAt: Date,
   },
 }
 export const hooks = {}

@@ -1,5 +1,5 @@
 <template>
-  <div v-if="active" class="loading-container">
+  <div :class="{ 'loading-container': true, active }">
     <div class="progress-wrapper" />
     <v-progress-circular
       class="progress"
@@ -23,9 +23,15 @@ export default { props: ['active'] }
   justify-content: center;
   left: 0;
   max-height: 100vh;
+  opacity: 0;
   position: absolute;
   right: 0;
   top: 0;
+  transition: .7s;
+  z-index: -1;
+}
+.active {
+  opacity: 1;
   z-index: 2;
 }
 .progress {

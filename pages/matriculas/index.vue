@@ -29,7 +29,6 @@
 </template>
 
 <script>
-import { service } from '@/api'
 import fetchService from '@/api/fetch'
 import { mapGetters } from 'vuex'
 import { map } from 'lodash'
@@ -52,7 +51,7 @@ export default {
       this.$router.push(`/matriculas/${_id}/edit`)
     },
     async remove(enrollment) {
-      await service(this.$store, 'enrollment/remove', enrollment._id)
+      await new this.$FeathersVuex.Enrollment(enrollment).remove()
     },
   },
   async fetch({ store }) {
