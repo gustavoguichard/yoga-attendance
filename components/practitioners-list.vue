@@ -59,6 +59,7 @@ export default {
     search: false,
     filter: '',
     selectedIndex: 0,
+    clickedPeople: [],
   }),
   computed: {
     ...mapGetters({
@@ -71,7 +72,7 @@ export default {
         || this.findPractitioners({ query: this.query })
       const optFields = this.twoLine ? ['email'] : []
       const filtered = searchInFields(list, ['displayName', 'fullName', ...optFields], this.filter)
-      return filtered
+      return filtered.filter(person => !this.clickedPeople.includes(person._id))
     },
     selectedPosition() {
       return Math.min(this.people.length - 1, this.selectedIndex)
@@ -84,8 +85,10 @@ export default {
           ? this.to.replace(/:id/g, person._id)
           : this.to
         this.$router.push(path)
+      } else {
+        this.clickedPeople.push(person._id)
+        this.closeSearch()
       }
-      this.closeSearch()
       this.$emit('selected', person)
     },
     canEdit(person) {

@@ -1,6 +1,6 @@
 <template>
   <v-layout align-content-center align-center column  v-if="chooseList">
-    <practitioners-list title="Adicionar praticante à aula" :query="chooseQuery" @selected="selected" :chooseList="true" :twoLine="true" />
+    <practitioners-list :title="this.chooseList === 'teacher' ? 'Selecionar professor(a)' : 'Adicionar praticante à aula'" :query="chooseQuery" @selected="selected" :chooseList="true" :twoLine="true" />
     <page-cta icon="arrow_back" @click.stop="toggleChooseList" />
   </v-layout>
   <v-layout align-content-center align-center column v-else>
@@ -49,7 +49,6 @@
 </template>
 
 <script>
-import { service } from '@/api'
 import { mapGetters } from 'vuex'
 import { filter, find, get, map } from 'lodash'
 import fetchService from '@/api/fetch'
@@ -64,20 +63,12 @@ const getTimeRange = date => ({
   $lt: `${date} 23:59:59.999`,
 })
 
-const fetch = async (store, params) => {
-  const { date } = params
-  await fetchService('classrooms')(store)
-  await fetchService('frequency')(store, {
-    createdAt: getTimeRange(date),
-  }, date)
-}
-
 export default {
   components: { pageCta, pageTitle, personListItem, practitionersList },
-  watchQuery: ['add'],
   data: () => ({
     datePicker: false,
     classDate: undefined,
+    added: [],
   }),
   asyncData: ({ route }) => ({
     classDate: route.params.date,
@@ -122,8 +113,8 @@ export default {
     },
   },
   methods: {
-    isSubscribed(freq) {
-      return freq.classroom.practitioners.includes(freq.practitionerId)
+    isSubscribed({ classroom, practitionerId }) {
+      return classroom.practitioners && classroom.practitioners.includes(practitionerId)
     },
     toggleChooseList(add = 'practitioner') {
       const query = this.chooseList ? null : { add }
@@ -133,34 +124,51 @@ export default {
       this.datePicker = false
       const createdAt = unparseDate(this.classDate)
       await Promise.all(this.frequency.map(async f =>
-        service(this.$store, 'frequency/patch', f._id, { createdAt })
+        new this.$FeathersVuex.Frequency({ ...f, createdAt })
+          .patch()
       ))
       this.$router.push(`/presencas/${this.$route.params.id}/${this.classDate}`)
     },
-    async remove({ _id }) {
-      await service(this.$store, 'frequency/remove', _id)
-      await fetch(this.$store, this.$route.params)
+    async createFrequencies() {
+      await Promise.all(this.added.map(async f => f.save()))
+      this.added = []
+    },
+    async remove(person) {
+      const freq = new this.$FeathersVuex.Frequency(person)
+      await freq.remove()
     },
     async selected({ _id }) {
       if (this.chooseList === 'teacher') {
         await Promise.all(this.frequency.map(async f =>
-          service(this.$store, 'frequency/patch', f._id, { teacher: f.practitionerId === _id })
+          new this.$FeathersVuex.Frequency({ ...f, teacher: f.practitionerId === _id })
+            .patch()
         ))
         this.toggleChooseList()
       } else {
         const sample = this.frequency[0]
-        await service(this.$store, 'frequency/create', {
+        const { Frequency } = this.$FeathersVuex
+        this.added.push(new Frequency({
           classId: sample.classId,
           createdAt: sample.createdAt,
           practitionerId: _id,
           teacher: false,
-        })
-        await fetch(this.$store, this.$route.params)
+        }))
       }
     },
   },
   async fetch({ store, params }) {
-    await fetch(store, params)
+    const { date } = params
+    await fetchService('classrooms')(store)
+    await fetchService('frequency')(store, {
+      createdAt: getTimeRange(date),
+    }, date)
+  },
+  mounted() {
+    this.$router.afterEach((to, from) => {
+      if (from.query.add === 'practitioner') {
+        this.createFrequencies()
+      }
+    })
   },
 };
 </script>

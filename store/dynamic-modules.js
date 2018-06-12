@@ -1,8 +1,11 @@
+import Vue from 'vue'
 import feathersVuex from 'feathers-vuex'
 import api from '@/api'
 import { map, reduce } from 'lodash'
 
-const { service } = feathersVuex(api, { idField: '_id' })
+const { service, FeathersVuex } = feathersVuex(api, { idField: '_id' })
+
+Vue.use(FeathersVuex)
 
 const servicesFiles = require.context('./services', false, /.js$/)
 const modulesFiles = require.context('./modules', false, /.js$/)

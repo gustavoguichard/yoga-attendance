@@ -1,7 +1,10 @@
+import Vue from 'vue'
 import Vuex from 'vuex'
 import cookieparser from 'cookieparser'
 import api from '@/api'
 import { servicePlugins, modules } from '@/store/dynamic-modules'
+
+Vue.use(Vuex)
 
 export default function () {
   return new Vuex.Store({

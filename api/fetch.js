@@ -3,9 +3,13 @@ const flushCache = {}
 const shouldKeep = (flush, service) =>
   ((!flush && +flush !== 0) || flush === flushCache[service])
 
-const select = {
-  practitioners: ['picture', 'teacher', 'nickName', 'fullName', 'email', 'birthdate', 'enrollments', 'family', 'phone'],
-}
+// const select = {
+//   practitioners: [
+//     'picture', 'teacher', 'nickName',
+//     'fullName', 'email', 'birthdate',
+//     'enrollments', 'family', 'phone',
+//   ],
+// }
 
 const sort = {
   practitioners: { fullName: 1 },
@@ -18,7 +22,6 @@ const sort = {
 const limit = {}
 
 export default service => async ({ state, dispatch }, query = {}, flush) => {
-  const $select = select[service]
   const $sort = sort[service]
   const $limit = limit[service] || 1000
   if (state[service].ids.length && shouldKeep(flush, service)) {
@@ -26,6 +29,6 @@ export default service => async ({ state, dispatch }, query = {}, flush) => {
   }
   flushCache[service] = flush
   await dispatch('ui/load')
-  await dispatch(`${service}/find`, { query: { $select, $sort, $limit, ...query } })
+  await dispatch(`${service}/find`, { query: { $sort, $limit, ...query } })
   return dispatch('ui/done')
 }

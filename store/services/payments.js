@@ -14,6 +14,12 @@ export const store = {
     updatedAt: Date,
     practitionerId: null,
     practitioner: 'Practitioner',
+    total: 0,
+    index: '',
+    frequented: [],
+    totalPaid: 0,
+    note: '',
+    status: 'open',
   },
 }
 

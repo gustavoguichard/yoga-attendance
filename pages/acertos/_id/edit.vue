@@ -79,7 +79,6 @@
 </template>
 
 <script>
-import { service } from '@/api'
 import fetchService from '@/api/fetch'
 import moment from 'moment'
 import { mapGetters } from 'vuex'
@@ -132,9 +131,9 @@ export default {
     async submit() {
       const { paidAt } = this
       const { status, totalPaid, note } = this.editing
-      await service(this.$store, 'payments/patch', this.$route.params.id, {
-        paidAt, status, totalPaid, note,
-      })
+      const _id = this.$route.params.id
+      this.editing.patch({ _id, paidAt, status, totalPaid, note })
+
       this.$router.push(`/praticantes/${this.person._id}`)
     },
   },
@@ -142,10 +141,8 @@ export default {
     await fetchService('payments')(store)
   },
   mounted() {
-    this.editing = {
-      ...this.editing,
-      ...this.payment,
-    }
+    const payment = new this.$FeathersVuex.Payment(this.payment)
+    this.editing = payment.clone()
     this.changeDate(this.payment.paidAt)
   },
 };
