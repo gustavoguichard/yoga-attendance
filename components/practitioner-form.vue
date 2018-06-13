@@ -154,7 +154,7 @@ export default {
       this.$router.push({ query: null })
     },
     addEnrollment() {
-      this.editing.enrollments = [...this.editing.enrollments, blankEnrollment()]
+      this.editing.enrollments = [blankEnrollment()].concat(this.editing.enrollments || [])
     },
     changeEnrollment(field, index, value) {
       this.editing.enrollments = map(this.editing.enrollments, (opt, i) => {
@@ -191,11 +191,13 @@ export default {
     },
   },
   async mounted() {
-    const person = new this.$FeathersVuex.Practitioner(this.person)
-    this.editing = person.clone()
-    this.editing.birthdate = this.person
-      ? moment(this.person.birthdate).format('DDMMYYYY')
-      : undefined
+    if (this.person) {
+      const person = new this.$FeathersVuex.Practitioner(this.person)
+      this.editing = person.clone()
+      this.editing.birthdate = this.person
+        ? moment(this.person.birthdate).format('DDMMYYYY')
+        : undefined
+    }
   },
 };
 </script>
