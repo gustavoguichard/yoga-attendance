@@ -62,6 +62,7 @@ module.exports = {
   /*
   ** Build configuration
   */
+  modules: ['@nuxtjs/pwa'],
   build: {
     babel: {
       plugins: [
