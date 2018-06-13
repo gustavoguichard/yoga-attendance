@@ -14,23 +14,21 @@
         />
       </v-card-title>
       <v-list two-line subheader>
-        <div v-for="(item, classId) in frequencyByDate" :key="classId">
-          <template v-for="(data, dateTitle) in item">
-            <v-divider></v-divider>
-            <v-list-tile ripple :to="`/presencas/${classId}/${dateTitle}`">
-              <v-list-tile-content>
-                <v-list-tile-title>
-                  {{ fn.parseDate(dateTitle) }} <span class="grey--text text--darken-1">- {{ data.title }}</span>
-                </v-list-tile-title>
-                <v-list-tile-sub-title>
-                  {{ data.teacher }}
-                </v-list-tile-sub-title>
-              </v-list-tile-content>
-                <v-list-tile-action>
-                  <v-list-tile-action-text>{{ data.amount }}</v-list-tile-action-text>
-                </v-list-tile-action>
-            </v-list-tile>
-          </template>
+        <div v-for="(item, index) in frequencyByDate" :key="index">
+          <v-divider></v-divider>
+          <v-list-tile ripple :to="`/presencas/${item.classId}/${item.date}`">
+            <v-list-tile-content>
+              <v-list-tile-title>
+                {{ fn.parseDate(item.date) }} <span class="grey--text text--darken-1">- {{ item.title }}</span>
+              </v-list-tile-title>
+              <v-list-tile-sub-title>
+                {{ item.teacher }}
+              </v-list-tile-sub-title>
+            </v-list-tile-content>
+              <v-list-tile-action>
+                <v-list-tile-action-text>{{ item.amount }}</v-list-tile-action-text>
+              </v-list-tile-action>
+          </v-list-tile>
         </div>
       </v-list>
     </v-card>
@@ -40,7 +38,8 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { reduce } from 'lodash'
+import { map, groupBy } from 'lodash'
+import { sortByKey } from '@/utils/helpers'
 import { getTimeRangeQuery, parseDate } from '@/utils/date-helpers'
 import fetchService from '@/api/fetch'
 import dateNavigator from '@/components/date-navigator'
@@ -57,19 +56,19 @@ export default {
       return this.findFrequency({ unitsAgo: query.weeks, unit: 'week' }, searchQuery)
     },
     frequencyByDate() {
-      return reduce(this.frequency, (res, curr) => {
-        const date = parseDate(curr.createdAt, 'YYYY-MM-DD')
-        const prevDate = (res[curr.classId] && res[curr.classId][date]) || {}
-        res[curr.classId] = {
-          ...res[curr.classId],
-          [date]: {
-            teacher: curr.teacher ? curr.practitioner.displayName : prevDate.teacher,
-            title: prevDate.title || curr.classroom.title,
-            amount: (prevDate.amount || 0) + !curr.teacher,
-          },
+      const withDate = map(this.frequency, f => ({ ...f, date: parseDate(f.createdAt, 'YYYY-MM-DD') }))
+      const grouped = groupBy(withDate, item => `${item.date}_${item.classId}`)
+      const sorted = sortByKey(grouped, true)
+      return map(sorted, curr => {
+        const withTeacher = curr.find(c => c.teacher) || curr[0]
+        return {
+          date: withTeacher.date,
+          classId: withTeacher.classId,
+          title: withTeacher.classroom.title,
+          teacher: withTeacher.practitioner.displayName,
+          amount: curr.length - 1,
         }
-        return res
-      }, {})
+      })
     },
     fn() {
       return { parseDate }
