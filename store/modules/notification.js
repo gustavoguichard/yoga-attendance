@@ -35,7 +35,7 @@ export default {
       commit('update')
     },
     offline({ commit }) {
-      commit('update', notification({ text: 'Você precisa se conectar para prosseguir', type: 'info' }))
+      commit('update', notification({ text: 'Você precisa se conectar para prosseguir', type: 'error' }))
     },
     403({ commit }) {
       commit('update', notification({ text: 'Você não está autorizado a acessar esta página', type: 'error' }))

@@ -31,7 +31,11 @@ export const servicePlugins = () => map(servicesFiles.keys(), path => {
       before: { all: [setLoader('load', rootStore)].concat(get(hooks, 'before.all', [])) },
       after: { all: [setLoader('done', rootStore)].concat(get(hooks, 'after.all', [])) },
       error: { all: [hook => {
-        rootStore.dispatch('notification/error', hook.error.message)
+        if (hook.error.message === 'Network Error') {
+          rootStore.dispatch('notification/offline')
+        } else {
+          rootStore.dispatch('notification/error', hook.error.message)
+        }
         rootStore.dispatch('ui/done')
         return hook
       }].concat(get(hooks, 'error.all', [])) },
