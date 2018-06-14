@@ -3,7 +3,10 @@ import feathersVuex from 'feathers-vuex'
 import api from '@/api'
 import { get, map, reduce } from 'lodash'
 
-const { service, FeathersVuex } = feathersVuex(api, { idField: '_id' })
+const { service, FeathersVuex } = feathersVuex(api, {
+  idField: '_id',
+  enableEvents: false,
+})
 
 Vue.use(FeathersVuex)
 
