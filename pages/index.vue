@@ -14,8 +14,8 @@
             :key="lesson.title"
             :lesson="lesson"
             :callback="openLesson"
-            :viewFrequency="viewFrequency"
-            :editClass="isAdmin && editClass"
+            :viewFrequency="online && viewFrequency"
+            :editClass="isAdmin && online && editClass"
           ></class-tile>
         </template>
       </v-list>
@@ -30,8 +30,8 @@
           :key="lesson.title"
           :lesson="lesson"
           :callback="openLesson"
-          :viewFrequency="viewFrequency"
-          :editClass="isAdmin && editClass"
+          :viewFrequency="online && viewFrequency"
+          :editClass="isAdmin && online && editClass"
         ></class-tile>
       </v-list>
     </v-card>
@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 import fetchService from '@/api/fetch'
 import classTile from '@/components/class-tile'
 import personListItem from '@/components/person-list-item'
@@ -48,11 +48,14 @@ import pageCta from '@/components/page-cta'
 
 export default {
   components: { classTile, pageCta, personListItem },
-  computed: mapGetters({
-    isAdmin: 'auth/isAdmin',
-    withTeacher: 'classrooms/withTeacher',
-    withoutTeacher: 'classrooms/withoutTeacher',
-  }),
+  computed: {
+    ...mapState('ui', ['online']),
+    ...mapGetters({
+      isAdmin: 'auth/isAdmin',
+      withTeacher: 'classrooms/withTeacher',
+      withoutTeacher: 'classrooms/withoutTeacher',
+    }),
+  },
   methods: {
     openLesson({ _id }) {
       this.$router.push(`/chamada/${_id}`)

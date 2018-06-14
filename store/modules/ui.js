@@ -1,10 +1,25 @@
+import Vue from 'vue'
+
 export default {
   state: () => ({
     requests: 1,
+    online: false,
+    offlinePages: [
+      'index',
+      'praticantes',
+      'praticantes-new',
+      'praticantes-id-edit',
+      'chamada',
+      'chamada-id',
+      'sign-in',
+    ],
   }),
   mutations: {
     updateRequests(st, count) {
-      st.requests = count
+      Vue.set(st, 'requests', count)
+    },
+    connection(st, online) {
+      Vue.set(st, 'online', online)
     },
   },
   actions: {

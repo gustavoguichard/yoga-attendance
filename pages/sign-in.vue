@@ -42,7 +42,11 @@ export default {
         this.$store.dispatch('notification/success', 'Bem vindo(a)!')
         this.$router.replace('/');
       } catch (e) {
-        this.$store.dispatch('notification/error', e.message)
+        if (e.message === 'Network Error') {
+          this.$store.dispatch('notification/offline')
+        } else {
+          this.$store.dispatch('notification/error', e.message)
+        }
       }
       this.$store.dispatch('ui/done')
     },
