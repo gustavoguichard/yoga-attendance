@@ -56,8 +56,8 @@ module.exports = {
   manifest: {
     name: 'Centro Iyengar Yoga Florianópolis',
     short_name: 'CIYF',
-    start_url: '.',
-    display: 'standalone',
+    start_url: '/',
+    display: 'fullscreen',
     lang: 'pt-BR',
     background_color: '#424242',
     theme_color: '#424242',
