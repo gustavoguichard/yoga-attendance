@@ -4,7 +4,7 @@
   "start_url": ".",
   "display": "standalone",
   "lang": "pt-BR",
-  "background_color": "white",
+  "background_color": "#424242",
   "theme_color": "#424242",
   "description": "Gerenciamento do Centro Iyengar Yoga Florianópolis",
   "icons": [{

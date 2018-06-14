@@ -48,6 +48,19 @@ module.exports = {
       },
     ]
   },
+  manifest: {
+    name: 'Centro Iyengar Yoga Florianópolis',
+    short_name: 'CIYF',
+    start_url: '.',
+    display: 'standalone',
+    lang: 'pt-BR',
+    background_color: 'white',
+    theme_color: '#424242',
+    description: 'Gerenciamento do Centro Iyengar Yoga Florianópolis',
+  },
+  icon: {
+    sizes: [16, 48, 72, 96, 120, 144, 152, 168, 192, 384, 512],
+  },
   plugins: ['@/plugins/vuetify.js', { src: '@/plugins/localStorage.js', ssr: false }],
   css: [
     '@/assets/style/app.styl'
