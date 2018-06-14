@@ -15,10 +15,6 @@ export const store = {
     },
   },
 
-  instanceDefaults: {
-    family: null,
-    familyData: 'Practitioner',
-  },
   replaceItems: true,
   skipRequestIfExists: true,
 }
