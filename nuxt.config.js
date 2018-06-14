@@ -31,8 +31,13 @@ module.exports = {
   workbox: {
     runtimeCaching: [
       {
-        urlPattern: 'localhost:3000/.*',
+        urlPattern: '/_nuxt/.*',
         handler: 'cacheFirst',
+        method: 'GET'
+      },
+      {
+        urlPattern: process.env.REST_API,
+        handler: 'networkFirst',
         method: 'GET'
       },
       {
@@ -54,7 +59,7 @@ module.exports = {
     start_url: '.',
     display: 'standalone',
     lang: 'pt-BR',
-    background_color: 'white',
+    background_color: '#424242',
     theme_color: '#424242',
     description: 'Gerenciamento do Centro Iyengar Yoga Florianópolis',
   },
