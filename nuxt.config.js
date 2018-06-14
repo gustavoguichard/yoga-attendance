@@ -36,7 +36,7 @@ module.exports = {
         method: 'GET'
       },
       {
-        urlPattern: process.env.REST_API,
+        urlPattern: 'https://yoga-attendance-api.herokuapp.com/.*',
         handler: 'networkFirst',
         method: 'GET'
       },
