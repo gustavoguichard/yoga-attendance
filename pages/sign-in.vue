@@ -39,7 +39,7 @@ export default {
       this.$store.dispatch('ui/load')
       try {
         await this.authenticate({ email, password });
-        this.$store.dispatch('notification/success', 'Bem vindo(a)!')
+        this.$store.dispatch('notification/success', 'Bem vindx!')
         this.$router.replace('/');
       } catch (e) {
         if (e.message === 'Network Error') {
