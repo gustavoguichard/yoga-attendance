@@ -64,6 +64,7 @@ export default {
     ...mapGetters('attendance', ['everyAttendant']),
     ...mapGetters('classrooms', ['get']),
     ...mapState('auth', ['user']),
+    ...mapState('ui', ['online']),
     ...mapState('attendance', ['selected', 'restitution', 'currentTeacher']),
     allSelected() {
       return this.subscribedList.length === this.selected.length
@@ -145,17 +146,23 @@ export default {
     },
     async submit() {
       if (this.teacher._id) {
-        const newSubscribers = map(filter(this.restitution, p => !p.restituting), '_id')
-        if (newSubscribers.length) {
-          const classroom = new this.$FeathersVuex.Classroom(this.lesson)
-          classroom.practitioners = [...this.lesson.practitioners, ...newSubscribers]
-          await classroom.patch()
+        if (this.online) {
+          const newSubscribers = map(filter(this.restitution, p => !p.restituting), '_id')
+          if (newSubscribers.length) {
+            const classroom = new this.$FeathersVuex.Classroom(this.lesson)
+            classroom.practitioners = [...this.lesson.practitioners, ...newSubscribers]
+            await classroom.patch()
+          }
         }
         Promise.all(this.everyAttendant.map(async person => this.createFrequency(person)))
         this.createFrequency(this.teacher._id, true)
-        this.$store.commit('attendance/cleanStore')
-        const date = moment().format('YYYY-MM-DD')
-        this.$router.push(`/presencas/${this.lesson._id}/${date}`)
+        if (this.online) {
+          this.$store.commit('attendance/cleanStore')
+          const date = moment().format('YYYY-MM-DD')
+          this.$router.push(`/presencas/${this.lesson._id}/${date}`)
+        }
+        this.$store.dispatch('notification/sync-later')
+        this.$router.push('/')
       } else {
         this.$store.dispatch('notification/info', 'É necessário selecionar um professor')
       }

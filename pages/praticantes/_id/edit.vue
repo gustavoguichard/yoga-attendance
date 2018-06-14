@@ -20,7 +20,7 @@ export default {
   },
   methods: {
     async submit(person) {
-      const result = await new this.$FeathersVuex.Practitioner(person).patch()
+      const result = await new this.$FeathersVuex.Practitioner(person).save()
       if (result) this.$router.push('/praticantes')
     },
   },

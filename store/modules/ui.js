@@ -3,7 +3,7 @@ import Vue from 'vue'
 export default {
   state: () => ({
     requests: 1,
-    online: false,
+    online: true,
     offlinePages: [
       'index',
       'praticantes',

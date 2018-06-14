@@ -45,6 +45,12 @@ module.exports = {
         handler: 'cacheFirst',
         method: 'GET',
         strategyOptions: {cacheableResponse: {statuses: [0, 200]}},
+      },
+      {
+        urlPattern: 'https://gravatar.com/avatar//.*',
+        handler: 'cacheFirst',
+        method: 'GET',
+        strategyOptions: {cacheableResponse: {statuses: [0, 200]}},
       }, {
         urlPattern: 'https://fonts.gstatic.com//.*',
         handler: 'cacheFirst',
