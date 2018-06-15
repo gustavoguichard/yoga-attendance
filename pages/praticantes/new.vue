@@ -12,17 +12,18 @@ import practitionerForm from '@/components/practitioner-form'
 export default {
   components: { practitionerForm },
   computed: {
-    ...mapState('ui', 'online'),
+    ...mapState('ui', ['online']),
   },
   methods: {
     async submit(person) {
+      let result
       if (this.online) {
-        const result = await new this.$FeathersVuex.Practitioner(person).save()
-        if (!result) return
+        result = await new this.$FeathersVuex.Practitioner(person).save()
       } else {
         this.$store.commit('offline/addPractitioner', person)
+        result = true
       }
-      this.$router.push('/praticantes')
+      if (result) this.$router.push('/praticantes')
     },
   },
   async fetch({ store }) {

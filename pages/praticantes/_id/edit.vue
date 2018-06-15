@@ -14,20 +14,21 @@ export default {
   components: { practitionerForm },
   computed: {
     ...mapGetters({ isAdmin: 'auth/isAdmin', practitioner: 'auth/currentPractitioner', get: 'practitioners/get' }),
-    ...mapState('ui', 'online'),
+    ...mapState('ui', ['online']),
     person() {
       return this.get(this.$route.params.id)
     },
   },
   methods: {
     async submit(person) {
+      let result
       if (this.online) {
-        const result = await new this.$FeathersVuex.Practitioner(person).save()
-        if (!result) return
+        result = await new this.$FeathersVuex.Practitioner(person).save()
       } else {
         this.$store.commit('offline/addPractitioner', person)
+        result = true
       }
-      this.$router.push('/praticantes')
+      if (result) this.$router.push('/praticantes')
     },
   },
   async fetch({ store, params }) {
