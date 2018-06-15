@@ -60,9 +60,9 @@ export default {
     ...mapGetters({
       teachers: 'practitioners/teachers',
       findPractitioners: 'practitioners/sortedFind',
+      everyAttendant: 'attendance/everyAttendant',
+      get: 'classrooms/get',
     }),
-    ...mapGetters('attendance', ['everyAttendant']),
-    ...mapGetters('classrooms', ['get']),
     ...mapState('auth', ['user']),
     ...mapState('ui', ['online']),
     ...mapState('attendance', ['selected', 'restitution', 'currentTeacher']),
@@ -98,6 +98,7 @@ export default {
   methods: {
     ...mapActions('attendance', ['addRestitution', 'toggleRestituting', 'toggle']),
     ...mapMutations('attendance', ['cleanStore', 'updateTeacher', 'updateSelected']),
+    ...mapMutations('offline', ['addFrequency']),
     addToLesson(person) {
       this.addRestitution({ ...person, restituting: this.restituting })
     },
@@ -138,11 +139,15 @@ export default {
       return map(this.restitution, '_id').includes(_id)
     },
     async createFrequency(id, teacher = false) {
-      return new this.$FeathersVuex.Frequency({
+      const freq = {
         teacher,
         practitionerId: id,
         classId: this.lesson._id,
-      }).create()
+        createdAt: new Date(),
+      }
+      return this.online
+        ? new this.$FeathersVuex.Frequency(freq).save()
+        : this.addFrequency(freq)
     },
     async submit() {
       if (this.teacher._id) {
@@ -156,13 +161,13 @@ export default {
         }
         Promise.all(this.everyAttendant.map(async person => this.createFrequency(person)))
         this.createFrequency(this.teacher._id, true)
+        this.$store.commit('attendance/cleanStore')
         if (this.online) {
-          this.$store.commit('attendance/cleanStore')
           const date = moment().format('YYYY-MM-DD')
           this.$router.push(`/presencas/${this.lesson._id}/${date}`)
+        } else {
+          this.$router.push('/')
         }
-        this.$store.dispatch('notification/sync-later')
-        this.$router.push('/')
       } else {
         this.$store.dispatch('notification/info', 'É necessário selecionar um professor')
       }

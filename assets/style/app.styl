@@ -28,14 +28,17 @@ body {
   .page-enter-active, .page-leave-active {
     transition: all .5s
   }
+
   .page-enter, .page-leave-active {
     transform: translateY(-10px)
     opacity: 0
   }
+
   .card .toolbar {
     background-color: #a48453
     color: white
   }
+
   @media only screen and (min-width: 600px) {
     .main-card {
       margin: 1em
@@ -90,4 +93,17 @@ body {
       }
     }
   }
+  .indeterminate {
+    animation: rotate 3s linear infinite
+  }
 }
+
+@keyframes rotate {
+  from {
+    transform: rotate(359deg)
+  }
+  to {
+    transform: rotate(0deg)
+  }
+}
+

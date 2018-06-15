@@ -18,9 +18,7 @@
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       <v-toolbar-title>CIYF</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-avatar v-if="!online" size="24px">
-        <v-icon color="red">wifi_off</v-icon>
-      </v-avatar>
+      <syncer />
       <v-btn icon v-if="currentPractitioner" :to="`/praticantes/${currentPractitioner._id}`">
         <v-avatar v-if="currentPractitioner.avatar" size="24px">
           <img :src="currentPractitioner.avatar" />
@@ -38,8 +36,10 @@
 
 <script>
 import { mapGetters, mapState } from 'vuex'
+import syncer from '@/components/syncer'
 
 export default {
+  components: { syncer },
   data: () => ({
     drawer: false,
     items: [

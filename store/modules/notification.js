@@ -37,9 +37,6 @@ export default {
     offline({ commit }) {
       commit('update', notification({ text: 'Você precisa se conectar para prosseguir', type: 'error' }))
     },
-    syncLater({ commit }) {
-      commit('update', notification({ text: 'Dados salvos offline. Lembre-se de conectar para sincronizar os dados!' }))
-    },
     403({ commit }) {
       commit('update', notification({ text: 'Você não está autorizado a acessar esta página', type: 'error' }))
     },

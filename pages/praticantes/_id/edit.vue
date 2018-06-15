@@ -5,23 +5,29 @@
 </template>
 
 <script>
+import { mapGetters, mapState } from 'vuex'
 import fetchService from '@/api/fetch'
 import { isAnotherTeacher } from '@/utils/helpers'
 import practitionerForm from '@/components/practitioner-form'
-import { mapGetters } from 'vuex'
 
 export default {
   components: { practitionerForm },
   computed: {
     ...mapGetters({ isAdmin: 'auth/isAdmin', practitioner: 'auth/currentPractitioner', get: 'practitioners/get' }),
+    ...mapState('ui', 'online'),
     person() {
       return this.get(this.$route.params.id)
     },
   },
   methods: {
     async submit(person) {
-      const result = await new this.$FeathersVuex.Practitioner(person).save()
-      if (result) this.$router.push('/praticantes')
+      if (this.online) {
+        const result = await new this.$FeathersVuex.Practitioner(person).save()
+        if (!result) return
+      } else {
+        this.$store.commit('offline/addPractitioner', person)
+      }
+      this.$router.push('/praticantes')
     },
   },
   async fetch({ store, params }) {

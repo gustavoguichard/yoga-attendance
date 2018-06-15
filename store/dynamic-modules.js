@@ -27,18 +27,20 @@ export const servicePlugins = () => map(servicesFiles.keys(), path => {
   const { hooks, store } = servicesFiles(path)
   const fn = (rootStore, ...args) => {
     api.service(name).hooks({
-      ...hooks,
-      before: { all: [setLoader('load', rootStore)].concat(get(hooks, 'before.all', [])) },
-      after: { all: [setLoader('done', rootStore)].concat(get(hooks, 'after.all', [])) },
-      error: { all: [hook => {
-        if (hook.error.message === 'Network Error') {
-          rootStore.dispatch('notification/offline')
-        } else {
-          rootStore.dispatch('notification/error', hook.error.message)
-        }
-        rootStore.dispatch('ui/done')
-        return hook
-      }].concat(get(hooks, 'error.all', [])) },
+      before: { ...hooks.before, all: [setLoader('load', rootStore)].concat(get(hooks, 'before.all', [])) },
+      after: { ...hooks.after, all: [setLoader('done', rootStore)].concat(get(hooks, 'after.all', [])) },
+      error: {
+        ...hooks.error,
+        all: [hook => {
+          if (hook.error.message === 'Network Error') {
+            rootStore.dispatch('notification/offline')
+          } else {
+            rootStore.dispatch('notification/error', hook.error.message)
+          }
+          rootStore.dispatch('ui/done')
+          return hook
+        }].concat(get(hooks, 'error.all', [])),
+      },
     })
     return service(name, store)(rootStore, ...args)
   }
