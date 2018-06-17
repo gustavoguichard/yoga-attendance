@@ -18,7 +18,7 @@
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       <v-toolbar-title>CIYF</v-toolbar-title>
       <v-spacer></v-spacer>
-      <!-- <syncer></syncer> -->
+      <syncer />
       <v-btn icon v-if="currentPractitioner" :to="`/praticantes/${currentPractitioner._id}`">
         <v-avatar v-if="currentPractitioner.avatar" size="24px">
           <img :src="currentPractitioner.avatar" />

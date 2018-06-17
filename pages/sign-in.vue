@@ -26,6 +26,7 @@ import { mapActions } from 'vuex'
 import pageCta from '@/components/page-cta'
 
 export default {
+  layout: 'minimal',
   components: { pageCta },
   data: () => ({
     email: '',
