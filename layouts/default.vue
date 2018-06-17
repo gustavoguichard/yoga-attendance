@@ -35,7 +35,8 @@ export default {
       this.$store.commit('ui/connection', false)
     },
   },
-  mounted() {
+  async mounted() {
+    await this.$nextTick()
     this.$store.dispatch('ui/done')
     if (!window.navigator) {
       return
