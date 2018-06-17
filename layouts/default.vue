@@ -1,12 +1,12 @@
 <template>
   <v-app id="ciyf-app" :class="$route.name">
-    <application-controls />
+    <application-controls></application-controls>
     <no-ssr>
-      <notification-center />
+      <notification-center></notification-center>
     </no-ssr>
     <v-content>
       <v-container class="app-container" fluid fill-height>
-        <loading :active="loading" />
+        <loading :active="loading"></loading>
         <nuxt />
       </v-container>
     </v-content>

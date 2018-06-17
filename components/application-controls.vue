@@ -1,24 +1,24 @@
 <template>
   <div>
     <v-navigation-drawer v-if="!isSignIn" fixed clipped v-model="drawer" app>
-    <v-list dense>
-      <template v-for="(item, i) in items">
-        <v-list-tile v-if="visibleItem(item)" :to="item.to">
-          <v-list-tile-action v-if="item.icon">
-            <v-icon v-html="item.icon" />
-          </v-list-tile-action>
-          <v-list-tile-content>
-            <v-list-tile-title v-html="item.name"></v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
-      </template>
-    </v-list>
-  </v-navigation-drawer>
+      <v-list dense>
+        <template v-for="(item, i) in items">
+          <v-list-tile v-if="visibleItem(item)" :to="item.to">
+            <v-list-tile-action v-if="item.icon">
+              <v-icon v-html="item.icon"></v-icon>
+            </v-list-tile-action>
+            <v-list-tile-content>
+              <v-list-tile-title v-html="item.name"></v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+        </template>
+      </v-list>
+    </v-navigation-drawer>
     <v-toolbar color="grey darken-3" dark fixed app clipped-left>
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       <v-toolbar-title>CIYF</v-toolbar-title>
       <v-spacer></v-spacer>
-      <syncer />
+      <syncer></syncer>
       <v-btn icon v-if="currentPractitioner" :to="`/praticantes/${currentPractitioner._id}`">
         <v-avatar v-if="currentPractitioner.avatar" size="24px">
           <img :src="currentPractitioner.avatar" />

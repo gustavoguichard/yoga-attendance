@@ -1,6 +1,6 @@
 <template>
   <div :class="{ 'loading-container': true, active }">
-    <div class="progress-wrapper" />
+    <div class="progress-wrapper"></div>
     <v-progress-circular
       class="progress"
       :size="100"

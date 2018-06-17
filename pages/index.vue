@@ -35,7 +35,7 @@
         ></class-tile>
       </v-list>
     </v-card>
-    <page-cta v-if="isAdmin" to="/aulas/new" icon="add" />
+    <page-cta v-if="isAdmin && online" to="/aulas/new" icon="add" />
   </v-layout>
 </template>
 
