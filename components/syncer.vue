@@ -1,12 +1,12 @@
 <template>
   <div>
-    <v-avatar v-if="!online" size="24px">
+    <v-avatar v-show="!online" size="24px">
       <v-icon color="red">wifi_off</v-icon>
     </v-avatar>
-    <v-avatar v-if="syncing" size="24px" class="ml-2 indeterminate">
+    <v-avatar v-show="syncing" size="24px" class="ml-2 indeterminate">
       <v-icon color="green">sync</v-icon>
     </v-avatar>
-    <v-avatar v-else-if="pending" size="24px" class="ml-2">
+    <v-avatar v-show="!syncing && pending" size="24px" class="ml-2">
       <v-icon color="orange">sync_problem</v-icon>
     </v-avatar>
   </div>
