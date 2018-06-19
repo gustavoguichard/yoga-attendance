@@ -12,7 +12,7 @@
           <v-icon v-if="allSelected" color="blue darken-4">check_circle</v-icon>
           <v-icon v-else>check</v-icon>
         </v-btn>
-        <v-toolbar-title>Praticantes da turma</v-toolbar-title>
+        <v-toolbar-title>Praticantes da turma - {{ everyAttendant.length }}</v-toolbar-title>
       </v-toolbar>
       <v-list dense subheader>
         <div v-for="person in listedPeople" :key="person._id">

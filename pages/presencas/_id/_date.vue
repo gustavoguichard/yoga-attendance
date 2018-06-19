@@ -32,7 +32,7 @@
     </v-dialog>
     <v-card class="main-card">
       <v-toolbar>
-        <v-toolbar-title>Alunos presentes:</v-toolbar-title>
+        <v-toolbar-title>Alunos presentes: {{ practitionersFreq.length }}</v-toolbar-title>
       </v-toolbar>
       <v-list two-line subheader>
         <div v-for="(freq, i) in practitionersFreq" :key="i">
