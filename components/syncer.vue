@@ -29,10 +29,6 @@ export default {
           new this.$FeathersVuex[Model](item).save()
         ))
       } catch (error) {
-        // this.$store.dispatch(
-        // 'notification/info',
-        // 'Ocorreram alguns erros e não foi possível salvar todos os dados'
-        // )
         result = error.message
       }
       return Promise.resolve(result)

@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { concat, filter, map, uniq, without } from 'lodash'
+import { concat, map, uniq, without } from 'lodash'
 
 export default {
   state: () => ({
@@ -31,7 +31,7 @@ export default {
     },
     toggle({ commit, getters, state: st }, person) {
       if (getters.isRestituting(person)) {
-        const list = filter(st.restitution, ({ _id }) => _id !== person._id)
+        const list = st.restitution.filter(p => p._id !== person._id)
         commit('updateRestitution', list)
       } else {
         const fn = st.selected.includes(person._id) ? without : concat

@@ -17,7 +17,14 @@
       <v-list dense subheader>
         <div v-for="person in listedPeople" :key="person._id">
           <person-list-item avatar="right" :person="person" @click="toggle(person)">
-            <v-icon slot="left" @click="togglePerson(person, $event)" :color="icon(person).color">{{ icon(person).name }}</v-icon>
+            <span slot="left" v-if="isRestituting(person)" @click.stop="toggleRestituting(person)">
+              <v-icon v-if="person.restituting" color="orange darken-2">compare_arrows</v-icon>
+              <v-icon v-else color="green darken-2">check_circle</v-icon>
+            </span>
+            <span slot="left" v-else>
+              <v-icon v-if="isSelected(person)" color="cyan darken-2">check_circle</v-icon>
+              <v-icon v-else color="grey lighten-2">check</v-icon>
+            </span>
           </person-list-item>
         </div>
       </v-list>
@@ -47,7 +54,7 @@
 <script>
 import moment from 'moment'
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
-import { filter, map } from 'lodash'
+import { map } from 'lodash'
 import fetchService from '@/api/fetch'
 import pageCta from '@/components/page-cta'
 import personListItem from '@/components/person-list-item'
@@ -58,10 +65,11 @@ export default {
   data: () => ({ restituting: true }),
   computed: {
     ...mapGetters({
+      getPractitioner: 'practitioners/get',
       teachers: 'practitioners/teachers',
       findPractitioners: 'practitioners/sortedFind',
       everyAttendant: 'attendance/everyAttendant',
-      get: 'classrooms/get',
+      getClassroom: 'classrooms/get',
     }),
     ...mapState('auth', ['user']),
     ...mapState('ui', ['online']),
@@ -73,14 +81,17 @@ export default {
       return !!this.$route.query.add
     },
     subscribedList() {
-      const query = { _id: { $in: this.lesson.practitioners, $ne: this.teacher.id } }
+      const query = { _id: { $in: this.lesson.practitioners, $ne: this.teacher._id } }
       return this.findPractitioners({ query })
     },
     lesson() {
-      return this.get(this.$route.params.id)
+      return this.getClassroom(this.$route.params.id)
     },
     listedPeople() {
       return [...this.subscribedList, ...this.restitution]
+    },
+    newSubscribers() {
+      return map(this.restitution.filter(p => !p.restituting), '_id')
     },
     otherPractitioners() {
       const usedIds = [...this.subscribedList, ...this.restitution, this.teacher]
@@ -102,25 +113,9 @@ export default {
     addToLesson(person) {
       this.addRestitution({ ...person, restituting: this.restituting })
     },
-    togglePerson(person, event) {
-      if (this.isRestituting(person)) {
-        this.toggleRestituting(person)
-        event.stopPropagation()
-      }
-    },
     toggleChooseList() {
       const query = this.chooseList ? null : { add: 'practitioner' }
       this.$router.push({ query })
-    },
-    icon(person) {
-      if (this.isRestituting(person)) {
-        return person.restituting
-          ? { color: 'orange darken-4', name: 'compare_arrows' }
-          : { color: 'green darken-2', name: 'check_circle' }
-      }
-      return this.isSelected(person)
-        ? { color: 'cyan darken-3', name: 'check_circle' }
-        : { color: 'grey lighten-1', name: 'check' }
     },
     selectAll() {
       const list = this.allSelected ? [] : map(this.subscribedList, '_id')
@@ -138,39 +133,31 @@ export default {
     isRestituting({ _id }) {
       return map(this.restitution, '_id').includes(_id)
     },
-    async createFrequency(id, teacher = false) {
-      const freq = {
-        teacher,
-        practitionerId: id,
-        classId: this.lesson._id,
-        createdAt: new Date(),
-      }
+    async addSubscribers() {
+      if (!this.online || !this.newSubscribers.length) return Promise.resolve()
+      const practitioners = this.lesson.practitioners.concat(this.newSubscribers)
+      return new this.$FeathersVuex.Classroom({ ...this.lesson, practitioners })
+        .patch()
+    },
+    async createFrequency(practitionerId, teacher = false) {
+      const classId = this.lesson._id
+      const createdAt = new Date()
+      const freq = { teacher, practitionerId, classId, createdAt }
       return this.online
         ? new this.$FeathersVuex.Frequency(freq).save()
         : this.addFrequency(freq)
     },
     async submit() {
-      if (this.teacher._id) {
-        if (this.online) {
-          const newSubscribers = map(filter(this.restitution, p => !p.restituting), '_id')
-          if (newSubscribers.length) {
-            const classroom = new this.$FeathersVuex.Classroom(this.lesson)
-            classroom.practitioners = [...this.lesson.practitioners, ...newSubscribers]
-            await classroom.patch()
-          }
-        }
-        Promise.all(this.everyAttendant.map(async person => this.createFrequency(person)))
-        this.createFrequency(this.teacher._id, true)
-        this.$store.commit('attendance/cleanStore')
-        if (this.online) {
-          const date = moment().format('YYYY-MM-DD')
-          this.$router.push(`/presencas/${this.lesson._id}/${date}`)
-        } else {
-          this.$router.push('/')
-        }
-      } else {
-        this.$store.dispatch('notification/info', 'É necessário selecionar um professor')
+      if (!this.teacher._id) {
+        return this.$store.dispatch('notification/info', 'É necessário selecionar um professor')
       }
+      await this.addSubscribers()
+      await Promise.all(this.everyAttendant.map(async person => this.createFrequency(person)))
+      await this.createFrequency(this.teacher._id, true)
+      this.$store.commit('attendance/cleanStore')
+      if (!this.online) return this.$router.push('/')
+      const date = moment().format('YYYY-MM-DD')
+      return this.$router.push(`/presencas/${this.lesson._id}/${date}`)
     },
   },
   async fetch({ store }) {

@@ -1,7 +1,5 @@
 import Vue from 'vue'
 
-let timer
-
 export default {
   state: () => ({
     requests: 1,
@@ -19,13 +17,6 @@ export default {
   mutations: {
     updateRequests(st, count) {
       Vue.set(st, 'requests', count)
-      if (count > 0) {
-        timer = setInterval(() => {
-          Vue.set(st, 'requests', 0)
-        }, 20000)
-      } else {
-        clearInterval(timer)
-      }
     },
     connection(st, online) {
       Vue.set(st, 'online', online)
