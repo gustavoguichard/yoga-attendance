@@ -92,12 +92,15 @@ export default {
       return this.getClassroom(this.$route.params.id)
     },
     practitionersFreq() {
-      const result = this.frequency.filter(f => f.practitionerId !== this.teacher._id)
+      const result = this.frequency.filter(f => f.practitionerId !== this.taughtById)
       return sortBy(result, 'practitioner.displayName')
     },
     taughtBy() {
       const temporary = this.frequency.find(f => f.teacher)
       return get(temporary, 'practitioner')
+    },
+    taughtById() {
+      return get(this.taughtBy, '_id')
     },
     teacher() {
       return this.taughtBy || this.lesson.teacherData
@@ -108,7 +111,7 @@ export default {
     },
     chooseQuery() {
       const peopleIds = map(this.frequency, 'practitioner._id')
-      const teachers = { teacher: true, _id: { $ne: this.teacher._id, $in: peopleIds } }
+      const teachers = { teacher: true, _id: { $ne: this.taughtById, $in: peopleIds } }
       const practitioners = { _id: { $nin: peopleIds } }
       return this.chooseList === 'teacher' ? teachers : practitioners
     },

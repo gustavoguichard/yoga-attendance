@@ -38,7 +38,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { map, groupBy } from 'lodash'
+import { get, map, groupBy } from 'lodash'
 import { sortByKey } from '@/utils/helpers'
 import { getTimeRangeQuery, parseDate } from '@/utils/date-helpers'
 import fetchService from '@/api/fetch'
@@ -60,12 +60,13 @@ export default {
       const grouped = groupBy(withDate, item => `${item.date}_${item.classId}`)
       const sorted = sortByKey(grouped, true)
       return map(sorted, curr => {
-        const withTeacher = curr.find(c => c.teacher) || curr[0]
+        const withTeacher = curr.find(c => c.teacher)
+        const sample = curr[0]
         return {
-          date: withTeacher.date,
-          classId: withTeacher.classId,
-          title: withTeacher.classroom.title,
-          teacher: withTeacher.practitioner.displayName,
+          date: sample.date,
+          classId: sample.classId,
+          title: sample.classroom.title,
+          teacher: get(withTeacher, 'practitioner.displayName') || '',
           amount: curr.length - 1,
         }
       })
@@ -76,7 +77,7 @@ export default {
   },
   async fetch({ store, query }) {
     const createdAt = getTimeRangeQuery('week', query.weeks)
-    await fetchService('frequency')(store, { createdAt }, query.weeks)
+    await fetchService('frequency')(store, { createdAt }, true)
   },
 };
 </script>
