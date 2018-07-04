@@ -81,7 +81,7 @@ export default {
         teacher: false,
         'classroom.regularClass': true,
       })
-      const grouped = groupBy(frequency, 'practitioner.displayName')
+      const grouped = groupBy(frequency, item => `${get(item, 'practitioner.displayName')}_${item.practitionerId}`)
       const sorted = sortByKey(grouped)
       const result = map(sorted, freq => {
         const person = freq[0].practitioner
