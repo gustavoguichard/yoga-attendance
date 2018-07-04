@@ -5,6 +5,7 @@ export const store = {
     findByTimeAgo: (state, { find }) => ({ unit, unitsAgo }, query = {}) => {
       const payments = find({ query })
       const data = [].concat(payments.data || payments)
+      console.log(data, state)
       return filterByTimeAgo(data, 'createdAt', unit, unitsAgo)
     },
   },
