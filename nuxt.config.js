@@ -7,6 +7,9 @@ module.exports = {
   },
   router: {
     middleware: ['auth', 'check-connection'],
+    scrollBehavior: (to, from, savedPosition) => {
+      return { x: 0, y: 0 }
+    },
   },
   /*
   ** Headers of the page

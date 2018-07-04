@@ -25,7 +25,6 @@
       <slot name="right"></slot>
     </v-list-tile-action>
   </v-list-tile>
-
 </template>
 
 <script>
