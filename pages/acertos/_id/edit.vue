@@ -129,12 +129,11 @@ export default {
       this.datePicker = false
     },
     async submit() {
-      const { paidAt } = this
+      const paidAt = moment(this.paidAt)._d
       const { status, totalPaid, note } = this.editing
       const _id = this.$route.params.id
-      this.editing.patch({ _id, paidAt, status, totalPaid, note })
-
-      this.$router.push(`/praticantes/${this.person._id}`)
+      await new this.$FeathersVuex.Payment({ _id, paidAt, status, totalPaid, note }).save()
+      this.$router.push(this.$route.query.back_to || `/praticantes/${this.person._id}`)
     },
   },
   async fetch({ store }) {
