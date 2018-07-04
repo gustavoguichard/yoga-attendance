@@ -33,7 +33,7 @@
       <v-card-text>
         <v-layout wrap>
           <v-flex xs12>
-            <v-text-field @keyup.enter="submit" v-model="editing.total" label="Valor total" name="total" prepend-icon="attach_money" required></v-text-field>
+            <v-text-field v-if="isAdmin" @keyup.enter="submit" v-model="editing.total" label="Valor total" name="total" prepend-icon="attach_money" required></v-text-field>
             <v-text-field @keyup.enter="submit" v-model="editing.totalPaid" @blur="paid" label="Valor pago" name="totalPaid" prepend-icon="money_off" required></v-text-field>
             <v-text-field @keyup.enter="submit" v-model="editing.note" label="Observação" name="note" prepend-icon="note_add"></v-text-field>
             <v-dialog
@@ -132,9 +132,9 @@ export default {
     },
     async submit() {
       const paidAt = moment(this.paidAt)._d
-      const { status, totalPaid, note } = this.editing
+      const { status, total, totalPaid, note } = this.editing
       const _id = this.$route.params.id
-      await new this.$FeathersVuex.Payment({ _id, paidAt, status, totalPaid, note }).save()
+      await new this.$FeathersVuex.Payment({ _id, paidAt, status, total, totalPaid, note }).save()
       this.$router.push(this.$route.query.back_to || `/praticantes/${this.person._id}`)
     },
   },

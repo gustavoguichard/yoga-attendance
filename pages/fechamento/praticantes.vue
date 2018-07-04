@@ -39,7 +39,7 @@
                   Aulas: {{ item.total }}
                 </v-chip>
                 <v-chip v-for="(payment, i) in item.payment" :key="i" light small :color="statusColor(payment)">
-                  {{ payment.status === 'open' ? 'Pagamento Aberto' : fn.toMoney(payment.totalPaid) }}
+                  {{ payment.status === 'open' || payment.status === 'pending' ? `Pagamento Aberto: ${fn.toMoney(payment.total)}` : fn.toMoney(payment.totalPaid) }}
                 </v-chip>
               </v-list-tile-sub-title>
             </v-list-tile-content>
@@ -89,8 +89,8 @@ export default {
           regularClass: true,
           practitionerId: freq[0].practitionerId,
         })
-        const payment = payments.map(({ _id, totalPaid, status, note }) =>
-          ({ _id, totalPaid, status, note })
+        const payment = payments.map(({ _id, totalPaid, total, status, note }) =>
+          ({ _id, totalPaid, total, status, note })
         )
         return { person, payment, total: freq.length }
       })
