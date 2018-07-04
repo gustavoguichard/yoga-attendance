@@ -85,10 +85,10 @@ export default {
       const sorted = sortByKey(grouped)
       const result = map(sorted, freq => {
         const person = freq[0].practitioner
-        const payments = person ? this.findPayments({ unitsAgo: query.months, unit: 'month' }, {
+        const payments = this.findPayments({ unitsAgo: query.months, unit: 'month' }, {
           regularClass: true,
-          practitionerId: person._id,
-        }) : []
+          practitionerId: freq[0].practitionerId,
+        })
         const payment = payments.map(({ _id, totalPaid, status, note }) =>
           ({ _id, totalPaid, status, note })
         )
