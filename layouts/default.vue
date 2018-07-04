@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import applicationControls from '@/components/application-controls'
+import applicationControls from '@/components/application-controls/index'
 import notificationCenter from '@/components/notification-center'
 import loading from '@/components/loading'
 import { mapGetters } from 'vuex'
