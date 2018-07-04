@@ -13,7 +13,7 @@
             v-for="lesson in teacher.classes"
             :key="lesson.title"
             :lesson="lesson"
-            :callback="openLesson"
+            to="/chamada/:id"
             :viewFrequency="online && viewFrequency"
             :editClass="isAdmin && online && editClass"
           ></class-tile>
@@ -29,7 +29,7 @@
           v-for="lesson in withoutTeacher"
           :key="lesson.title"
           :lesson="lesson"
-          :callback="openLesson"
+          to="/chamada/:id"
           :viewFrequency="online && viewFrequency"
           :editClass="isAdmin && online && editClass"
         ></class-tile>
@@ -57,9 +57,6 @@ export default {
     }),
   },
   methods: {
-    openLesson({ _id }) {
-      this.$router.push(`/chamada/${_id}`)
-    },
     viewFrequency({ _id }) {
       this.$router.push(`/presencas?classId=${_id}`)
     },

@@ -19,10 +19,11 @@
 
 <script>
 export default {
-  props: ['lesson', 'viewFrequency', 'editClass', 'openLesson', 'callback'],
+  props: ['lesson', 'viewFrequency', 'editClass', 'openLesson', 'to'],
   methods: {
     clicked(lesson) {
-      if (this.callback) this.callback(lesson)
+      const path = this.to.replace(/:id/g, lesson._id)
+      this.$router.push(path)
     },
   },
 };
