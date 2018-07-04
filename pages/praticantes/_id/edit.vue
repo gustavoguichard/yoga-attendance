@@ -28,7 +28,7 @@ export default {
         this.$store.commit('offline/addPractitioner', person)
         result = true
       }
-      if (result) this.$router.push('/praticantes')
+      if (result) this.$router.push(this.$route.query.back_to || '/praticantes')
     },
   },
   async fetch({ store, params }) {

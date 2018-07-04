@@ -6,6 +6,7 @@ export default {
     selected: [],
     restitution: [],
     currentTeacher: undefined,
+    newPractitioner: undefined,
   }),
 
   mutations: {
@@ -23,11 +24,20 @@ export default {
     updateSelected(st, list) {
       Vue.set(st, 'selected', uniq(list))
     },
+    updatePractitioner(st, person) {
+      Vue.set(st, 'newPractitioner', person)
+    },
   },
 
   actions: {
     addRestitution({ commit, state: st }, person) {
       commit('updateRestitution', [...st.restitution, person])
+    },
+    newPractitioner({ commit }, person) {
+      commit('updatePractitioner', person)
+    },
+    clearPractitioner({ commit }) {
+      commit('updatePractitioner', undefined)
     },
     toggle({ commit, getters, state: st }, person) {
       if (getters.isRestituting(person)) {

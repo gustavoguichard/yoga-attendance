@@ -1,6 +1,9 @@
 <template>
   <v-layout v-if="chooseList" justify-center wrap>
     <practitioners-list :practitioners="otherPractitioners" title="Escolha o praticante" @selected="addToLesson" :chooseList="true">
+      <v-btn slot="header" color="primary" :to="`/praticantes/new?back_to=${$route.path}`">
+        Adicionar novo
+      </v-btn>
       <v-switch color="cyan darken-3" slot="footer" :label="`Reposição${restituting ? '' : '?'}`" v-model="restituting"></v-switch>
     </practitioners-list>
     <page-cta icon="arrow_back" @click.stop="toggleChooseList" />
@@ -74,7 +77,7 @@ export default {
     }),
     ...mapState('auth', ['user']),
     ...mapState('ui', ['online']),
-    ...mapState('attendance', ['selected', 'restitution', 'currentTeacher']),
+    ...mapState('attendance', ['selected', 'restitution', 'currentTeacher', 'newPractitioner']),
     allSelected() {
       return this.subscribedList.length === this.selected.length
     },
@@ -163,6 +166,12 @@ export default {
       const date = moment().format('YYYY-MM-DD')
       return this.$router.push(`/presencas/${this.lesson._id}/${date}`)
     },
+  },
+  mounted() {
+    if (this.newPractitioner) {
+      this.addToLesson(this.newPractitioner)
+      this.$store.dispatch('attendance/clearPractitioner')
+    }
   },
   async fetch({ store }) {
     await fetchService('classrooms')(store)
