@@ -28,12 +28,13 @@
           <br>
           Quantidade: {{ payment.frequented.length }}
         </p>
-        <h3>Total: {{ fn.toMoney(payment.total) }}</h3>
+        <h3>Total: {{ fn.toMoney(editing.total) }}</h3>
       </v-card-text>
       <v-card-text>
         <v-layout wrap>
           <v-flex xs12>
-            <v-text-field @keyup.enter="submit" v-model="editing.totalPaid" @blur="paid" label="Valor pago" name="totalPaid" prepend-icon="attach_money" required></v-text-field>
+            <v-text-field @keyup.enter="submit" v-model="editing.total" label="Valor total" name="total" prepend-icon="attach_money" required></v-text-field>
+            <v-text-field @keyup.enter="submit" v-model="editing.totalPaid" @blur="paid" label="Valor pago" name="totalPaid" prepend-icon="money_off" required></v-text-field>
             <v-text-field @keyup.enter="submit" v-model="editing.note" label="Observação" name="note" prepend-icon="note_add"></v-text-field>
             <v-dialog
               ref="dialog"
@@ -96,6 +97,7 @@ export default {
     editing: {
       status: 'open',
       totalPaid: '',
+      total: '',
       note: '',
     },
   }),
