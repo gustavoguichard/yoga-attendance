@@ -38,7 +38,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { get, map, groupBy } from 'lodash'
+import { map, groupBy } from 'lodash'
 import { sortByKey } from '@/utils/helpers'
 import { getTimeRangeQuery, parseDate } from '@/utils/date-helpers'
 import fetchService from '@/api/fetch'
@@ -49,7 +49,11 @@ export default {
   watchQuery: ['weeks'],
   components: { dateNavigator, pageCta },
   computed: {
-    ...mapGetters({ findFrequency: 'frequency/findByTimeAgo' }),
+    ...mapGetters({
+      getClass: 'classrooms/get',
+      getPerson: 'practitioners/get',
+      findFrequency: 'frequency/findByTimeAgo',
+    }),
     frequency() {
       const { query } = this.$route
       const searchQuery = query.classId ? { classId: query.classId } : undefined
@@ -60,14 +64,16 @@ export default {
       const grouped = groupBy(withDate, item => `${item.date}_${item.classId}`)
       const sorted = sortByKey(grouped, true)
       return map(sorted, curr => {
-        const withTeacher = curr.find(c => c.teacher)
+        const taught = curr.find(c => c.teacher)
         const sample = curr[0]
+        const classroom = this.getClass(sample.classId)
+        const teacher = this.getPerson(taught ? taught.practitionerId : classroom.teacher)
         return {
           date: sample.date,
           classId: sample.classId,
-          title: sample.classroom.title,
-          teacher: get(withTeacher, 'practitioner.displayName') || '',
-          amount: curr.length - 1,
+          title: classroom.title,
+          teacher: teacher ? teacher.displayName : '',
+          amount: curr.length - (+!!teacher),
         }
       })
     },
@@ -77,6 +83,8 @@ export default {
   },
   async fetch({ store, query }) {
     const createdAt = getTimeRangeQuery('week', query.weeks)
+    await fetchService('classrooms')(store)
+    await fetchService('practitioners')(store)
     await fetchService('frequency')(store, { createdAt }, true)
   },
 };

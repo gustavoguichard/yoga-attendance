@@ -89,6 +89,7 @@ export default {
   computed: {
     ...mapGetters({
       getPractitioner: 'practitioners/get',
+      getClass: 'classrooms/get',
       findPayments: 'payments/findByTimeAgo',
       findFrequency: 'frequency/findByTimeAgo',
     }),
@@ -100,9 +101,10 @@ export default {
     },
     frequency() {
       const { query, params } = this.$route
-      return this.findFrequency({ unitsAgo: query.months, unit: 'month' }, {
+      const frequency = this.findFrequency({ unitsAgo: query.months, unit: 'month' }, {
         practitionerId: params.id,
       })
+      return frequency.map(f => ({ ...f, classroom: this.getClass(f.classId) }))
     },
     payments() {
       const { query, params } = this.$route
@@ -125,6 +127,7 @@ export default {
   async fetch({ store, query }) {
     const createdAt = getTimeRangeQuery('month', query.months)
     await fetchService('practitioners')(store)
+    await fetchService('classrooms')(store)
     await fetchService('payments')(store, { createdAt }, query.months)
     await fetchService('frequency')(store, { createdAt }, query.months)
   },

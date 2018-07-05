@@ -43,23 +43,27 @@ export default {
   data: () => ({ filter: '' }),
   computed: {
     ...mapGetters({
-      getLesson: 'classrooms/get',
+      getClass: 'classrooms/get',
+      getPerson: 'practitioners/get',
       findFrequency: 'frequency/findByTimeAgo',
       findPayments: 'payments/find',
     }),
     frequency() {
       const { query } = this.$route
-      const frequency = this.findFrequency({ unitsAgo: query.months, unit: 'month' }, {
-        teacher: false,
+      const frequency = this.findFrequency({ unitsAgo: query.months, unit: 'month' }, { teacher: false })
+      const populated = frequency.map(f => {
+        const classroom = this.getClass(f.classId)
+        const practitioner = this.getPerson(f.practitionerId)
+        return { ...f, classroom, practitioner }
       })
-      return formattedFrequency(frequency, this.findPayments, query.months, this.lesson)
+      return formattedFrequency(populated, this.findPayments, query.months, this.lesson)
     },
     people() {
       const fromClass = this.frequency.filter(f => f.frequency > 0)
       return searchInFields(fromClass, ['person.displayName', 'person.surname'], this.filter)
     },
     lesson() {
-      return this.getLesson(this.$route.params.id)
+      return this.getClass(this.$route.params.id)
     },
   },
   methods: {

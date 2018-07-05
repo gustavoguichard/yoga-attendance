@@ -42,16 +42,21 @@ export default {
   data: () => ({ filter: '' }),
   computed: {
     ...mapGetters({
+      getClass: 'classrooms/get',
+      getPerson: 'practitioners/get',
       findPayments: 'payments/find',
       findFrequency: 'frequency/findByTimeAgo',
     }),
     frequency() {
       const { query } = this.$route
-      const frequency = this.findFrequency({ unitsAgo: query.months, unit: 'month' }, {
-        teacher: false,
-        'classroom.regularClass': true,
+      const frequency = this.findFrequency({ unitsAgo: query.months, unit: 'month' }, { teacher: false })
+      const populated = frequency.map(f => {
+        const classroom = this.getClass(f.classId)
+        const practitioner = this.getPerson(f.practitionerId)
+        return { ...f, classroom, practitioner }
       })
-      return formattedFrequency(frequency, this.findPayments, query.months)
+      const filtered = populated.filter(f => f.classroom.regularClass)
+      return formattedFrequency(filtered, this.findPayments, query.months)
     },
     people() {
       return searchInFields(this.frequency, ['person.displayName', 'person.surname'], this.filter)
@@ -65,6 +70,7 @@ export default {
   async fetch({ store, query }) {
     const createdAt = getTimeRangeQuery('month', query.months)
     await fetchService('practitioners')(store)
+    await fetchService('classrooms')(store)
     await fetchService('payments')(store, { createdAt }, true)
     await fetchService('frequency')(store, { createdAt }, query.months)
   },

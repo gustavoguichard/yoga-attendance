@@ -76,6 +76,7 @@ export default {
   computed: {
     ...mapGetters({
       getClassroom: 'classrooms/get',
+      getPerson: 'practitioners/get',
       findFrequency: 'frequency/findByTimeRange',
     }),
     chooseList() {
@@ -93,7 +94,8 @@ export default {
     },
     practitionersFreq() {
       const result = this.frequency.filter(f => f.practitionerId !== this.taughtById)
-      return sortBy(result, 'practitioner.displayName')
+      const sorted = sortBy(result, 'practitioner.displayName')
+      return sorted.map(f => ({ ...f, practitioner: this.getPerson(f.practitionerId) }))
     },
     taughtBy() {
       const temporary = this.frequency.find(f => f.teacher)
@@ -117,8 +119,8 @@ export default {
     },
   },
   methods: {
-    isSubscribed({ classroom, practitionerId }) {
-      return classroom.practitioners && classroom.practitioners.includes(practitionerId)
+    isSubscribed({ practitionerId }) {
+      return this.lesson.practitioners.includes(practitionerId)
     },
     toggleChooseList(add = 'practitioner') {
       const query = this.chooseList ? null : { add }
@@ -162,6 +164,7 @@ export default {
   },
   async fetch({ store, params }) {
     const { date } = params
+    await fetchService('practitioners')(store)
     await fetchService('classrooms')(store)
     await fetchService('frequency')(store, {
       createdAt: getTimeRange(date),
