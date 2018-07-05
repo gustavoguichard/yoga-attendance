@@ -34,9 +34,6 @@ export const store = {
     },
   },
 
-  instanceDefaults: {
-    // teacherData: 'Practitioner',
-  },
   replaceItems: true,
   skipRequestIfExists: true,
 }

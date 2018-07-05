@@ -15,13 +15,13 @@
         <v-flex xs12>
           <v-text-field @keyup.enter="submit" v-model="editing.email" name="email" label="E-mail" prepend-icon="email" required></v-text-field>
         </v-flex>
-        <v-flex xs12>
+        <!-- <v-flex xs12>
           <v-avatar size="80" class="grey lighten-4 mt-2 mb-4" @click="pickFile" style="cursor: pointer">
             <img v-if="editing.picture" :src="editing.picture" alt="avatar">
             <v-icon v-else alt="avatar">add_a_photo</v-icon>
           </v-avatar>
           <input style="display: none" type="file" accept="image/*" ref="fileInput" @change="onFileChange">
-        </v-flex>
+        </v-flex> -->
         <v-flex xs12>
           <v-checkbox color="cyan darken-2" v-model="editing.teacher" name="teacher" label="Professor"></v-checkbox>
         </v-flex>
