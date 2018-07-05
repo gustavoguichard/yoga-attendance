@@ -1,5 +1,5 @@
 <template>
-  <div class="text-xs-center grey--text text--darken-2 mb-4 mt-2">
+  <div :class="{'text-xs-center grey--text text--darken-2': true, 'mb-4 mt-2': !noMargin }">
     <v-avatar v-if="icon || avatar" class="mb-2" size="100">
       <img v-if="avatar" :src="avatar" alt="Professor" />
       <v-icon x-large v-else>{{ icon }}</v-icon>
@@ -10,7 +10,7 @@
 </template>
 
 <script>
-export default { props: ['icon', 'avatar', 'title', 'subtitle'] }
+export default { props: ['icon', 'avatar', 'title', 'subtitle', 'no-margin'] }
 </script>
 
 <style scoped>
