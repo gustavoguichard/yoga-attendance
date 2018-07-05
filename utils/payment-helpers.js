@@ -1,5 +1,5 @@
 import moment from 'moment'
-import { compact, get, groupBy, join, map } from 'lodash'
+import { compact, get, groupBy, join, map, sumBy } from 'lodash'
 import { sortByKey } from '@/utils/helpers'
 import { getPrevDate } from '@/utils/date-helpers'
 
@@ -23,9 +23,14 @@ export const formattedFrequency = (frequency, find, months, lesson) => {
     const payment = payments.map(({ _id, totalPaid, total, status, note }) =>
       ({ _id, totalPaid, total, status, note })
     )
+    const percent = (freqInClass.length || freq.length) / freq.length
+    const totalPaid = sumBy(payment, 'totalPaid') * percent
+    const debth = (sumBy(payment, 'total') - totalPaid) * percent
     return {
       person,
       payment,
+      totalPaid,
+      debth,
       total: freq.length,
       frequency: freqInClass.length,
     }
