@@ -20,37 +20,7 @@
         />
       </v-card-title>
       <v-divider />
-      <v-list two-line>
-        <template v-for="(item, i) in people">
-          <v-divider v-if="i > 0" />
-          <v-list-tile ripple avatar :to="`/praticantes/${item.person._id}?months=${$route.query.months}`">
-            <v-list-tile-avatar size="28">
-              <img :src="item.person.avatar" />
-            </v-list-tile-avatar>
-            <v-list-tile-content>
-              <v-list-tile-title>
-                <span>
-                  {{ item.person.displayName }}
-                  <em class="grey--text"> - {{ item.person.surname }}</em>
-                </span>
-              </v-list-tile-title>
-              <v-list-tile-sub-title>
-                <v-chip outline small color="primary">
-                  Aulas: {{ item.total }}
-                </v-chip>
-                <v-chip v-for="(payment, i) in item.payment" :key="i" light small :color="statusColor(payment)">
-                  {{ payment.status === 'open' || payment.status === 'pending' ? `Pagamento Aberto: ${fn.toMoney(payment.total)}` : fn.toMoney(payment.totalPaid) }}
-                </v-chip>
-              </v-list-tile-sub-title>
-            </v-list-tile-content>
-            <v-list-tile-action v-if="toConfirm(item) && toConfirm(item).status !== 'confirmed'">
-              <v-btn icon @click.prevent="confirmPayments(item)">
-                <v-icon color="green">check_circle</v-icon>
-              </v-btn>
-            </v-list-tile-action>
-          </v-list-tile>
-        </template>
-      </v-list>
+      <people-payment :list="people" />
     </v-card>
   </v-layout>
 </template>
@@ -58,21 +28,21 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import fetchService from '@/api/fetch'
-import { get, map, groupBy } from 'lodash'
 import { getTimeRangeQuery } from '@/utils/date-helpers'
-import { searchInFields, sortByKey, toMoney } from '@/utils/helpers'
+import { searchInFields } from '@/utils/helpers'
+import { formattedFrequency } from '@/utils/payment-helpers'
 import dateNavigator from '@/components/date-navigator'
 import pageTitle from '@/components/page-title'
+import peoplePayment from '@/components/people-payment'
 
 export default {
   middleware: ['check-admin'],
   watchQuery: ['months'],
-  components: { dateNavigator, pageTitle },
+  components: { dateNavigator, pageTitle, peoplePayment },
   data: () => ({ filter: '' }),
   computed: {
     ...mapGetters({
-      getPractitioner: 'practitioners/get',
-      findPayments: 'payments/findByTimeAgo',
+      findPayments: 'payments/find',
       findFrequency: 'frequency/findByTimeAgo',
     }),
     frequency() {
@@ -81,48 +51,16 @@ export default {
         teacher: false,
         'classroom.regularClass': true,
       })
-      const grouped = groupBy(frequency, item => `${get(item, 'practitioner.displayName')}_${item.practitionerId}`)
-      const sorted = sortByKey(grouped)
-      const result = map(sorted, freq => {
-        const person = freq[0].practitioner
-        const payments = this.findPayments({ unitsAgo: query.months, unit: 'month' }, {
-          regularClass: true,
-          practitionerId: freq[0].practitionerId,
-        })
-        const payment = payments.map(({ _id, totalPaid, total, status, note }) =>
-          ({ _id, totalPaid, total, status, note })
-        )
-        return { person, payment, total: freq.length }
-      })
-      return result
+      return formattedFrequency(frequency, this.findPayments, query.months)
     },
     people() {
-      const filterBlanks = this.frequency.filter(f => f.person)
-      return searchInFields(filterBlanks, ['person.displayName', 'person.surname'], this.filter)
-    },
-    fn() {
-      return { toMoney }
+      return searchInFields(this.frequency, ['person.displayName', 'person.surname'], this.filter)
     },
   },
   methods: {
     ...mapActions('payments', ['patch']),
     clearSearch() {
       this.filter = ''
-    },
-    toConfirm({ payment }) {
-      return payment.find(p => p.status === 'paid') || payment[0]
-    },
-    async confirmPayments(item) {
-      const payment = this.toConfirm(item)
-      if (payment.status === 'paid') {
-        await this.patch([payment._id, { status: 'confirmed' }])
-        this.$store.dispatch('notification/success', 'Pagamento confirmado!')
-      } else {
-        this.$router.push(`/acertos/${payment._id}/edit?back_to=${this.$route.fullPath}`)
-      }
-    },
-    statusColor({ status }) {
-      return get({ pending: 'red', paid: 'blue', confirmed: 'green' }, status, 'lightslategrey')
     },
   },
   async fetch({ store, query }) {
