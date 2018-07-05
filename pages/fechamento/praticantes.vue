@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 import fetchService from '@/api/fetch'
 import { getTimeRangeQuery } from '@/utils/date-helpers'
 import { searchInFields } from '@/utils/helpers'
@@ -58,7 +58,6 @@ export default {
     },
   },
   methods: {
-    ...mapActions('payments', ['patch']),
     clearSearch() {
       this.filter = ''
     },

@@ -36,6 +36,7 @@
 <script>
 import { get } from 'lodash'
 import { percent, toMoney } from '@/utils/helpers'
+import { mapActions } from 'vuex'
 
 export default {
   props: ['list'],
@@ -48,6 +49,7 @@ export default {
     },
   },
   methods: {
+    ...mapActions('payments', ['patch']),
     toConfirm({ payment }) {
       return payment.find(p => p.status === 'paid') || payment[0]
     },
