@@ -69,7 +69,7 @@ export default {
   data: () => ({ restituting: true }),
   computed: {
     ...mapGetters({
-      getPractitioner: 'practitioners/get',
+      getPerson: 'practitioners/get',
       teachers: 'practitioners/teachers',
       findPractitioners: 'practitioners/sortedFind',
       everyAttendant: 'attendance/everyAttendant',
@@ -109,7 +109,7 @@ export default {
     teacher() {
       return this.currentTeacher
         || (this.user.practitioner.teacher && this.user.practitioner)
-        || this.lesson.teacherData
+        || this.getPerson(this.lesson.teacher)
         || { _id: null }
     },
   },

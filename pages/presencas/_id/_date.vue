@@ -105,7 +105,7 @@ export default {
       return get(this.taughtBy, '_id')
     },
     teacher() {
-      return this.taughtBy || this.lesson.teacherData
+      return this.taughtBy || this.getPerson(this.lesson.teacher)
     },
     isSubstitution() {
       const { teacher } = this.lesson

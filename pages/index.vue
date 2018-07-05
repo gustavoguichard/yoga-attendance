@@ -5,7 +5,7 @@
         <v-toolbar-title>Selecione a turma pelo professor</v-toolbar-title>
       </v-toolbar>
       <v-list two-line>
-        <template v-for="(teacher, i) in withTeacher">
+        <template v-for="(teacher, i) in classByTeacher">
           <v-divider v-if="i !== 0"></v-divider>
           <person-list-item :avatar="true" :person="teacher" property="name" :disabled="true" />
           <v-divider></v-divider>
@@ -42,6 +42,7 @@
 <script>
 import { mapGetters, mapState } from 'vuex'
 import fetchService from '@/api/fetch'
+import { groupedByTeacher } from '@/utils/classrooms-helpers'
 import classTile from '@/components/class-tile'
 import personListItem from '@/components/person-list-item'
 import pageCta from '@/components/page-cta'
@@ -52,9 +53,13 @@ export default {
     ...mapState('ui', ['online']),
     ...mapGetters({
       isAdmin: 'auth/isAdmin',
+      practitioners: 'practitioners/find',
       withTeacher: 'classrooms/withTeacher',
       withoutTeacher: 'classrooms/withoutTeacher',
     }),
+    classByTeacher() {
+      return groupedByTeacher(this.withTeacher, this.practitioners().data)
+    },
   },
   methods: {
     viewFrequency({ _id }) {
@@ -66,6 +71,7 @@ export default {
   },
   async fetch({ store }) {
     await fetchService('classrooms')(store)
+    await fetchService('practitioners')(store)
   },
 };
 </script>

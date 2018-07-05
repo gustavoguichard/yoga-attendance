@@ -10,7 +10,7 @@
       </v-toolbar>
       <v-divider />
       <v-list two-line>
-        <template v-for="(teacher, i) in withTeacher">
+        <template v-for="(teacher, i) in classByTeacher">
           <v-divider v-if="i !== 0"></v-divider>
           <person-list-item :avatar="true" :person="teacher" property="name" :disabled="true" />
           <v-divider></v-divider>
@@ -42,6 +42,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import fetchService from '@/api/fetch'
+import { groupedByTeacher } from '@/utils/classrooms-helpers'
 import classTile from '@/components/class-tile'
 import pageTitle from '@/components/page-title'
 import personListItem from '@/components/person-list-item'
@@ -53,10 +54,15 @@ export default {
     ...mapGetters({
       withTeacher: 'classrooms/withTeacher',
       withoutTeacher: 'classrooms/withoutTeacher',
+      practitioners: 'practitioners/find',
     }),
+    classByTeacher() {
+      return groupedByTeacher(this.withTeacher, this.practitioners().data)
+    },
   },
   async fetch({ store }) {
     await fetchService('classrooms')(store)
+    await fetchService('practitioners')(store)
   },
 };
 </script>

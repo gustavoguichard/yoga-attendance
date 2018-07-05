@@ -1,14 +1,4 @@
-import { get, groupBy, reduce } from 'lodash'
-
 const $sort = { title: 1 }
-const groupedByTeacher = rooms => {
-  const grouped = groupBy(rooms, 'teacherData.fullName')
-  return reduce(grouped, (result, cr, name) => [...result, {
-    name,
-    avatar: get(cr, '[0].teacherData.avatar'),
-    classes: cr,
-  }], [])
-}
 
 export const store = {
   getters: {
@@ -25,7 +15,7 @@ export const store = {
     withTeacher(state, { find }) {
       const query = { teacher: { $ne: null }, $sort }
       const result = find({ query })
-      return groupedByTeacher(result.data || result)
+      return result.data || result
     },
     withoutTeacher(state, { find }) {
       const query = { teacher: null, $sort }

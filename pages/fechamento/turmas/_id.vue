@@ -2,8 +2,8 @@
   <v-layout align-content-center align-center column>
     <page-title
       :title="lesson.title"
-      :subtitle="lesson.teacherData && lesson.teacherData.displayName"
-      :avatar="lesson.teacherData && lesson.teacherData.avatar"
+      :subtitle="teacher && teacher.displayName"
+      :avatar="teacher && teacher.avatar"
     />
     <v-card class="main-card">
       <v-toolbar>
@@ -64,6 +64,9 @@ export default {
     },
     lesson() {
       return this.getClass(this.$route.params.id)
+    },
+    teacher() {
+      return this.getPerson(this.lesson.teacher)
     },
   },
   methods: {

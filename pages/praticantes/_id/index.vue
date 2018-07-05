@@ -27,7 +27,7 @@
             <v-list>
               <v-list-tile v-for="(items, title) in byClassRoom" :key="title">
                 <v-list-tile-avatar class="avatar">
-                  <img v-if="getTeacherPicture(items[0])" :src="getTeacherPicture(items[0])">
+                  <img v-if="getTeacherPicture(items)" :src="getTeacherPicture(items)">
                   <v-icon v-else>person</v-icon>
                 </v-list-tile-avatar>
                 <v-list-tile-content>
@@ -88,7 +88,7 @@ export default {
   components: { dateNavigator, pageTitle, paymentDescription },
   computed: {
     ...mapGetters({
-      getPractitioner: 'practitioners/get',
+      getPerson: 'practitioners/get',
       getClass: 'classrooms/get',
       findPayments: 'payments/findByTimeAgo',
       findFrequency: 'frequency/findByTimeAgo',
@@ -113,15 +113,17 @@ export default {
       })
     },
     person() {
-      return this.getPractitioner(this.$route.params.id)
+      return this.getPerson(this.$route.params.id)
     },
   },
   methods: {
     attendanceLink(item) {
       return `/presencas/${item.classId}/${parseDate(item.createdAt, 'YYYY-MM-DD')}`
     },
-    getTeacherPicture(item) {
-      return get(item, 'classroom.teacherData.avatar')
+    getTeacherPicture(items) {
+      const sample = items[0]
+      const teacher = this.getPerson(get(sample, 'classroom.teacher'))
+      return teacher && teacher.avatar
     },
   },
   async fetch({ store, query }) {

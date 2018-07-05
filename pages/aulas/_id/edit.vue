@@ -2,8 +2,8 @@
   <v-layout align-content-center align-center column>
     <page-title icon="person"
       :title="lesson.title"
-      :subtitle="lesson.teacherData && lesson.teacherData.displayName"
-      :avatar="lesson.teacherData && lesson.teacherData.avatar"
+      :subtitle="teacher && teacher.displayName"
+      :avatar="teacher && teacher.avatar"
     />
     <classroom-form title="Editando aula" :lesson="lesson" @submit="submit"></classroom-form>
   </v-layout>
@@ -19,9 +19,15 @@ export default {
   middleware: ['check-admin'],
   components: { classroomForm, pageTitle },
   computed: {
-    ...mapGetters('classrooms', ['get']),
+    ...mapGetters({
+      getClass: 'classrooms/get',
+      getPerson: 'practitioners/get',
+    }),
     lesson() {
-      return this.get(this.$route.params.id)
+      return this.getClass(this.$route.params.id)
+    },
+    teacher() {
+      return this.getPerson(this.lesson.teacher)
     },
   },
   methods: {
