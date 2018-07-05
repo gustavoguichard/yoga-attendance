@@ -103,7 +103,10 @@ export default {
   }),
   computed: {
     ...mapGetters('auth', ['isAdmin']),
-    ...mapGetters('payments', ['get']),
+    ...mapGetters({
+      get: 'payments/get',
+      getPerson: 'practitioners/get',
+    }),
     payment() {
       return this.get(this.$route.params.id)
     },
@@ -111,7 +114,7 @@ export default {
       return parseDate(this.paidAt, 'DD/MM/YYYY')
     },
     person() {
-      return this.payment.practitioner
+      return this.getPerson(this.payment.practitionerId)
     },
     fn() {
       return { parseDate, toMoney }
@@ -139,6 +142,7 @@ export default {
     },
   },
   async fetch({ store }) {
+    await fetchService('practitioners')(store)
     await fetchService('payments')(store)
   },
   mounted() {

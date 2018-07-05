@@ -95,7 +95,10 @@ export default {
     practitionersFreq() {
       const result = this.frequency.filter(f => f.practitionerId !== this.taughtById)
       const sorted = sortBy(result, 'practitioner.displayName')
-      return sorted.map(f => ({ ...f, practitioner: this.getPerson(f.practitionerId) }))
+      return sorted.map(f => {
+        const practitioner = this.getPerson(f.practitionerId)
+        return { ...f, practitioner }
+      })
     },
     taughtBy() {
       const temporary = this.frequency.find(f => f.teacher)
@@ -145,10 +148,11 @@ export default {
     },
     async selected({ _id }) {
       if (this.chooseList === 'teacher') {
-        await Promise.all(this.frequency.map(async f =>
-          new this.$FeathersVuex.Frequency({ ...f, teacher: f.practitionerId === _id })
+        await Promise.all(this.frequency.map(async f => {
+          const teacher = f.practitionerId === _id
+          return new this.$FeathersVuex.Frequency({ ...f, teacher })
             .patch()
-        ))
+        }))
         this.toggleChooseList()
       } else {
         const sample = this.frequency[0]
