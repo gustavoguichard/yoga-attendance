@@ -32,6 +32,7 @@ export default {
     },
   },
   async fetch({ store }) {
+    await fetchService('classrooms')(store)
     await fetchService('enrollment')(store)
   },
 };

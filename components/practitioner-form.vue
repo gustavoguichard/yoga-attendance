@@ -96,7 +96,7 @@
 /* global FileReader */
 import { mapGetters } from 'vuex'
 import moment from 'moment'
-import { get, map, find } from 'lodash'
+import { get, find } from 'lodash'
 import decorate from '@/utils/decorate-enrollment'
 import { parsePractitioner } from '@/utils/form-helpers'
 import pageCta from '@/components/page-cta'
@@ -128,14 +128,20 @@ export default {
     },
   }),
   computed: {
-    ...mapGetters('enrollment', ['find']),
+    ...mapGetters({
+      getClass: 'classrooms/get',
+      find: 'enrollment/find',
+    }),
     ...mapGetters({ findPractitioners: 'practitioners/sortedFind' }),
     chooseList() {
       return !!this.$route.query.add
     },
     enrollmentOptions() {
       const result = this.find().data
-      return map(result, decorate)
+      return result.map(enrl => {
+        const lesson = this.getClass(enrl.classId)
+        return decorate(enrl, lesson)
+      })
     },
     possibleFamilyQuery() {
       const alreadyMembers = [this.editing._id].concat(this.editing.family || [])
@@ -157,7 +163,7 @@ export default {
       this.editing.enrollments = [blankEnrollment()].concat(this.editing.enrollments || [])
     },
     changeEnrollment(field, index, value) {
-      this.editing.enrollments = map(this.editing.enrollments, (opt, i) => {
+      this.editing.enrollments = this.editing.enrollments.map((opt, i) => {
         if (i === index) {
           opt = { ...opt, [field]: value }
         }

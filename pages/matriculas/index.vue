@@ -31,7 +31,6 @@
 <script>
 import fetchService from '@/api/fetch'
 import { mapGetters } from 'vuex'
-import { map } from 'lodash'
 import pageCta from '@/components/page-cta'
 import confirmationDialog from '@/components/confirmation-dialog'
 import decorate from '@/utils/decorate-enrollment'
@@ -40,10 +39,16 @@ export default {
   middleware: ['check-admin'],
   components: { pageCta, confirmationDialog },
   computed: {
-    ...mapGetters('enrollment', ['find']),
+    ...mapGetters({
+      getClass: 'classrooms/get',
+      find: 'enrollment/find',
+    }),
     enrollments() {
-      const result = this.find().data
-      return map(result, decorate)
+      const result = this.find().data || []
+      return result.map(enrl => {
+        const lesson = this.getClass(enrl.classId)
+        return decorate(enrl, lesson)
+      })
     },
   },
   methods: {
@@ -55,6 +60,7 @@ export default {
     },
   },
   async fetch({ store }) {
+    await fetchService('classrooms')(store)
     await fetchService('enrollment')(store)
   },
 };

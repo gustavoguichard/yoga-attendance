@@ -33,6 +33,7 @@ export default {
   },
   async fetch({ store, params }) {
     await fetchService('practitioners')(store, {}, params.id)
+    await fetchService('classrooms')(store)
     await fetchService('enrollment')(store)
   },
   mounted() {

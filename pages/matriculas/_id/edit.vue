@@ -14,12 +14,16 @@ export default {
   middleware: ['check-admin'],
   components: { enrollmentForm },
   computed: {
-    ...mapGetters('enrollment', ['get']),
+    ...mapGetters({
+      get: 'enrollment/get',
+      getClass: 'classrooms/get',
+    }),
     currentEnrollment() {
       return this.get(this.$route.params.id)
     },
     enrollment() {
-      return decorate(this.currentEnrollment)
+      const lesson = this.getClass(this.currentEnrollment.classId)
+      return decorate(this.currentEnrollment, lesson)
     },
   },
   methods: {
