@@ -18,14 +18,11 @@
             </span>
           </v-list-tile-title>
           <v-list-tile-sub-title>
-            <v-chip outline small color="primary">
-              Aulas: {{ item.frequency ? `${item.frequency} / ${item.total}` : item.total }}
-              <span v-if="item.frequency && item.frequency !== item.total" class="ml-2">({{ fn.percent(item.frequency, item.total) }})</span>
-            </v-chip>
-            <v-chip outline small color="green">
-              {{ fn.toMoney(item.totalPaid) }}
-              / {{ Math.round(item.debth * 100) / 100 }}
-            </v-chip>
+            <strong>Aulas:</strong> {{ item.frequency ? `${item.frequency} / ${item.total}` : item.total }}
+            <span v-if="item.totalPaid > 0 && item.percent < 1">
+              - {{ fn.toMoney(item.totalPaid) }}
+              ({{ fn.percent(item.frequency, item.total) }})
+            </span>
             <v-chip v-for="(payment, i) in item.payment" :key="i" light small :color="statusColor(payment)" @click.prevent="$router.push(paymentLink(payment))">
               {{ payment.status === 'open' || payment.status === 'pending' ? `Aberto: ${fn.toMoney(payment.total)}` : fn.toMoney(payment.totalPaid) }}
             </v-chip>

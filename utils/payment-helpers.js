@@ -24,10 +24,11 @@ export const formattedFrequency = (frequency, find, months, lesson) => {
       ({ _id, totalPaid, total, status, note })
     )
     const percent = (freqInClass.length || freq.length) / freq.length
-    const totalPaid = sumBy(payment, 'totalPaid') * percent
+    const totalPaid = Math.round(sumBy(payment, 'totalPaid') * percent)
     const debth = (sumBy(payment, 'total') - totalPaid) * percent
     return {
       person,
+      percent,
       payment,
       totalPaid,
       debth,
