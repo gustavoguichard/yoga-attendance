@@ -1,15 +1,20 @@
 <template>
-  <v-list dense>
-    <menu-item v-for="(item, i) in items" :key="i" :item="item" />
-  </v-list>
+  <v-navigation-drawer fixed clipped v-model="drawer" app>
+    <v-list dense>
+      <menu-item v-for="(item, i) in items" :key="i" :item="item" />
+    </v-list>
+  </v-navigation-drawer>
 </template>
+
 <script>
 import menuItem from './menu-item'
 
 export default {
   name: 'main-menu',
   components: { menuItem },
+  props: ['isMobile'],
   data: () => ({
+    drawer: false,
     items: [
       { name: 'Aulas e eventos', to: '/', icon: 'event_note', offline: true },
       { name: 'Praticantes', to: '/praticantes', icon: 'group', offline: true },
@@ -27,5 +32,10 @@ export default {
       { name: 'Regras de pagamento', to: '/matriculas', icon: 'settings', admin: true },
     ],
   }),
-};
+  mounted() {
+    if (!this.isMobile) {
+      this.drawer = true
+    }
+  },
+}
 </script>
