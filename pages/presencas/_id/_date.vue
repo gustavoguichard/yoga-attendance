@@ -6,7 +6,7 @@
   <v-layout align-content-center align-center column v-else>
     <page-title icon="person"
       :title="lesson.title"
-      :subtitle="isSubstitution && `Professor(a): ${teacher.displayName}`"
+      :subtitle="isSubstitution && `Professor(a): ${lessonTeacher.displayName}`"
       :avatar="teacher && teacher.avatar"
     />
     <v-btn @click.stop="toggleChooseList('teacher')" color="primary" depressed>Trocar professor</v-btn>
@@ -92,6 +92,9 @@ export default {
     lesson() {
       return this.getClassroom(this.$route.params.id)
     },
+    lessonTeacher() {
+      return this.getPerson(this.lesson.teacher)
+    },
     practitionersFreq() {
       const result = this.frequency.filter(f => f.practitionerId !== this.taughtById)
       const sorted = sortBy(result, 'practitioner.displayName')
@@ -101,14 +104,14 @@ export default {
       })
     },
     taughtBy() {
-      const temporary = this.frequency.find(f => f.teacher)
-      return get(temporary, 'practitioner')
+      const temporary = this.frequency.find(f => f.teacher) || {}
+      return this.getPerson(temporary.practitionerId)
     },
     taughtById() {
       return get(this.taughtBy, '_id')
     },
     teacher() {
-      return this.taughtBy || this.getPerson(this.lesson.teacher)
+      return this.taughtBy || this.lessonTeacher
     },
     isSubstitution() {
       const { teacher } = this.lesson
