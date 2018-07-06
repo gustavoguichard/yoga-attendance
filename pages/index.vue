@@ -1,8 +1,12 @@
 <template>
-  <v-layout justify-center justify-space-around wrap>
-    <v-card class="half">
+  <v-layout align-content-center align-center column>
+    <page-title
+      title="Iniciar chamada"
+      subtitle="Selecione uma turma"
+    />
+    <v-card class="main-card">
       <v-toolbar>
-        <v-toolbar-title>Selecione a turma pelo professor</v-toolbar-title>
+        <v-toolbar-title>Por professor</v-toolbar-title>
       </v-toolbar>
       <v-list two-line>
         <template v-for="(teacher, i) in classByTeacher">
@@ -19,8 +23,6 @@
           ></class-tile>
         </template>
       </v-list>
-    </v-card>
-    <v-card class="half">
       <v-toolbar>
         <v-toolbar-title>Outras turmas</v-toolbar-title>
       </v-toolbar>
@@ -44,11 +46,12 @@ import { mapGetters, mapState } from 'vuex'
 import fetchService from '@/api/fetch'
 import { groupedByTeacher } from '@/utils/classrooms-helpers'
 import classTile from '@/components/class-tile'
+import pageTitle from '@/components/page-title'
 import personListItem from '@/components/person-list-item'
 import pageCta from '@/components/page-cta'
 
 export default {
-  components: { classTile, pageCta, personListItem },
+  components: { classTile, pageCta, pageTitle, personListItem },
   computed: {
     ...mapState('ui', ['online']),
     ...mapGetters({

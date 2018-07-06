@@ -1,11 +1,17 @@
 <template>
   <div>
-    <v-navigation-drawer v-if="!isSignIn" fixed clipped v-model="drawer" app>
+    <v-navigation-drawer fixed clipped v-model="drawer" app>
       <main-menu />
     </v-navigation-drawer>
     <v-toolbar color="grey darken-3" dark fixed app clipped-left>
-      <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-      <v-toolbar-title>CIYF</v-toolbar-title>
+      <v-toolbar-side-icon v-if="isMobile" @click.stop="drawer = !drawer"></v-toolbar-side-icon>
+      <v-toolbar-title v-if="isMobile">CIYF</v-toolbar-title>
+      <template v-else>
+        <v-avatar size="36">
+          <img src="/icon.png" alt="Logo" />
+        </v-avatar>
+        <v-toolbar-title>Centro Iyengar Yoga Florianópolis</v-toolbar-title>
+      </template>
       <v-spacer></v-spacer>
       <syncer />
       <v-btn icon v-if="currentPractitioner" :to="`/praticantes/${currentPractitioner._id}`">
@@ -30,12 +36,12 @@ import mainMenu from './main-menu'
 
 export default {
   components: { mainMenu, syncer },
-  data: () => ({ drawer: false }),
+  data: () => ({ drawer: !this.isMobile }),
   computed: {
     ...mapGetters('auth', ['currentPractitioner']),
     ...mapState('auth', ['user']),
-    isSignIn() {
-      return this.$route.name === 'sign-in'
+    isMobile() {
+      return this.$vuetify.breakpoint.mdAndDown
     },
   },
 };

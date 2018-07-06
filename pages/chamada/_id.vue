@@ -8,8 +8,12 @@
     </practitioners-list>
     <page-cta icon="arrow_back" @click.stop="toggleChooseList" />
   </v-layout>
-  <v-layout v-else justify-center justify-space-around wrap>
-    <v-card class="half">
+  <v-layout v-else align-content-center align-center column>
+    <page-title
+      :title="lesson.title"
+      :subtitle="teacher.fullName"
+    />
+    <v-card class="main-card">
       <v-toolbar>
         <v-btn icon dark @click="selectAll">
           <v-icon v-if="allSelected" color="blue darken-4">check_circle</v-icon>
@@ -37,10 +41,8 @@
           <v-icon>person_add</v-icon>
         </v-btn>
       </v-card-actions>
-    </v-card>
-    <v-card class="half">
       <v-toolbar>
-        <v-toolbar-title>Professor</v-toolbar-title>
+        <v-toolbar-title>Selecionar professor:</v-toolbar-title>
       </v-toolbar>
       <v-list>
         <div v-for="(teacher, i) in teachers" :key="teacher._id">
@@ -61,11 +63,12 @@ import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import { map } from 'lodash'
 import fetchService from '@/api/fetch'
 import pageCta from '@/components/page-cta'
+import pageTitle from '@/components/page-title'
 import personListItem from '@/components/person-list-item'
 import practitionersList from '@/components/practitioners-list'
 
 export default {
-  components: { pageCta, personListItem, practitionersList },
+  components: { pageCta, pageTitle, personListItem, practitionersList },
   data: () => ({ restituting: true }),
   computed: {
     ...mapGetters({
