@@ -13,6 +13,7 @@
       :title="lesson.title"
       :subtitle="teacher.fullName"
     />
+    <date-picker @change="dateChanged" />
     <v-card class="main-card">
       <v-toolbar>
         <v-btn icon dark @click="selectAll">
@@ -62,14 +63,18 @@ import moment from 'moment'
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import { map } from 'lodash'
 import fetchService from '@/api/fetch'
+import datePicker from '@/components/date-picker'
 import pageCta from '@/components/page-cta'
 import pageTitle from '@/components/page-title'
 import personListItem from '@/components/person-list-item'
 import practitionersList from '@/components/practitioners-list'
 
 export default {
-  components: { pageCta, pageTitle, personListItem, practitionersList },
-  data: () => ({ restituting: true }),
+  components: { datePicker, pageCta, pageTitle, personListItem, practitionersList },
+  data: () => ({
+    restituting: true,
+    createdAt: new Date(),
+  }),
   computed: {
     ...mapGetters({
       getPerson: 'practitioners/get',
@@ -123,6 +128,9 @@ export default {
     addToLesson(person) {
       this.addRestitution({ ...person, restituting: this.restituting })
     },
+    dateChanged(date) {
+      this.createdAt = date
+    },
     toggleChooseList() {
       const query = this.chooseList ? null : { add: 'practitioner' }
       this.$router.push({ query })
@@ -151,7 +159,7 @@ export default {
     },
     async createFrequency(practitionerId, teacher = false) {
       const classId = this.lesson._id
-      const createdAt = new Date()
+      const { createdAt } = this
       const freq = { teacher, practitionerId, classId, createdAt }
       return this.online
         ? new this.$FeathersVuex.Frequency(freq).save()
@@ -162,11 +170,15 @@ export default {
         return this.$store.dispatch('notification/info', 'É necessário selecionar um professor')
       }
       await this.addSubscribers()
-      await Promise.all(this.everyAttendant.map(async person => this.createFrequency(person)))
-      await this.createFrequency(this.teacher._id, true)
+      try {
+        await Promise.all(this.everyAttendant.map(async person => this.createFrequency(person)))
+        await this.createFrequency(this.teacher._id, true)
+      } catch (error) {
+        this.$store.dispatch('notification/info', 'Alguns praticantes já estão inscritos')
+      }
       this.$store.commit('attendance/cleanStore')
       if (!this.online) return this.$router.push('/')
-      const date = moment().format('YYYY-MM-DD')
+      const date = moment(this.createdAt).format('YYYY-MM-DD')
       return this.$router.push(`/presencas/${this.lesson._id}/${date}`)
     },
   },

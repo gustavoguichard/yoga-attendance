@@ -10,26 +10,7 @@
       :avatar="teacher && teacher.avatar"
     />
     <v-btn @click.stop="toggleChooseList('teacher')" color="primary" depressed>Trocar professor</v-btn>
-    <v-dialog
-      ref="dialog"
-      v-model="datePicker"
-      lazy
-      full-width
-      width="290px"
-    >
-      <v-text-field
-        slot="activator"
-        v-model="date"
-        label="Alterar data"
-        prepend-icon="event"
-        readonly
-      ></v-text-field>
-      <v-date-picker v-model="classDate" locale="pt-br" scrollable>
-        <v-spacer></v-spacer>
-        <v-btn flat color="primary" @click="datePicker = false">Cancel</v-btn>
-        <v-btn flat color="primary" @click="changeDate">OK</v-btn>
-      </v-date-picker>
-    </v-dialog>
+    <date-picker :date="$route.params.date" @change="dateChanged" />
     <v-card class="main-card">
       <v-toolbar>
         <v-toolbar-title>Alunos presentes: {{ practitionersFreq.length }}</v-toolbar-title>
@@ -52,7 +33,7 @@
 import { mapGetters } from 'vuex'
 import { get, map, sortBy } from 'lodash'
 import fetchService from '@/api/fetch'
-import { parseDate, unparseDate } from '@/utils/date-helpers'
+import datePicker from '@/components/date-picker'
 import pageCta from '@/components/page-cta'
 import pageTitle from '@/components/page-title'
 import personListItem from '@/components/person-list-item'
@@ -64,14 +45,9 @@ const getTimeRange = date => ({
 })
 
 export default {
-  components: { pageCta, pageTitle, personListItem, practitionersList },
+  components: { datePicker, pageCta, pageTitle, personListItem, practitionersList },
   data: () => ({
-    datePicker: false,
-    classDate: undefined,
     added: [],
-  }),
-  asyncData: ({ route }) => ({
-    classDate: route.params.date,
   }),
   computed: {
     ...mapGetters({
@@ -81,9 +57,6 @@ export default {
     }),
     chooseList() {
       return this.$route.query.add
-    },
-    date() {
-      return parseDate(this.classDate, 'DD/MM/YYYY')
     },
     frequency() {
       const { id, date } = this.$route.params
@@ -132,14 +105,14 @@ export default {
       const query = this.chooseList ? null : { add }
       this.$router.push({ query })
     },
-    async changeDate() {
+    async dateChanged(createdAt, parsedDate) {
+      const { id } = this.$route.params
       this.datePicker = false
-      const createdAt = unparseDate(this.classDate)
       await Promise.all(this.frequency.map(async f =>
         new this.$FeathersVuex.Frequency({ ...f, createdAt })
           .patch()
       ))
-      this.$router.push(`/presencas/${this.$route.params.id}/${this.classDate}`)
+      this.$router.push(`/presencas/${id}/${parsedDate}`)
     },
     async createFrequencies() {
       await Promise.all(this.added.map(async f => f.save()))
