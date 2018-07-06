@@ -40,7 +40,7 @@ module.exports = {
       },
       {
         urlPattern: 'https://yoga-attendance-api.herokuapp.com/.*',
-        handler: 'networkFirst',
+        handler: 'cacheFirst',
         method: 'GET'
       },
       {
