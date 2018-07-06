@@ -21,7 +21,7 @@ module.exports = {
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       { name: 'apple-mobile-web-app-title', content: 'CIYF' },
       { name: 'mobile-web-app-capable', content: 'yes' },
-      { name: 'apple-mobile-web-app-status-bar-style', content: 'black-translucent' },
+      { name: 'apple-mobile-web-app-status-bar-style', content: 'black' },
       { hid: 'description', name: 'description', content: 'Gerenciamento de presenças e pagamentos para uma escola de Yoga - CIYF' }
     ],
     link: [
