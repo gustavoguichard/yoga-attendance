@@ -6,7 +6,9 @@
     <v-content>
       <v-container class="app-container" fluid fill-height>
         <loading :active="loading"></loading>
-        <nuxt />
+        <v-layout justify-center class="page-container">
+          <nuxt />
+        </v-layout>
       </v-container>
     </v-content>
   </v-app>

@@ -1,5 +1,5 @@
 <template>
-  <v-layout justify-center wrap>
+  <v-layout align-content-center align-center column>
     <enrollment-form title="Nova regra de pagamento" @submit="submit"></enrollment-form>
   </v-layout>
 </template>

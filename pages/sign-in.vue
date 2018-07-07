@@ -1,5 +1,4 @@
 <template>
-<v-layout justify-center class="page-container">
   <v-card class="main-card mt-3 py-4 px-2">
     <v-layout wrap>
       <v-flex column>
@@ -18,7 +17,6 @@
     </v-layout>
     <page-cta :absolute="true" @click="submit" icon="check" />
   </v-card>
-</v-layout>
 </template>
 
 <script>

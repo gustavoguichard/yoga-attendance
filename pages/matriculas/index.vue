@@ -1,5 +1,10 @@
 <template>
-  <v-layout justify-center wrap>
+  <v-layout align-content-center align-center column>
+    <page-title
+      title="Regras de pagamento"
+      subtitle="Gerencie matrículas e preços"
+      icon="settings"
+    />
     <v-card class="main-card">
       <v-toolbar>
         <v-toolbar-title>Selecione uma regra</v-toolbar-title>
@@ -32,12 +37,13 @@
 import fetchService from '@/api/fetch'
 import { mapGetters } from 'vuex'
 import pageCta from '@/components/page-cta'
+import pageTitle from '@/components/page-title'
 import confirmationDialog from '@/components/confirmation-dialog'
 import decorate from '@/utils/decorate-enrollment'
 
 export default {
   middleware: ['check-admin'],
-  components: { pageCta, confirmationDialog },
+  components: { pageCta, pageTitle, confirmationDialog },
   computed: {
     ...mapGetters({
       getClass: 'classrooms/get',

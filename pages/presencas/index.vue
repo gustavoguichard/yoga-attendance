@@ -1,5 +1,9 @@
 <template>
   <v-layout align-content-center align-center column>
+    <page-title
+      title="Presenças"
+      icon="playlist_add_check"
+    />
     <v-card class="main-card">
       <v-toolbar>
         <v-toolbar-title>Selecione a lista pelo dia:</v-toolbar-title>
@@ -44,10 +48,11 @@ import { getTimeRangeQuery, parseDate } from '@/utils/date-helpers'
 import fetchService from '@/api/fetch'
 import dateNavigator from '@/components/date-navigator'
 import pageCta from '@/components/page-cta'
+import pageTitle from '@/components/page-title'
 
 export default {
   watchQuery: ['weeks'],
-  components: { dateNavigator, pageCta },
+  components: { dateNavigator, pageCta, pageTitle },
   computed: {
     ...mapGetters({
       getClass: 'classrooms/get',

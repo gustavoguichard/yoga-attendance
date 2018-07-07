@@ -1,6 +1,12 @@
 <template>
-  <v-layout justify-center wrap>
-    <practitioner-form :title="`Editando ${person.fullName}`" :person="person" @submit="submit"></practitioner-form>
+  <v-layout align-content-center align-center column>
+    <page-title icon="person"
+      title="Editando"
+      :subtitle="person.fullName"
+      :avatar="person.avatar"
+      :noMargin="true"
+    />
+    <practitioner-form :person="person" @submit="submit"></practitioner-form>
   </v-layout>
 </template>
 
@@ -8,10 +14,11 @@
 import { mapGetters, mapState } from 'vuex'
 import fetchService from '@/api/fetch'
 import { isAnotherTeacher } from '@/utils/helpers'
+import pageTitle from '@/components/page-title'
 import practitionerForm from '@/components/practitioner-form'
 
 export default {
-  components: { practitionerForm },
+  components: { pageTitle, practitionerForm },
   computed: {
     ...mapGetters({ isAdmin: 'auth/isAdmin', practitioner: 'auth/currentPractitioner', get: 'practitioners/get' }),
     ...mapState('ui', ['online']),

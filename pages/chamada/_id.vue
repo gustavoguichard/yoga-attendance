@@ -1,5 +1,5 @@
 <template>
-  <v-layout v-if="chooseList" justify-center wrap>
+  <v-layout v-if="chooseList" align-content-center align-center column>
     <practitioners-list :practitioners="otherPractitioners" title="Escolha o praticante" @selected="addToLesson" :chooseList="true">
       <v-btn slot="header" color="primary" :to="`/praticantes/new?back_to=${$route.path}`">
         Adicionar novo
@@ -10,10 +10,10 @@
   </v-layout>
   <v-layout v-else align-content-center align-center column>
     <page-title
-      :title="lesson.title"
-      :subtitle="teacher.fullName"
+      title="Selecione os praticantes"
+      :subtitle="`${lesson.title} - ${teacher.fullName}`"
     />
-    <date-picker @change="dateChanged" />
+    <date-picker label="Data da chamada" @change="dateChanged" />
     <v-card class="main-card">
       <v-toolbar>
         <v-btn icon dark @click="selectAll">

@@ -2,7 +2,7 @@
   <practitioners-list v-if="chooseList" :query="possibleFamilyQuery" title="Escolha o familiar" @selected="addFamily" :chooseList="true" :twoLine="true" />
   <v-card class="main-card" v-else>
     <v-toolbar>
-      <v-toolbar-title>{{ title }}</v-toolbar-title>
+      <v-toolbar-title>Preencha os campos abaixo</v-toolbar-title>
     </v-toolbar>
     <v-card-text>
       <v-layout wrap>
@@ -113,7 +113,7 @@ const blankEnrollment = () => ({
 
 export default {
   components: { confirmationDialog, pageCta, personListItem, practitionersList },
-  props: ['person', 'title'],
+  props: ['person'],
   data: () => ({
     editing: {
       fullName: '',

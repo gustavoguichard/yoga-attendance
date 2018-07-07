@@ -1,5 +1,5 @@
 <template>
-  <v-layout justify-center wrap>
+  <v-layout align-content-center align-center column>
     <enrollment-form :title="`${enrollment.className} - ${enrollment.type}`" :enrollment="currentEnrollment" @submit="submit"></enrollment-form>
   </v-layout>
 </template>

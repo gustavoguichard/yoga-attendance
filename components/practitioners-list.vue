@@ -48,7 +48,7 @@ export default {
     hideSelected: { type: Boolean },
     practitioners: { type: Array },
     query: { type: Object },
-    title: { type: String, default: 'Praticantes' },
+    title: { type: String, default: 'Clique para buscar' },
     to: { type: String },
     twoLine: { type: Boolean },
   },

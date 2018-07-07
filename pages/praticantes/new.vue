@@ -1,16 +1,21 @@
 <template>
-  <v-layout justify-center wrap>
-    <practitioner-form title="Novo Praticante" @submit="submit"></practitioner-form>
+  <v-layout align-content-center align-center column>
+    <page-title icon="person_add"
+      title="Novo praticante"
+      :noMargin="true"
+    />
+    <practitioner-form @submit="submit"></practitioner-form>
   </v-layout>
 </template>
 
 <script>
 import { mapState } from 'vuex'
 import fetchService from '@/api/fetch'
+import pageTitle from '@/components/page-title'
 import practitionerForm from '@/components/practitioner-form'
 
 export default {
-  components: { practitionerForm },
+  components: { pageTitle, practitionerForm },
   computed: {
     ...mapState('ui', ['online']),
   },
