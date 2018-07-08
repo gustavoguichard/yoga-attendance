@@ -91,7 +91,7 @@ export default {
       return teacher && (this.teacher._id !== teacher)
     },
     chooseQuery() {
-      const peopleIds = map(this.frequency, 'practitioner._id')
+      const peopleIds = map(this.frequency, 'practitionerId')
       const teachers = { teacher: true, _id: { $ne: this.taughtById, $in: peopleIds } }
       const practitioners = { _id: { $nin: peopleIds } }
       return this.chooseList === 'teacher' ? teachers : practitioners
