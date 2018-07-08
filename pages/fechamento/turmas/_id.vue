@@ -56,7 +56,10 @@ export default {
         const practitioner = this.getPerson(f.practitionerId)
         return { ...f, classroom, practitioner }
       })
-      return formattedFrequency(populated, this.findPayments, query.months, this.lesson)
+      const filtered = this.lesson.regularClass
+        ? populated.filter(f => f.classroom.regularClass)
+        : populated.filter(f => f.classId === this.lesson._id)
+      return formattedFrequency(filtered, this.findPayments, query.months, this.lesson)
     },
     people() {
       const fromClass = this.frequency.filter(f => f.frequency > 0)
