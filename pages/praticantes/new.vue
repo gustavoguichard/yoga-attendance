@@ -1,9 +1,6 @@
 <template>
   <v-layout align-content-center align-center column>
-    <page-title icon="person_add"
-      title="Novo praticante"
-      :noMargin="true"
-    />
+    <page-title icon="person_add" title="Novo praticante" />
     <practitioner-form @submit="submit"></practitioner-form>
   </v-layout>
 </template>

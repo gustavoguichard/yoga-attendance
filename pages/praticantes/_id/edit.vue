@@ -1,11 +1,6 @@
 <template>
   <v-layout align-content-center align-center column>
-    <page-title icon="person"
-      title="Editando"
-      :subtitle="person.fullName"
-      :avatar="person.avatar"
-      :noMargin="true"
-    />
+    <page-title icon="person" title="Editando" :subtitle="person.fullName" :avatar="person.avatar" />
     <practitioner-form :person="person" @submit="submit"></practitioner-form>
   </v-layout>
 </template>

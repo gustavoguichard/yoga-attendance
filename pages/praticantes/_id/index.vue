@@ -4,12 +4,11 @@
       :title="person.displayName"
       :subtitle="person.displayName !== person.fullName ? person.fullName : null"
       :avatar="person.avatar"
-      :noMargin="true"
     />
     <v-btn :to="`/praticantes/${person._id}/edit?back_to=${$route.path}`" color="primary">Editar</v-btn>
     <v-card class="main-card">
       <v-toolbar>
-        <v-toolbar-title>Lista de presenças</v-toolbar-title>
+        <v-toolbar-title>Histórico mensal</v-toolbar-title>
       </v-toolbar>
       <v-card-title>
         <date-navigator

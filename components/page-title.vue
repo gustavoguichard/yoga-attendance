@@ -1,5 +1,5 @@
 <template>
-  <div :class="{'text-xs-center grey--text text--darken-2': true, 'mb-4 mt-2': !noMargin }">
+  <div class="text-xs-center grey--text text--darken-2 mb-4 mt-2">
     <v-avatar v-show="avatar" class="mb-2" size="100">
       <img :src="avatar" alt="Professor" />
     </v-avatar>
@@ -10,7 +10,7 @@
 </template>
 
 <script>
-export default { props: ['icon', 'avatar', 'title', 'subtitle', 'no-margin'] }
+export default { props: ['icon', 'avatar', 'title', 'subtitle'] }
 </script>
 
 <style scoped>
