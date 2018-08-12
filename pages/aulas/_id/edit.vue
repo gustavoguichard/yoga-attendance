@@ -16,7 +16,6 @@ import classroomForm from '@/components/classroom-form'
 import { mapGetters } from 'vuex'
 
 export default {
-  middleware: ['check-admin'],
   components: { classroomForm, pageTitle },
   computed: {
     ...mapGetters({

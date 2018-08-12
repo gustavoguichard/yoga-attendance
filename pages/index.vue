@@ -19,7 +19,7 @@
             :lesson="lesson"
             to="/chamada/:id"
             :viewFrequency="online && viewFrequency"
-            :editClass="isAdmin && online && editClass"
+            :editClass="canEdit(lesson) && editClass"
           ></class-tile>
         </template>
       </v-list>
@@ -33,7 +33,7 @@
           :lesson="lesson"
           to="/chamada/:id"
           :viewFrequency="online && viewFrequency"
-          :editClass="isAdmin && online && editClass"
+          :editClass="canEdit(lesson) && editClass"
         ></class-tile>
       </v-list>
     </v-card>
@@ -56,6 +56,7 @@ export default {
     ...mapState('ui', ['online']),
     ...mapGetters({
       isAdmin: 'auth/isAdmin',
+      practitioner: 'auth/currentPractitioner',
       practitioners: 'practitioners/find',
       withTeacher: 'classrooms/withTeacher',
       withoutTeacher: 'classrooms/withoutTeacher',
@@ -65,6 +66,10 @@ export default {
     },
   },
   methods: {
+    canEdit(lesson) {
+      const isOwner = this.practitioner && (lesson.teacher === this.practitioner._id)
+      return (this.isAdmin || isOwner) && this.online
+    },
     viewFrequency({ _id }) {
       this.$router.push(`/presencas?classId=${_id}`)
     },
