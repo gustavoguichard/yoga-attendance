@@ -5,8 +5,8 @@
     </v-navigation-drawer>
     <v-toolbar color="grey darken-3" dark fixed app clipped-left>
       <v-toolbar-side-icon v-show="isMobile" @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-      <v-toolbar-title v-if="isMobile">CIYF</v-toolbar-title>
-      <template v-else>
+      <v-toolbar-title v-show="isMobile">CIYF</v-toolbar-title>
+      <template v-show="!isMobile">
         <v-avatar size="36" class="ml-2">
           <img src="/icon.png" alt="Logo" />
         </v-avatar>
