@@ -70,11 +70,11 @@ export default {
     },
     practitionersFreq() {
       const result = this.frequency.filter(f => f.practitionerId !== this.taughtById)
-      const sorted = sortBy(result, 'practitioner.displayName')
-      return sorted.map(f => {
+      const populated = result.map(f => {
         const practitioner = this.getPerson(f.practitionerId)
         return { ...f, practitioner }
       })
+      return sortBy(populated, 'practitioner.displayName')
     },
     taughtBy() {
       const temporary = this.frequency.find(f => f.teacher) || {}
