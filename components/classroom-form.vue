@@ -6,28 +6,30 @@
     </v-toolbar>
     <v-card-text>
       <v-layout wrap>
-        <v-flex xs12>
-          <v-text-field @keyup.enter="submit" v-model="editing.title" name="title" label="Título" prepend-icon="title" required></v-text-field>
+        <v-flex xs12 v-if="isAdmin">
+          <v-flex xs12>
+            <v-text-field @keyup.enter="submit" v-model="editing.title" name="title" label="Título" prepend-icon="title" required></v-text-field>
+          </v-flex>
+          <v-flex xs12>
+            <v-text-field @keyup.enter="submit" v-model="editing.tuition" name="tuition" label="Preço da aula avulsa" prepend-icon="attach_money" required></v-text-field>
+          </v-flex>
+          <v-flex xs12>
+            <v-select
+              :items="teacherSelection"
+              v-model="editing.teacher"
+              item-text="displayName"
+              item-value="_id"
+              prepend-icon="person"
+              label="Professor"
+              single-line
+            ></v-select>
+          </v-flex>
+          <v-flex xs12>
+            <v-switch color="cyan darken-3" slot="footer" :label="`É aula regular${editing.regularClass ? '' : '?'}`" v-model="editing.regularClass"></v-switch>
+            <v-divider class="my-3"></v-divider>
+          </v-flex>
         </v-flex>
         <v-flex xs12>
-          <v-text-field @keyup.enter="submit" v-model="editing.tuition" name="tuition" label="Preço da aula avulsa" prepend-icon="attach_money" required></v-text-field>
-        </v-flex>
-        <v-flex xs12>
-          <v-select
-            :items="teacherSelection"
-            v-model="editing.teacher"
-            item-text="displayName"
-            item-value="_id"
-            prepend-icon="person"
-            label="Professor"
-            single-line
-          ></v-select>
-        </v-flex>
-        <v-flex xs12>
-          <v-switch color="cyan darken-3" slot="footer" :label="`É aula regular${editing.regularClass ? '' : '?'}`" v-model="editing.regularClass"></v-switch>
-        </v-flex>
-        <v-flex xs12>
-          <v-divider class="my-3"></v-divider>
           <v-subheader class="pl-0">
             <v-icon class="mr-1">people</v-icon>
             Alunos:
@@ -74,6 +76,7 @@ export default {
   }),
   computed: {
     ...mapGetters({
+      isAdmin: 'auth/isAdmin',
       teachers: 'practitioners/teachers',
       findPractitioners: 'practitioners/sortedFind',
     }),

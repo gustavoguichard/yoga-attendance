@@ -37,7 +37,6 @@ import pageTitle from '@/components/page-title'
 import peoplePayment from '@/components/people-payment'
 
 export default {
-  middleware: ['check-admin'],
   watchQuery: ['months'],
   components: { dateNavigator, pageTitle, peoplePayment },
   data: () => ({ filter: '' }),

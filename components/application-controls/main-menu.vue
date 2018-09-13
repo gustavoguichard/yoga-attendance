@@ -19,9 +19,8 @@ export default {
       {
         group: 'Fechamento',
         icon: 'attach_money',
-        admin: true,
         items: [
-          { name: 'Por praticante', to: '/fechamento/praticantes', icon: 'face' },
+          { name: 'Por praticante', to: '/fechamento/praticantes', icon: 'face', admin: true },
           { name: 'Por turma', to: '/fechamento/turmas', icon: 'event' },
         ],
       },
