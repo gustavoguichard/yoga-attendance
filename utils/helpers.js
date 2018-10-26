@@ -1,10 +1,10 @@
 import numeral from 'numeral'
-import { compact, deburr, filter, fromPairs, get, map, sortBy, toLower, toPairs } from 'lodash'
+import { compact, deburr, fromPairs, get, map, sortBy, toLower, toPairs } from 'lodash'
 
 export const searchInFields = (items, fields, text) => {
   const normalize = txt => deburr(toLower(txt))
   const searchText = normalize(text)
-  return filter(items, item =>
+  return items.filter(item =>
     compact(map(fields, field => {
       const fieldValue = get(item, field)
       return normalize(fieldValue).includes(searchText)

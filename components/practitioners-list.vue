@@ -14,7 +14,7 @@
       <slot name="header"></slot>
     </v-card-title>
     <v-list :dense="dense" :two-line="twoLine">
-      <template v-for="(person, i) in people">
+      <template v-for="(person, i) in paginated[page - 1]">
         <v-divider v-if="i > 0" />
         <person-list-item :active="(i === selectedPosition) && search" :avatar="true" :showMail="twoLine" avatarSize="28" :person="person" @click="clicked(person)">
           <v-btn icon v-if="canEdit(person)" ripple slot="right" @click.stop="$router.push(`/praticantes/${person._id}/edit`)">
@@ -24,18 +24,28 @@
       </template>
     </v-list>
     <v-card-actions v-if="$slots['footer'] || chooseList">
-      <slot name="footer"></slot>
+      <slot name="footer">
+      </slot>
       <v-spacer></v-spacer>
       <v-btn v-if="chooseList" @click="$router.push({ query: null })" flat dark color="cyan darken-3">
         Voltar
       </v-btn>
     </v-card-actions>
+    <div class="text-xs-center">
+      <v-pagination
+        v-if="paginated.length > 1"
+        v-model="page"
+        :length="paginated.length"
+        total-visible="7"
+        class="pagination"
+      ></v-pagination>
+    </div>
   </v-card>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import { isString } from 'lodash'
+import { isString, chunk } from 'lodash'
 import { isAnotherTeacher, searchInFields } from '@/utils/helpers'
 import fetchService from '@/api/fetch'
 import personListItem from '@/components/person-list-item'
@@ -58,6 +68,7 @@ export default {
     filter: '',
     selectedIndex: 0,
     clickedPeople: [],
+    page: 1,
   }),
   computed: {
     ...mapGetters({
@@ -71,6 +82,9 @@ export default {
       const optFields = this.twoLine ? ['email'] : []
       const filtered = searchInFields(list, ['displayName', 'fullName', ...optFields], this.filter)
       return filtered.filter(person => !this.clickedPeople.includes(person._id))
+    },
+    paginated() {
+      return chunk(this.people, 15)
     },
     selectedPosition() {
       return Math.min(this.people.length - 1, this.selectedIndex)
@@ -96,6 +110,7 @@ export default {
     closeSearch() {
       this.search = false
       this.filter = ''
+      this.page = 1
       this.selectedIndex = 0
     },
     moveDown() {
@@ -118,3 +133,9 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+.pagination {
+  margin-bottom: 1em;
+}
+</style>
