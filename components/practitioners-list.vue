@@ -110,7 +110,6 @@ export default {
     closeSearch() {
       this.search = false
       this.filter = ''
-      this.page = 1
       this.selectedIndex = 0
     },
     moveDown() {
@@ -126,6 +125,11 @@ export default {
     },
     async enterSelected() {
       this.clicked(this.people[this.selectedPosition])
+    },
+  },
+  watch: {
+    filter() {
+      this.page = 1
     },
   },
   async mounted() {
