@@ -1,11 +1,17 @@
 <template>
   <v-layout align-content-center align-center column>
-    <page-title icon="person"
+    <page-title
+      icon="person"
       :title="person.displayName"
       :subtitle="person.displayName !== person.fullName ? person.fullName : null"
       :avatar="person.avatar"
     />
     <v-btn :to="`/praticantes/${person._id}/edit?back_to=${$route.path}`" color="primary">Editar</v-btn>
+    <confirmation-dialog v-if="isAdmin" slot="right" @click.stop="removePractitioner(person)">
+      <v-btn icon>
+        <v-icon>delete</v-icon>
+      </v-btn>
+    </confirmation-dialog>
     <v-card class="main-card">
       <v-toolbar>
         <v-toolbar-title>Histórico mensal</v-toolbar-title>
@@ -30,14 +36,14 @@
                   <v-icon v-else>person</v-icon>
                 </v-list-tile-avatar>
                 <v-list-tile-content>
-                  <v-list-tile-title>
-                    {{ title }}
-                  </v-list-tile-title>
+                  <v-list-tile-title>{{ title }}</v-list-tile-title>
                 </v-list-tile-content>
                 <v-list-tile-action>
-                  <v-chip class="frequency" outline color="primary">
-                    {{ items.length }} ({{ fn.percent(items.length, frequency.length) }})
-                  </v-chip>
+                  <v-chip
+                    class="frequency"
+                    outline
+                    color="primary"
+                  >{{ items.length }} ({{ fn.percent(items.length, frequency.length) }})</v-chip>
                 </v-list-tile-action>
               </v-list-tile>
             </v-list>
@@ -47,10 +53,13 @@
           <v-list dense two-line>
             <template v-for="(order, i) in payments">
               <v-divider v-if="i > 0"></v-divider>
-              <payment-description :order="order" />
+              <payment-description :order="order"/>
             </template>
           </v-list>
-          <h4 class="headline calculated-payment">Pagamento calculado: <span>{{ fn.toMoney(fn.sumBy(payments, 'total')) }}</span></h4>
+          <h4 class="headline calculated-payment">
+            Pagamento calculado:
+            <span>{{ fn.toMoney(fn.sumBy(payments, 'total')) }}</span>
+          </h4>
           <v-divider class="my-3 pt-2"></v-divider>
         </div>
       </v-card-title>
@@ -61,9 +70,7 @@
           <v-list-tile ripple :to="attendanceLink(item)">
             <v-list-tile-content>
               <v-list-tile-title>{{ fn.parseDate(item.createdAt) }}</v-list-tile-title>
-              <v-list-tile-sub-title>
-                {{ item.classroom.title }}{{ item.teacher ? ` - como professor` : '' }}
-              </v-list-tile-sub-title>
+              <v-list-tile-sub-title>{{ item.classroom.title }}{{ item.teacher ? ` - como professor` : '' }}</v-list-tile-sub-title>
             </v-list-tile-content>
           </v-list-tile>
         </div>
@@ -81,12 +88,14 @@ import { percent, toMoney } from '@/utils/helpers'
 import dateNavigator from '@/components/date-navigator'
 import paymentDescription from '@/components/payment-description'
 import pageTitle from '@/components/page-title'
+import confirmationDialog from '@/components/confirmation-dialog'
 
 export default {
   watchQuery: ['months'],
-  components: { dateNavigator, pageTitle, paymentDescription },
+  components: { confirmationDialog, dateNavigator, pageTitle, paymentDescription },
   computed: {
     ...mapGetters({
+      isAdmin: 'auth/isAdmin',
       getPerson: 'practitioners/get',
       getClass: 'classrooms/get',
       findPayments: 'payments/findByTimeAgo',
@@ -123,6 +132,12 @@ export default {
       const sample = items[0]
       const teacher = this.getPerson(get(sample, 'classroom.teacher'))
       return teacher && teacher.avatar
+    },
+    async removePractitioner(person) {
+      if (this.isAdmin) {
+        new this.$FeathersVuex.Practitioner(person).remove()
+        this.$router.push('/praticantes')
+      }
     },
   },
   async fetch({ store, query }) {
