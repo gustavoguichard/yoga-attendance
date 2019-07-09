@@ -97,6 +97,7 @@
 import { mapGetters } from 'vuex'
 import moment from 'moment'
 import { get, find } from 'lodash'
+import { readAndCompressImage } from 'browser-image-resizer'
 import decorate from '@/utils/decorate-enrollment'
 import { parsePractitioner } from '@/utils/form-helpers'
 import pageCta from '@/components/page-cta'
@@ -183,10 +184,12 @@ export default {
       ev.preventDefault()
       const reader = new FileReader()
       const file = ev.target.files[0]
-      this.file = file
 
       reader.onloadend = async () => {
         this.editing.picture = reader.result
+        const config = { quality: 0.5, maxWidth: 500, maxHeight: 500, autoRotate: true }
+        const image = await readAndCompressImage(file, config)
+        this.file = image
       }
 
       reader.readAsDataURL(file)
