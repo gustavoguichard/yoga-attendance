@@ -15,13 +15,13 @@
         <v-flex xs12>
           <v-text-field @keyup.enter="submit" v-model="editing.email" name="email" label="E-mail" prepend-icon="email" required></v-text-field>
         </v-flex>
-        <!-- <v-flex xs12>
+        <v-flex xs12>
           <v-avatar size="80" class="grey lighten-4 mt-2 mb-4" @click="pickFile" style="cursor: pointer">
             <img v-if="editing.picture" :src="editing.picture" alt="avatar">
             <v-icon v-else alt="avatar">add_a_photo</v-icon>
           </v-avatar>
           <input style="display: none" type="file" accept="image/*" ref="fileInput" @change="onFileChange">
-        </v-flex> -->
+        </v-flex>
         <v-flex xs12>
           <v-checkbox color="cyan darken-2" v-model="editing.teacher" name="teacher" label="Professor"></v-checkbox>
         </v-flex>
@@ -115,6 +115,7 @@ export default {
   components: { confirmationDialog, pageCta, personListItem, practitionersList },
   props: ['person'],
   data: () => ({
+    file: null,
     editing: {
       fullName: '',
       nickName: '',
@@ -182,8 +183,9 @@ export default {
       ev.preventDefault()
       const reader = new FileReader()
       const file = ev.target.files[0]
+      this.file = file
 
-      reader.onloadend = () => {
+      reader.onloadend = async () => {
         this.editing.picture = reader.result
       }
 
@@ -193,13 +195,14 @@ export default {
       this.$refs.fileInput.click()
     },
     submit() {
-      this.$emit('submit', parsePractitioner(this.editing))
+      this.$emit('submit', parsePractitioner(this.editing), this.file)
     },
   },
   async mounted() {
     if (this.person) {
       const person = new this.$FeathersVuex.Practitioner(this.person)
       this.editing = person.clone()
+      this.editing.picture = this.editing.picture || this.person.avatar
       this.editing.birthdate = this.person
         ? moment(this.person.birthdate).format('DDMMYYYY')
         : undefined

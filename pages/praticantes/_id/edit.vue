@@ -11,6 +11,7 @@ import fetchService from '@/api/fetch'
 import { isAnotherTeacher } from '@/utils/helpers'
 import pageTitle from '@/components/page-title'
 import practitionerForm from '@/components/practitioner-form'
+import { uploadPicture } from '@/utils/practitioners-helpers'
 
 export default {
   components: { pageTitle, practitionerForm },
@@ -22,10 +23,11 @@ export default {
     },
   },
   methods: {
-    async submit(person) {
+    async submit(person, file) {
       let result
       if (this.online) {
-        result = await new this.$FeathersVuex.Practitioner(person).save()
+        const data = file ? (await uploadPicture(person, file)) : person
+        result = await new this.$FeathersVuex.Practitioner(data).save()
       } else {
         this.$store.commit('offline/addPractitioner', person)
         result = true
