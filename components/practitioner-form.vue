@@ -187,7 +187,7 @@ export default {
 
       reader.onloadend = async () => {
         this.editing.picture = reader.result
-        const config = { quality: 0.5, maxWidth: 500, maxHeight: 500, autoRotate: true }
+        const config = { maxWidth: 500, maxHeight: 500 }
         const image = await readAndCompressImage(file, config)
         this.file = image
       }
