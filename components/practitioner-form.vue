@@ -189,7 +189,7 @@ export default {
         this.editing.picture = reader.result
         const config = { maxWidth: 500, maxHeight: 500 }
         const image = await readAndCompressImage(file, config)
-        this.file = image
+        this.file = { image, name: file.name }
       }
 
       reader.readAsDataURL(file)
